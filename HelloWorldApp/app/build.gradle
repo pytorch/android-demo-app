@@ -1,0 +1,30 @@
+apply plugin: 'com.android.application'
+
+repositories {
+    maven {
+        url "https://oss.sonatype.org/content/repositories/snapshots"
+    }
+}
+
+android {
+    compileSdkVersion 28
+    buildToolsVersion "29.0.2"
+    defaultConfig {
+        applicationId "org.pytorch.helloworld"
+        minSdkVersion 21
+        targetSdkVersion 28
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+        }
+    }
+}
+
+dependencies {
+    implementation 'androidx.appcompat:appcompat:1.1.0'
+    implementation 'org.pytorch:pytorch_android:0.0.8-SNAPSHOT'
+    implementation 'org.pytorch:pytorch_android_torchvision:0.0.8-SNAPSHOT'
+}
