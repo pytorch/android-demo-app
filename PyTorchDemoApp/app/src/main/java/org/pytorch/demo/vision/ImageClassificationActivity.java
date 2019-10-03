@@ -3,6 +3,7 @@ package org.pytorch.demo.vision;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.TextureView;
 import android.view.View;
 import android.widget.TextView;
@@ -162,6 +163,7 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
       final long analysisDuration = SystemClock.elapsedRealtime() - startTime;
       return new AnalysisResult(topKClassNames, topKScores, moduleForwardDuration, analysisDuration);
     } catch (Exception e) {
+      Log.e(Constants.TAG, "Error during image analysis", e);
       mAnalyzeImageErrorState = true;
       runOnUiThread(() -> {
         if (!isFinishing()) {

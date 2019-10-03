@@ -3,6 +3,7 @@ package org.pytorch.demo.vision;
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Size;
 import android.view.TextureView;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ public abstract class AbstractCameraXActivity<R> extends BaseModuleActivity {
   private static final String[] PERMISSIONS = {Manifest.permission.CAMERA};
 
   private TextureView mTextureView;
+  private long mLastAnalysisResultTime;
 
   protected abstract int getContentViewLayoutId();
 
@@ -82,8 +84,13 @@ public abstract class AbstractCameraXActivity<R> extends BaseModuleActivity {
     final ImageAnalysis imageAnalysis = new ImageAnalysis(imageAnalysisConfig);
     imageAnalysis.setAnalyzer(
         (image, rotationDegrees) -> {
+          if (SystemClock.elapsedRealtime() - mLastAnalysisResultTime < 500) {
+            return;
+          }
+
           final R result = analyzeImage(image, rotationDegrees);
           if (result != null) {
+            mLastAnalysisResultTime = SystemClock.elapsedRealtime();
             runOnUiThread(() -> applyToUiAnalyzeImageResult(result));
           }
         });
