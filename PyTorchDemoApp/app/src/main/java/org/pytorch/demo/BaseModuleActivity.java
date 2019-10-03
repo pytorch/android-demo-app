@@ -94,10 +94,13 @@ public class BaseModuleActivity extends AppCompatActivity {
   @UiThread
   protected void showErrorDialog(View.OnClickListener clickListener) {
     final View view = InfoViewFactory.newErrorDialogView(this);
-    view.setOnClickListener(clickListener);
     final AlertDialog.Builder builder = new AlertDialog.Builder(this, R.style.CustomDialog)
         .setCancelable(false)
         .setView(view);
-    builder.show();
+    final AlertDialog alertDialog = builder.show();
+    view.setOnClickListener(v -> {
+      clickListener.onClick(v);
+      alertDialog.dismiss();
+    });
   }
 }

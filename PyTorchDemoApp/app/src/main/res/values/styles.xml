@@ -81,7 +81,6 @@
 
     <style name="Button" parent="Clickable">
         <item name="android:textAppearance">@style/TextAppearance.AppCompat.Medium</item>
-        <item name="android:paddingLeft">24dp</item>
     </style>
 
     <style name="TextAppearanceMainVisionNlp" parent="TextAppearance.AppCompat.Display1">

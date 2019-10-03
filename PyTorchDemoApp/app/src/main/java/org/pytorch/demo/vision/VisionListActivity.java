@@ -13,7 +13,7 @@ public class VisionListActivity extends AbstractListActivity {
     super.onCreate(savedInstanceState);
     findViewById(R.id.vision_card_qmobilenet_click_area).setOnClickListener(v -> {
       final Intent intent = new Intent(VisionListActivity.this, ImageClassificationActivity.class);
-      intent.putExtra(ImageClassificationActivity.INTENT_MODULE_ASSET_NAME, "mobilenet_quantized_scripted.pt");
+      intent.putExtra(ImageClassificationActivity.INTENT_MODULE_ASSET_NAME, "mobilenet_quantized_scripted_925.pt");
       startActivity(intent);
     });
     findViewById(R.id.vision_card_resnet_click_area).setOnClickListener(v -> {
