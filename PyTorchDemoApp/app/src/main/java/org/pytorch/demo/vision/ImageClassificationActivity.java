@@ -19,6 +19,7 @@ import org.pytorch.demo.vision.view.ResultRowView;
 import org.pytorch.torchvision.TensorImageUtils;
 
 import java.io.File;
+import java.nio.FloatBuffer;
 import java.util.Locale;
 
 import androidx.annotation.Nullable;
@@ -59,6 +60,8 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
   private TextView mMsText;
   private Module mModule;
   private String mModuleAssetName;
+  private FloatBuffer mInputTensorBuffer;
+  private Tensor mInputTensor;
 
   @Override
   protected int getContentViewLayoutId() {
@@ -136,18 +139,24 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
         final String moduleFileAbsoluteFilePath = new File(
             Utils.assetFilePath(this, getModuleAssetName())).getAbsolutePath();
         mModule = Module.load(moduleFileAbsoluteFilePath);
+
+        mInputTensorBuffer =
+            Tensor.allocateFloatBuffer(3 * INPUT_TENSOR_WIDTH * INPUT_TENSOR_HEIGHT);
+        mInputTensor = Tensor.newFloat32Tensor(
+            new long[]{1, 3, INPUT_TENSOR_HEIGHT, INPUT_TENSOR_WIDTH},
+            mInputTensorBuffer);
       }
 
       final long startTime = SystemClock.elapsedRealtime();
-      final Tensor inputTensor =
-          TensorImageUtils.imageYUV420CenterCropToFloat32Tensor(
-              image.getImage(), rotationDegrees,
-              INPUT_TENSOR_WIDTH, INPUT_TENSOR_HEIGHT,
-              TensorImageUtils.TORCHVISION_NORM_MEAN_RGB,
-              TensorImageUtils.TORCHVISION_NORM_STD_RGB);
+      TensorImageUtils.imageYUV420CenterCropToFloatBuffer(
+          image.getImage(), rotationDegrees,
+          INPUT_TENSOR_WIDTH, INPUT_TENSOR_HEIGHT,
+          TensorImageUtils.TORCHVISION_NORM_MEAN_RGB,
+          TensorImageUtils.TORCHVISION_NORM_STD_RGB,
+          mInputTensorBuffer, 0);
 
       final long moduleForwardStartTime = SystemClock.elapsedRealtime();
-      final Tensor outputTensor = mModule.forward(IValue.tensor(inputTensor)).getTensor();
+      final Tensor outputTensor = mModule.forward(IValue.tensor(mInputTensor)).getTensor();
       final long moduleForwardDuration = SystemClock.elapsedRealtime() - moduleForwardStartTime;
 
       final float[] scores = outputTensor.getDataAsFloatArray();
