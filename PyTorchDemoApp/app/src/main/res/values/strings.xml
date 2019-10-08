@@ -21,11 +21,11 @@
     <string name="welcome_page_nlp_title">Text Classification</string>
     <string name="welcome_page_nlp_description">Text classification examples run packaged inside app models on user entered text</string>
 
-    <string name="vision_card_mobilenet_title">Image Classification\nQuantized mobilenetV2</string>
-    <string name="vision_card_mobilenet_description">Inference in int32.\nInput is float32 tensor of 1x3x224x224 shape</string>
+    <string name="vision_card_qmobilenet_title">Image Classification\nQuantized MobileNetV2</string>
+    <string name="vision_card_qmobilenet_description">Inference in int8.\nInput is float32 tensor of 1x3x224x224 shape</string>
 
     <string name="vision_card_resnet_title">Image Classification\nResnet18</string>
-    <string name="vision_card_resnet_description">Default torch vision pretrained Resnet18 model. Input is float32 tensor of 1x3x224x224 shape</string>
+    <string name="vision_card_resnet_description">Default TorchVision pretrained Resnet18 model. Input is float32 tensor of 1x3x224x224 shape</string>
 
     <string name="nlp_card_lstm_title">Text Classification.\nLSTM model trained on Reddit comments dataset. </string>
     <string name="nlp_card_lstm_description">Predicts subreddit by given comment.\nInput is uint8 1xN shaped tensor, where N is the length of text\'s bytes representation in utf-8 encoding. Output classes are subreddits.</string>

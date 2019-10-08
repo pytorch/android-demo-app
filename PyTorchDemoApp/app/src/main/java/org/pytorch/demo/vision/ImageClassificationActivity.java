@@ -20,7 +20,9 @@ import org.pytorch.torchvision.TensorImageUtils;
 
 import java.io.File;
 import java.nio.FloatBuffer;
+import java.util.LinkedList;
 import java.util.Locale;
+import java.util.Queue;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
@@ -29,15 +31,17 @@ import androidx.camera.core.ImageProxy;
 public class ImageClassificationActivity extends AbstractCameraXActivity<ImageClassificationActivity.AnalysisResult> {
 
   public static final String INTENT_MODULE_ASSET_NAME = "INTENT_MODULE_ASSET_NAME";
+  public static final String INTENT_INFO_VIEW_TYPE = "INTENT_INFO_VIEW_TYPE";
 
   private static final int INPUT_TENSOR_WIDTH = 224;
   private static final int INPUT_TENSOR_HEIGHT = 224;
   private static final int TOP_K = 3;
+  private static final int MOVING_AVG_PERIOD = 10;
   private static final String FORMAT_MS = "%dms";
+  private static final String FORMAT_AVG_MS = "avg:%.0fms";
+
   private static final String FORMAT_FPS = "%.1fFPS";
   public static final String SCORES_FORMAT = "%.2f";
-
-  private boolean mAnalyzeImageErrorState;
 
   static class AnalysisResult {
 
@@ -55,13 +59,17 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
     }
   }
 
+  private boolean mAnalyzeImageErrorState;
   private ResultRowView[] mResultRowViews = new ResultRowView[TOP_K];
   private TextView mFpsText;
   private TextView mMsText;
+  private TextView mMsAvgText;
   private Module mModule;
   private String mModuleAssetName;
   private FloatBuffer mInputTensorBuffer;
   private Tensor mInputTensor;
+  private long mMovingAvgSum = 0;
+  private Queue<Long> mMovingAvgQueue = new LinkedList<>();
 
   @Override
   protected int getContentViewLayoutId() {
@@ -87,10 +95,17 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
 
     mFpsText = findViewById(R.id.image_classification_fps_text);
     mMsText = findViewById(R.id.image_classification_ms_text);
+    mMsAvgText = findViewById(R.id.image_classification_ms_avg_text);
   }
 
   @Override
   protected void applyToUiAnalyzeImageResult(AnalysisResult result) {
+    mMovingAvgSum += result.moduleForwardDuration;
+    mMovingAvgQueue.add(result.moduleForwardDuration);
+    if (mMovingAvgQueue.size() > MOVING_AVG_PERIOD) {
+      mMovingAvgSum -= mMovingAvgQueue.remove();
+    }
+
     for (int i = 0; i < TOP_K; i++) {
       final ResultRowView rowView = mResultRowViews[i];
       rowView.nameTextView.setText(result.topNClassNames[i]);
@@ -106,6 +121,14 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
     mFpsText.setText(String.format(Locale.US, FORMAT_FPS, (1000.f / result.analysisDuration)));
     if (mFpsText.getVisibility() != View.VISIBLE) {
       mFpsText.setVisibility(View.VISIBLE);
+    }
+
+    if (mMovingAvgQueue.size() == MOVING_AVG_PERIOD) {
+      float avgMs = (float) mMovingAvgSum / MOVING_AVG_PERIOD;
+      mMsAvgText.setText(String.format(Locale.US, FORMAT_AVG_MS, avgMs));
+      if (mMsAvgText.getVisibility() != View.VISIBLE) {
+        mMsAvgText.setVisibility(View.VISIBLE);
+      }
     }
   }
 
@@ -185,7 +208,7 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
 
   @Override
   protected int getInfoViewCode() {
-    return InfoViewFactory.INFO_VIEW_TYPE_IMAGE_CLASSIFICATION;
+    return getIntent().getIntExtra(INTENT_INFO_VIEW_TYPE, -1);
   }
 
   @Override
