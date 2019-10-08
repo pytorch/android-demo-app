@@ -26,19 +26,17 @@ public abstract class AbstractCameraXActivity<R> extends BaseModuleActivity {
   private static final int REQUEST_CODE_CAMERA_PERMISSION = 200;
   private static final String[] PERMISSIONS = {Manifest.permission.CAMERA};
 
-  private TextureView mTextureView;
   private long mLastAnalysisResultTime;
 
   protected abstract int getContentViewLayoutId();
 
-  protected abstract TextureView onCreateGetCameraPreviewTextureView();
+  protected abstract TextureView getCameraPreviewTextureView();
 
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(getContentViewLayoutId());
     StatusBarUtils.setStatusBarOverlay(getWindow(), true);
-    mTextureView = onCreateGetCameraPreviewTextureView();
+    setContentView(getContentViewLayoutId());
 
     startBackgroundThread();
 
@@ -71,9 +69,10 @@ public abstract class AbstractCameraXActivity<R> extends BaseModuleActivity {
   }
 
   private void setupCameraX() {
+    final TextureView textureView = getCameraPreviewTextureView();
     final PreviewConfig previewConfig = new PreviewConfig.Builder().build();
     final Preview preview = new Preview(previewConfig);
-    preview.setOnPreviewOutputUpdateListener(output -> mTextureView.setSurfaceTexture(output.getSurfaceTexture()));
+    preview.setOnPreviewOutputUpdateListener(output -> textureView.setSurfaceTexture(output.getSurfaceTexture()));
 
     final ImageAnalysisConfig imageAnalysisConfig =
         new ImageAnalysisConfig.Builder()
