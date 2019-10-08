@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
         TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);
 
     // running the model
-    final Tensor outputTensor = module.forward(IValue.tensor(inputTensor)).getTensor();
+    final Tensor outputTensor = module.forward(IValue.from(inputTensor)).toTensor();
 
     // getting tensor content as java array of floats
     final float[] scores = outputTensor.getDataAsFloatArray();

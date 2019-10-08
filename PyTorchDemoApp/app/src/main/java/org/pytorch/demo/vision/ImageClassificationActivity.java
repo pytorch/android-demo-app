@@ -167,9 +167,7 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
 
         mInputTensorBuffer =
             Tensor.allocateFloatBuffer(3 * INPUT_TENSOR_WIDTH * INPUT_TENSOR_HEIGHT);
-        mInputTensor = Tensor.newFloat32Tensor(
-            new long[]{1, 3, INPUT_TENSOR_HEIGHT, INPUT_TENSOR_WIDTH},
-            mInputTensorBuffer);
+        mInputTensor = Tensor.fromBlob(mInputTensorBuffer, new long[]{1, 3, INPUT_TENSOR_HEIGHT, INPUT_TENSOR_WIDTH});
       }
 
       final long startTime = SystemClock.elapsedRealtime();
@@ -181,7 +179,7 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
           mInputTensorBuffer, 0);
 
       final long moduleForwardStartTime = SystemClock.elapsedRealtime();
-      final Tensor outputTensor = mModule.forward(IValue.tensor(mInputTensor)).getTensor();
+      final Tensor outputTensor = mModule.forward(IValue.from(mInputTensor)).toTensor();
       final long moduleForwardDuration = SystemClock.elapsedRealtime() - moduleForwardStartTime;
 
       final float[] scores = outputTensor.getDataAsFloatArray();
