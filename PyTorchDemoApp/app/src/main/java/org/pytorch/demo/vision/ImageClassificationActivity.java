@@ -6,13 +6,13 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.TextureView;
 import android.view.View;
+import android.view.ViewStub;
 import android.widget.TextView;
 
 import org.pytorch.IValue;
 import org.pytorch.Module;
 import org.pytorch.Tensor;
 import org.pytorch.demo.Constants;
-import org.pytorch.demo.InfoViewFactory;
 import org.pytorch.demo.R;
 import org.pytorch.demo.Utils;
 import org.pytorch.demo.vision.view.ResultRowView;
@@ -77,8 +77,10 @@ public class ImageClassificationActivity extends AbstractCameraXActivity<ImageCl
   }
 
   @Override
-  protected TextureView onCreateGetCameraPreviewTextureView() {
-    return findViewById(R.id.image_classification_texture_view);
+  protected TextureView getCameraPreviewTextureView() {
+    return ((ViewStub) findViewById(R.id.image_classification_texture_view_stub))
+        .inflate()
+        .findViewById(R.id.image_classification_texture_view);
   }
 
   @Override
