@@ -114,21 +114,21 @@ public class TextClassificationActivity extends BaseModuleActivity {
 
       final IValue getClassesOutput = mModule.runMethod("get_classes");
 
-      final IValue[] classesListIValue = getClassesOutput.getList();
+      final IValue[] classesListIValue = getClassesOutput.toList();
       final String[] moduleClasses = new String[classesListIValue.length];
 
       int i = 0;
       for (IValue iv : classesListIValue) {
-        moduleClasses[i++] = iv.getString();
+        moduleClasses[i++] = iv.toStr();
       }
 
       mModuleClasses = moduleClasses;
     }
     byte[] bytes = text.getBytes(Charset.forName("UTF-8"));
     final long[] shape = new long[]{1, bytes.length};
-    final Tensor inputTensor = Tensor.newUInt8Tensor(shape, bytes);
+    final Tensor inputTensor = Tensor.fromBlobUnsigned(bytes, shape);
 
-    final Tensor outputTensor = mModule.forward(IValue.tensor(inputTensor)).getTensor();
+    final Tensor outputTensor = mModule.forward(IValue.from(inputTensor)).toTensor();
     final float[] scores = outputTensor.getDataAsFloatArray();
     final int[] ixs = Utils.topK(scores, TOP_K);
 
