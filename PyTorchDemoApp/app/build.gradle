@@ -35,6 +35,6 @@ dependencies {
     implementation "androidx.camera:camera-camera2:$camerax_version"
     implementation 'com.google.android.material:material:1.0.0-beta01'
 
-    implementation 'org.pytorch:pytorch_android:1.4.0.1'
-    implementation 'org.pytorch:pytorch_android_torchvision:1.4.0.1'
+    implementation 'org.pytorch:pytorch_android:1.4.0'
+    implementation 'org.pytorch:pytorch_android_torchvision:1.4.0'
 }
