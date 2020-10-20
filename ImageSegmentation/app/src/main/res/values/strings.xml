@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">ImageSegmentation</string>
+    <string name="an_image">an image</string>
+    <string name="image_view">Image View</string>
+    <string name="segment">Segment</string>
+    <string name="next">Next</string>
+</resources>
