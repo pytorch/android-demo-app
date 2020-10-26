@@ -1,4 +1,4 @@
-package com.example.imagesegmentation;
+package org.pytorch.imagesegmentation;
 
 import androidx.appcompat.app.AppCompatActivity;
 
