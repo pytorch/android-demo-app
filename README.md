@@ -24,10 +24,10 @@ example = torch.rand(1, 3, 224, 224)
 traced_script_module = torch.jit.trace(model, example)
 traced_script_module.save("app/src/main/assets/model.pt")
 ```
-If everything works well, we should have our model - `model.pt` generated in the assets folder of android application.
+If everything works well, we should have our model - `model.pt` generated in the assets folder of android application. 
 That will be packaged inside android application as `asset` and can be used on the device.
 
-More details about TorchScript you can find in [tutorials on pytorch.org](https://pytorch.org/docs/stable/jit.html)
+More details about TorchScript you can find in [tutorials on pytorch.org](https://pytorch.org/docs/stable/jit.html) 
 
 #### 2. Cloning from github
 ```
@@ -57,14 +57,14 @@ dependencies {
 }
 ```
 Where `org.pytorch:pytorch_android` is the main dependency with PyTorch Android API, including libtorch native library for all 4 android abis (armeabi-v7a, arm64-v8a, x86, x86_64).
-Further in this doc you can find how to rebuild it only for specific list of android abis.
+Further in this doc you can find how to rebuild it only for specific list of android abis. 
 
 `org.pytorch:pytorch_android_torchvision` - additional library with utility functions for converting `android.media.Image` and `android.graphics.Bitmap` to tensors.
 
 #### 4. Reading image from Android Asset
 
 All the logic happens in [`org.pytorch.helloworld.MainActivity`](https://github.com/pytorch/android-demo-app/blob/master/HelloWorldApp/app/src/main/java/org/pytorch/helloworld/MainActivity.java#L31-L69).
-As a first step we read `image.jpg` to `android.graphics.Bitmap` using the standard Android API.
+As a first step we read `image.jpg` to `android.graphics.Bitmap` using the standard Android API. 
 ```
 Bitmap bitmap = BitmapFactory.decodeStream(getAssets().open("image.jpg"));
 ```
@@ -83,13 +83,13 @@ Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(bitmap,
 `org.pytorch.torchvision.TensorImageUtils` is part of `org.pytorch:pytorch_android_torchvision` library.
 The `TensorImageUtils#bitmapToFloat32Tensor` method creates tensors in the [torchvision format](https://pytorch.org/docs/stable/torchvision/models.html) using `android.graphics.Bitmap` as a source.
 
-> All pre-trained models expect input images normalized in the same way, i.e. mini-batches of 3-channel RGB images of shape (3 x H x W), where H and W are expected to be at least 224.
+> All pre-trained models expect input images normalized in the same way, i.e. mini-batches of 3-channel RGB images of shape (3 x H x W), where H and W are expected to be at least 224. 
 > The images have to be loaded in to a range of `[0, 1]` and then normalized using `mean = [0.485, 0.456, 0.406]` and `std = [0.229, 0.224, 0.225]`
 
-`inputTensor`'s shape is `1x3xHxW`, where `H` and `W` are bitmap height and width appropriately.
+`inputTensor`'s shape is `1x3xHxW`, where `H` and `W` are bitmap height and width appropriately. 
 
 #### 7. Run Inference
-
+ 
 ```
 Tensor outputTensor = module.forward(IValue.from(inputTensor)).toTensor();
 float[] scores = outputTensor.getDataAsFloatArray();
@@ -99,7 +99,7 @@ float[] scores = outputTensor.getDataAsFloatArray();
 
 #### 8. Processing results
 Its content is retrieved using `org.pytorch.Tensor.getDataAsFloatArray()` method that returns java array of floats with scores for every image net class.
-
+ 
 After that we just find index with maximum score and retrieve predicted class name from `ImageNetClasses.IMAGENET_CLASSES` array that contains all ImageNet classes.
 
 ```
@@ -113,8 +113,8 @@ for (int i = 0; i < scores.length; i++) {
 }
 String className = ImageNetClasses.IMAGENET_CLASSES[maxScoreIdx];
 ```
-
-In the following sections you can find detailed explanations of PyTorch Android API, code walk through for a bigger [demo application](https://github.com/pytorch/android-demo-app/tree/master/PyTorchDemoApp),
+ 
+In the following sections you can find detailed explanations of PyTorch Android API, code walk through for a bigger [demo application](https://github.com/pytorch/android-demo-app/tree/master/PyTorchDemoApp), 
 implementation details of the API, how to customize and build it from source.
 
 ## PyTorch Demo Application
@@ -159,7 +159,7 @@ After getting predicted scores from the model it finds top K classes with the hi
 #### Language Processing Example
 
 Another example is natural language processing, based on an LSTM model, trained on a reddit comments dataset.
-The logic happens in [`TextClassificattionActivity`](https://github.com/pytorch/android-demo-app/blob/master/PyTorchDemoApp/app/src/main/java/org/pytorch/demo/nlp/TextClassificationActivity.java).
+The logic happens in [`TextClassificattionActivity`](https://github.com/pytorch/android-demo-app/blob/master/PyTorchDemoApp/app/src/main/java/org/pytorch/demo/nlp/TextClassificationActivity.java). 
 
 Result class names are packaged inside the TorchScript model and initialized just after initial module initialization.
 The module has a `get_classes` method that returns `List[str]`, which can be called using method `Module.runMethod(methodName)`:
@@ -190,18 +190,3 @@ Tensor outputTensor = mModule.forward(IValue.from(inputTensor)).toTensor()
 ```
 
 After that, the code processes the output, finding classes with the highest scores.
-
-## Quickstart with the Image Segmentation Android App
-
-Open a Mac Terminal, run the commands below before opening Android Studio and selecting the android/ImageSegmentation project:
-
-```
-python deeplabv3.py
-```
-Note that the Python script above is used to generate the TorchScript-formatted model for mobile apps. If you don't have the PyTorch environment set up to run the script, you can download the model file using the link [here](https://drive.google.com/file/d/17KeE6mKo67l14XxTl8a-NbtqwAvduVZG/view?usp=sharing).
-
-After the model file is ready, drag and drop it to the Android ImageSegmentation project's asset folder and run the app.
-
-## Quickstart with the Neural Machine Translation Android App
-
-Use Android Studio to open the project at Seq2SeqNMT. Download the TorchScript encoder and decoder model files [here](https://drive.google.com/file/d/1TxB5oStgShrNvlSVlVaGylNUi4PTtufQ/view?usp=sharing), then copy the two files to the Android project's assets folder, and run the app on an emulator or device.
