@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 
 import org.pytorch.IValue;
 import org.pytorch.Module;
@@ -26,9 +27,10 @@ import java.util.Map;
 public class MainActivity extends AppCompatActivity implements Runnable {
     private ImageView imageView;
     private Button buttonSegment;
+    private ProgressBar progressBar;
     private Bitmap bitmap = null;
     private Module module = null;
-    private static final String imagename = "deeplab.jpg";
+    private String imagename = "deeplab.jpg";
 
     // see http://host.robots.ox.ac.uk:8080/pascal/VOC/voc2007/segexamples/index.html for the list of classes with indexes
     private static final int CLASSNUM = 21;
@@ -73,6 +75,10 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         final Button buttonRestart = findViewById(R.id.restartButton);
         buttonRestart.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                if (imagename == "deeplab.jpg")
+                    imagename = "dog.jpg";
+                else
+                    imagename = "deeplab.jpg";
                 try {
                     bitmap = BitmapFactory.decodeStream(getAssets().open(imagename));
                 } catch (IOException e) {
@@ -87,9 +93,12 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
 
         buttonSegment = findViewById(R.id.segmentButton);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         buttonSegment.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 buttonSegment.setEnabled(false);
+                progressBar.setVisibility(ProgressBar.VISIBLE);
+                buttonSegment.setText(getString(R.string.run_model));
 
                 Thread thread = new Thread(MainActivity.this);
                 thread.start();
@@ -151,6 +160,9 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             public void run() {
                 imageView.setImageBitmap(transferredBitmap);
                 buttonSegment.setEnabled(true);
+                buttonSegment.setText(getString(R.string.segment));
+                progressBar.setVisibility(ProgressBar.INVISIBLE);
+
             }
         });
     }

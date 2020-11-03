@@ -1,7 +1,8 @@
 <resources>
-    <string name="app_name">ImageSegmentation</string>
+    <string name="app_name">DeepLab3</string>
     <string name="an_image">an image</string>
     <string name="image_view">Image View</string>
     <string name="segment">Segment</string>
+    <string name="run_model">Running the model...</string>
     <string name="restart">Restart</string>
 </resources>
