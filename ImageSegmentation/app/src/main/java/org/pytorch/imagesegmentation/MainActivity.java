@@ -81,13 +81,11 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                     imagename = "deeplab.jpg";
                 try {
                     bitmap = BitmapFactory.decodeStream(getAssets().open(imagename));
+                    imageView.setImageBitmap(bitmap);
                 } catch (IOException e) {
                     Log.e("ImageSegmentation", "Error reading assets", e);
                     finish();
                 }
-
-                final ImageView imageView = findViewById(R.id.imageView);
-                imageView.setImageBitmap(bitmap);
             }
         });
 
@@ -104,39 +102,38 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 thread.start();
             }
         });
-    }
 
-    @Override
-    public void run() {
         try {
             module = Module.load(MainActivity.assetFilePath(getApplicationContext(), "deeplabv3_scripted.pt"));
         } catch (IOException e) {
             Log.e("ImageSegmentation", "Error reading assets", e);
             finish();
         }
+
+    }
+
+    @Override
+    public void run() {
         final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(bitmap,
                 TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);
+        final float[] inputs = inputTensor.getDataAsFloatArray();
         Map<String, IValue> outTensors = module.forward(IValue.from(inputTensor)).toDictStringKey();
         final Tensor outputTensor = outTensors.get("out").toTensor();
         final float[] scores = outputTensor.getDataAsFloatArray();
         int width = bitmap.getWidth();
         int height = bitmap.getHeight();
         int[] intValues = new int[width * height];
-        for (int i = 0; i < intValues.length; i++) {
-            intValues[i] = 0xFFFFFFFF;
-        }
+//        for (int i = 0; i < intValues.length; i++) {
+//            intValues[i] = 0xFFFFFFFF;
+//        }
         for (int j = 0; j < width; j++) {
             for (int k = 0; k < height; k++) {
-                int maxj = 0;
-                int maxk = 0;
-                int maxi = 0;
+                int maxi = 0, maxj = 0, maxk = 0;
                 double maxnum = -100000.0;
                 for (int i = 0; i < CLASSNUM; i++) {
                     if (scores[i * (width * height) + j * width + k] > maxnum) {
                         maxnum = scores[i * (width * height) + j * width + k];
-                        maxj = j;
-                        maxk = k;
-                        maxi = i;
+                        maxi = i; maxj = j; maxk = k;
                     }
                 }
                 if (maxi == PERSON)
