@@ -25,12 +25,12 @@ import java.io.OutputStream;
 import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements Runnable {
-    private ImageView imageView;
-    private Button buttonSegment;
-    private ProgressBar progressBar;
-    private Bitmap bitmap = null;
-    private Module module = null;
-    private String imagename = "deeplab.jpg";
+    private ImageView mImageView;
+    private Button mButtonSegment;
+    private ProgressBar mProgressBar;
+    private Bitmap mBitmap = null;
+    private Module mModule = null;
+    private String mImagename = "deeplab.jpg";
 
     // see http://host.robots.ox.ac.uk:8080/pascal/VOC/voc2007/segexamples/index.html for the list of classes with indexes
     private static final int CLASSNUM = 21;
@@ -63,25 +63,25 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         setContentView(R.layout.activity_main);
 
         try {
-            bitmap = BitmapFactory.decodeStream(getAssets().open(imagename));
+            mBitmap = BitmapFactory.decodeStream(getAssets().open(mImagename));
         } catch (IOException e) {
             Log.e("ImageSegmentation", "Error reading assets", e);
             finish();
         }
 
-        imageView = findViewById(R.id.imageView);
-        imageView.setImageBitmap(bitmap);
+        mImageView = findViewById(R.id.imageView);
+        mImageView.setImageBitmap(mBitmap);
 
         final Button buttonRestart = findViewById(R.id.restartButton);
         buttonRestart.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (imagename == "deeplab.jpg")
-                    imagename = "dog.jpg";
+                if (mImagename == "deeplab.jpg")
+                    mImagename = "dog.jpg";
                 else
-                    imagename = "deeplab.jpg";
+                    mImagename = "deeplab.jpg";
                 try {
-                    bitmap = BitmapFactory.decodeStream(getAssets().open(imagename));
-                    imageView.setImageBitmap(bitmap);
+                    mBitmap = BitmapFactory.decodeStream(getAssets().open(mImagename));
+                    mImageView.setImageBitmap(mBitmap);
                 } catch (IOException e) {
                     Log.e("ImageSegmentation", "Error reading assets", e);
                     finish();
@@ -90,13 +90,13 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         });
 
 
-        buttonSegment = findViewById(R.id.segmentButton);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        buttonSegment.setOnClickListener(new View.OnClickListener() {
+        mButtonSegment = findViewById(R.id.segmentButton);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mButtonSegment.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                buttonSegment.setEnabled(false);
-                progressBar.setVisibility(ProgressBar.VISIBLE);
-                buttonSegment.setText(getString(R.string.run_model));
+                mButtonSegment.setEnabled(false);
+                mProgressBar.setVisibility(ProgressBar.VISIBLE);
+                mButtonSegment.setText(getString(R.string.run_model));
 
                 Thread thread = new Thread(MainActivity.this);
                 thread.start();
@@ -104,7 +104,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         });
 
         try {
-            module = Module.load(MainActivity.assetFilePath(getApplicationContext(), "deeplabv3_scripted.pt"));
+            mModule = Module.load(MainActivity.assetFilePath(getApplicationContext(), "deeplabv3_scripted.pt"));
         } catch (IOException e) {
             Log.e("ImageSegmentation", "Error reading assets", e);
             finish();
@@ -114,22 +114,19 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
     @Override
     public void run() {
-        final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(bitmap,
+        final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(mBitmap,
                 TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);
         final float[] inputs = inputTensor.getDataAsFloatArray();
-        Map<String, IValue> outTensors = module.forward(IValue.from(inputTensor)).toDictStringKey();
+        Map<String, IValue> outTensors = mModule.forward(IValue.from(inputTensor)).toDictStringKey();
         final Tensor outputTensor = outTensors.get("out").toTensor();
         final float[] scores = outputTensor.getDataAsFloatArray();
-        int width = bitmap.getWidth();
-        int height = bitmap.getHeight();
+        int width = mBitmap.getWidth();
+        int height = mBitmap.getHeight();
         int[] intValues = new int[width * height];
-//        for (int i = 0; i < intValues.length; i++) {
-//            intValues[i] = 0xFFFFFFFF;
-//        }
         for (int j = 0; j < width; j++) {
             for (int k = 0; k < height; k++) {
                 int maxi = 0, maxj = 0, maxk = 0;
-                double maxnum = -100000.0;
+                double maxnum = -Double.MAX_VALUE;
                 for (int i = 0; i < CLASSNUM; i++) {
                     if (scores[i * (width * height) + j * width + k] > maxnum) {
                         maxnum = scores[i * (width * height) + j * width + k];
@@ -147,18 +144,18 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             }
         }
 
-        Bitmap bmpSegmentation = Bitmap.createScaledBitmap(bitmap, width, height, true);
+        Bitmap bmpSegmentation = Bitmap.createScaledBitmap(mBitmap, width, height, true);
         Bitmap outputBitmap = bmpSegmentation.copy(bmpSegmentation.getConfig(), true);
         outputBitmap.setPixels(intValues, 0, outputBitmap.getWidth(), 0, 0, outputBitmap.getWidth(), outputBitmap.getHeight());
-        final Bitmap transferredBitmap = Bitmap.createScaledBitmap(outputBitmap, bitmap.getWidth(), bitmap.getHeight(), true);
+        final Bitmap transferredBitmap = Bitmap.createScaledBitmap(outputBitmap, mBitmap.getWidth(), mBitmap.getHeight(), true);
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                imageView.setImageBitmap(transferredBitmap);
-                buttonSegment.setEnabled(true);
-                buttonSegment.setText(getString(R.string.segment));
-                progressBar.setVisibility(ProgressBar.INVISIBLE);
+                mImageView.setImageBitmap(transferredBitmap);
+                mButtonSegment.setEnabled(true);
+                mButtonSegment.setText(getString(R.string.segment));
+                mProgressBar.setVisibility(ProgressBar.INVISIBLE);
 
             }
         });
