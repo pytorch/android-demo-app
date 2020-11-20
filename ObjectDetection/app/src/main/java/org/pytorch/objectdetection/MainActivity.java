@@ -28,25 +28,19 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
-import java.nio.FloatBuffer;
-import java.util.Map;
 
 public class MainActivity extends AppCompatActivity implements Runnable {
-    private ImageView mImageView;
-    private Button mButtonSegment;
-    private ProgressBar mProgressBar;
-    private Bitmap mBitmap = null;
-    private Module mModule = null;
-    private String mImagename = "test1.png";
-
-    private static final int CLASSNUM = 21;
-    private static final int DOG = 12;
-    private static final int PERSON = 15;
-    private static final int SHEEP = 17;
-
+    private int mImageIndex = 0;
+    private String[] mTestImages = {"test1.png", "test2.jpg", "test3.png"};
     private static float[] NO_MEAN_RGB = new float[] {0.0f, 0.0f, 0.0f};
     public static float[] NO_STD_RGB = new float[] {1.0f, 1.0f, 1.0f};
 
+    private ImageView mImageView;
+    private ResultView mResultView;
+    private Button mButtonDetect;
+    private ProgressBar mProgressBar;
+    private Bitmap mBitmap = null;
+    private Module mModule = null;
 
     public static String assetFilePath(Context context, String assetName) throws IOException {
         File file = new File(context.getFilesDir(), assetName);
@@ -73,7 +67,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         setContentView(R.layout.activity_main);
 
         try {
-            mBitmap = BitmapFactory.decodeStream(getAssets().open(mImagename));
+            mBitmap = BitmapFactory.decodeStream(getAssets().open(mTestImages[mImageIndex]));
         } catch (IOException e) {
             Log.e("Object Detection", "Error reading assets", e);
             finish();
@@ -81,16 +75,19 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         mImageView = findViewById(R.id.imageView);
         mImageView.setImageBitmap(mBitmap);
+        mResultView = findViewById(R.id.resultView);
+        mResultView.setVisibility(View.INVISIBLE);
 
-        final Button buttonRestart = findViewById(R.id.restartButton);
-        buttonRestart.setOnClickListener(new View.OnClickListener() {
+        final Button buttonTest = findViewById(R.id.testButton);
+        buttonTest.setText(("Test Image 1/3"));
+        buttonTest.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (mImagename == "deeplab.jpg")
-                    mImagename = "dog.jpg";
-                else
-                    mImagename = "deeplab.jpg";
+                mResultView.setVisibility(View.INVISIBLE);
+                mImageIndex = (mImageIndex + 1) % mTestImages.length;
+                buttonTest.setText(String.format("Text Image %d/%d", mImageIndex + 1, mTestImages.length));
+
                 try {
-                    mBitmap = BitmapFactory.decodeStream(getAssets().open(mImagename));
+                    mBitmap = BitmapFactory.decodeStream(getAssets().open(mTestImages[mImageIndex]));
                     mImageView.setImageBitmap(mBitmap);
                 } catch (IOException e) {
                     Log.e("Object Detection", "Error reading assets", e);
@@ -99,14 +96,13 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             }
         });
 
-
-        mButtonSegment = findViewById(R.id.detectButton);
+        mButtonDetect = findViewById(R.id.detectButton);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        mButtonSegment.setOnClickListener(new View.OnClickListener() {
+        mButtonDetect.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mButtonSegment.setEnabled(false);
+                mButtonDetect.setEnabled(false);
                 mProgressBar.setVisibility(ProgressBar.VISIBLE);
-                mButtonSegment.setText(getString(R.string.run_model));
+                mButtonDetect.setText(getString(R.string.run_model));
 
                 Thread thread = new Thread(MainActivity.this);
                 thread.start();
@@ -131,44 +127,46 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         final float[] inputs = inputTensor.getDataAsFloatArray();
         IValue[] outputTuple = mModule.forward(IValue.from(inputTensor)).toTuple();
         final Tensor outputTensor = outputTuple[0].toTensor();
-        final float[] scores = outputTensor.getDataAsFloatArray();
+        final float[] outputs = outputTensor.getDataAsFloatArray();
         int width = mBitmap.getWidth();
         int height = mBitmap.getHeight();
         int[] intValues = new int[width * height];
-        for (int j = 0; j < width; j++) {
-            for (int k = 0; k < height; k++) {
-                int maxi = 0, maxj = 0, maxk = 0;
-                double maxnum = -Double.MAX_VALUE;
-                for (int i = 0; i < CLASSNUM; i++) {
-                    if (scores[i * (width * height) + j * width + k] > maxnum) {
-                        maxnum = scores[i * (width * height) + j * width + k];
-                        maxi = i; maxj = j; maxk = k;
-                    }
-                }
-                if (maxi == PERSON)
-                    intValues[maxj * width + maxk] = 0xFFFF0000;
-                else if (maxi == DOG)
-                    intValues[maxj * width + maxk] = 0xFF00FF00;
-                else if (maxi == SHEEP)
-                    intValues[maxj * width + maxk] = 0xFF0000FF;
-                else
-                    intValues[maxj * width + maxk] = 0xFF000000;
-            }
-        }
-
-        Bitmap bmpSegmentation = Bitmap.createScaledBitmap(mBitmap, width, height, true);
-        Bitmap outputBitmap = bmpSegmentation.copy(bmpSegmentation.getConfig(), true);
-        outputBitmap.setPixels(intValues, 0, outputBitmap.getWidth(), 0, 0, outputBitmap.getWidth(), outputBitmap.getHeight());
-        final Bitmap transferredBitmap = Bitmap.createScaledBitmap(outputBitmap, mBitmap.getWidth(), mBitmap.getHeight(), true);
+//        for (int j = 0; j < width; j++) {
+//            for (int k = 0; k < height; k++) {
+//                int maxi = 0, maxj = 0, maxk = 0;
+//                double maxnum = -Double.MAX_VALUE;
+//                for (int i = 0; i < CLASSNUM; i++) {
+//                    if (outputs[i * (width * height) + j * width + k] > maxnum) {
+//                        maxnum = outputs[i * (width * height) + j * width + k];
+//                        maxi = i; maxj = j; maxk = k;
+//                    }
+//                }
+//                if (maxi == PERSON)
+//                    intValues[maxj * width + maxk] = 0xFFFF0000;
+//                else if (maxi == DOG)
+//                    intValues[maxj * width + maxk] = 0xFF00FF00;
+//                else if (maxi == SHEEP)
+//                    intValues[maxj * width + maxk] = 0xFF0000FF;
+//                else
+//                    intValues[maxj * width + maxk] = 0xFF000000;
+//            }
+//        }
+//
+//        Bitmap bmpSegmentation = Bitmap.createScaledBitmap(mBitmap, width, height, true);
+//        Bitmap outputBitmap = bmpSegmentation.copy(bmpSegmentation.getConfig(), true);
+//        outputBitmap.setPixels(intValues, 0, outputBitmap.getWidth(), 0, 0, outputBitmap.getWidth(), outputBitmap.getHeight());
+//        final Bitmap transferredBitmap = Bitmap.createScaledBitmap(outputBitmap, mBitmap.getWidth(), mBitmap.getHeight(), true);
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mImageView.setImageBitmap(transferredBitmap);
-                mButtonSegment.setEnabled(true);
-                mButtonSegment.setText(getString(R.string.detect));
+//                mImageView.setImageBitmap(transferredBitmap);
+                mButtonDetect.setEnabled(true);
+                mButtonDetect.setText(getString(R.string.detect));
                 mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-
+                mResultView.setResults(mImageIndex*100 + 10);
+                mResultView.invalidate();
+                mResultView.setVisibility(View.VISIBLE);
             }
         });
     }

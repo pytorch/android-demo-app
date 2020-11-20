@@ -18,6 +18,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <org.pytorch.objectdetection.ResultView
+        android:id="@+id/resultView"
+        android:layout_width="388dp"
+        android:layout_height="405dp"
+        android:layout_marginTop="60dp"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.478"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Button
         android:id="@+id/detectButton"
         android:layout_width="wrap_content"
@@ -43,15 +54,14 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView"  />
 
     <Button
-        android:id="@+id/restartButton"
+        android:id="@+id/testButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:text="@string/restart"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/segmentButton" />
+        app:layout_constraintTop_toBottomOf="@+id/detectButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
