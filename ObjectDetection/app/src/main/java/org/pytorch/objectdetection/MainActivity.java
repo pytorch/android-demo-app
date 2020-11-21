@@ -28,6 +28,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements Runnable {
     private int mImageIndex = 0;
@@ -41,6 +42,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private ProgressBar mProgressBar;
     private Bitmap mBitmap = null;
     private Module mModule = null;
+
+    private float mImgScaleX, mImgScaleY, mIvScaleX, mIvScaleY;
 
     public static String assetFilePath(Context context, String assetName) throws IOException {
         File file = new File(context.getFilesDir(), assetName);
@@ -104,6 +107,12 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 mProgressBar.setVisibility(ProgressBar.VISIBLE);
                 mButtonDetect.setText(getString(R.string.run_model));
 
+                mImgScaleX = (float)mBitmap.getWidth() / PrePostProcessor.inputWidth;
+                mImgScaleY = (float)mBitmap.getHeight() / PrePostProcessor.inputHeight;
+
+                mIvScaleX = (mBitmap.getWidth() > mBitmap.getHeight() ? (float)mImageView.getWidth() / mBitmap.getWidth() : (float)mBitmap.getWidth() / mBitmap.getHeight());
+                mIvScaleY  = (mBitmap.getWidth() < mBitmap.getHeight() ? (float)mBitmap.getHeight() / mBitmap.getWidth() : (float)mImageView.getHeight() / mBitmap.getWidth());
+
                 Thread thread = new Thread(MainActivity.this);
                 thread.start();
             }
@@ -112,59 +121,31 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         try {
             mModule = Module.load(MainActivity.assetFilePath(getApplicationContext(), "yolov5s.torchscript.pt"));
         } catch (IOException e) {
-            Log.e("ImageSegmentation", "Error reading assets", e);
+            Log.e("Object Detection", "Error reading assets", e);
             finish();
         }
-
     }
 
     @Override
     public void run() {
 
-        Bitmap resizedBitmap = Bitmap.createScaledBitmap(mBitmap, 640, 640, true);
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(mBitmap, PrePostProcessor.inputWidth, PrePostProcessor.inputHeight, true);
         final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(resizedBitmap, NO_MEAN_RGB, NO_STD_RGB);
 
         final float[] inputs = inputTensor.getDataAsFloatArray();
         IValue[] outputTuple = mModule.forward(IValue.from(inputTensor)).toTuple();
         final Tensor outputTensor = outputTuple[0].toTensor();
         final float[] outputs = outputTensor.getDataAsFloatArray();
-        int width = mBitmap.getWidth();
-        int height = mBitmap.getHeight();
-        int[] intValues = new int[width * height];
-//        for (int j = 0; j < width; j++) {
-//            for (int k = 0; k < height; k++) {
-//                int maxi = 0, maxj = 0, maxk = 0;
-//                double maxnum = -Double.MAX_VALUE;
-//                for (int i = 0; i < CLASSNUM; i++) {
-//                    if (outputs[i * (width * height) + j * width + k] > maxnum) {
-//                        maxnum = outputs[i * (width * height) + j * width + k];
-//                        maxi = i; maxj = j; maxk = k;
-//                    }
-//                }
-//                if (maxi == PERSON)
-//                    intValues[maxj * width + maxk] = 0xFFFF0000;
-//                else if (maxi == DOG)
-//                    intValues[maxj * width + maxk] = 0xFF00FF00;
-//                else if (maxi == SHEEP)
-//                    intValues[maxj * width + maxk] = 0xFF0000FF;
-//                else
-//                    intValues[maxj * width + maxk] = 0xFF000000;
-//            }
-//        }
-//
-//        Bitmap bmpSegmentation = Bitmap.createScaledBitmap(mBitmap, width, height, true);
-//        Bitmap outputBitmap = bmpSegmentation.copy(bmpSegmentation.getConfig(), true);
-//        outputBitmap.setPixels(intValues, 0, outputBitmap.getWidth(), 0, 0, outputBitmap.getWidth(), outputBitmap.getHeight());
-//        final Bitmap transferredBitmap = Bitmap.createScaledBitmap(outputBitmap, mBitmap.getWidth(), mBitmap.getHeight(), true);
+
+        final ArrayList<Result> results =  PrePostProcessor.outputsToNMSPredictions(outputs, mImgScaleX, mImgScaleY, mIvScaleX, mIvScaleY, mImageView.getX(), mImageView.getY());
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-//                mImageView.setImageBitmap(transferredBitmap);
                 mButtonDetect.setEnabled(true);
                 mButtonDetect.setText(getString(R.string.detect));
                 mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-                mResultView.setResults(mImageIndex*100 + 10);
+                mResultView.setResults(results);
                 mResultView.invalidate();
                 mResultView.setVisibility(View.VISIBLE);
             }

@@ -7,25 +7,37 @@
 package org.pytorch.objectdetection;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
-import android.graphics.drawable.Drawable;
-import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 
-import org.w3c.dom.Text;
+import java.util.ArrayList;
 
 
 public class ResultView extends View {
 
+    private final static int TEXT_X = 40;
+    private final static int TEXT_Y = 35;
+    private final static int TEXT_WIDTH = 260;
+    private final static int TEXT_HEIGHT = 50;
+    
+    private final static String[] classes = {"person", "bicycle", "car", "motorcycle", "airplane", "bus", "train", "truck", "boat", "traffic light",
+            "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat", "dog", "horse", "sheep", "cow",
+            "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella", "handbag", "tie", "suitcase", "frisbee",
+            "skis", "snowboard", "sports ball", "kite", "baseball bat", "baseball glove", "skateboard", "surfboard",
+            "tennis racket", "bottle", "wine glass", "cup", "fork", "knife", "spoon", "bowl", "banana", "apple",
+            "sandwich", "orange", "broccoli", "carrot", "hot dog", "pizza", "donut", "cake", "chair", "couch",
+            "potted plant", "bed", "dining table", "toilet", "tv", "laptop", "mouse", "remote", "keyboard", "cell phone",
+            "microwave", "oven", "toaster", "sink", "refrigerator", "book", "clock", "vase", "scissors", "teddy bear",
+            "hair drier", "toothbrush"};
+
     private Paint mPaintRectangle;
     private Paint mPaintText;
-    private int m_y = 10;
+    private ArrayList<Result> mResults;
 
     public ResultView(Context context) {
         super(context);
@@ -42,24 +54,26 @@ public class ResultView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
-        mPaintRectangle.setStrokeWidth(5);
-        mPaintRectangle.setStyle(Paint.Style.STROKE);
-        canvas.drawRect(10, m_y, 500, 300, mPaintRectangle);
+        for (Result result : mResults) {
+            mPaintRectangle.setStrokeWidth(5);
+            mPaintRectangle.setStyle(Paint.Style.STROKE);
+            canvas.drawRect(result.rect, mPaintRectangle);
 
-        Path mPath = new Path();
-        RectF mRectF = new RectF(10, m_y, 260, m_y +50);
-        mPath.addRect(mRectF, Path.Direction.CW);
-        mPaintText.setColor(Color.MAGENTA);
-        canvas.drawPath(mPath, mPaintText);
+            Path mPath = new Path();
+            RectF mRectF = new RectF(result.rect.left, result.rect.top, result.rect.left + TEXT_WIDTH,  result.rect.top + TEXT_HEIGHT);
+            mPath.addRect(mRectF, Path.Direction.CW);
+            mPaintText.setColor(Color.MAGENTA);
+            canvas.drawPath(mPath, mPaintText);
 
-        mPaintText.setColor(Color.WHITE);
-        mPaintText.setStrokeWidth(0);
-        mPaintText.setStyle(Paint.Style.FILL);
-        mPaintText.setTextSize(32);
-        canvas.drawText("person 0.84", 40, 35+m_y, mPaintText);
+            mPaintText.setColor(Color.WHITE);
+            mPaintText.setStrokeWidth(0);
+            mPaintText.setStyle(Paint.Style.FILL);
+            mPaintText.setTextSize(32);
+            canvas.drawText(String.format("%s %.2f", classes[result.classIndex], result.score), result.rect.left + TEXT_X, result.rect.top + TEXT_Y, mPaintText);
+        }
     }
 
-    public void setResults(int y) {
-        m_y = y;
+    public void setResults(ArrayList<Result> results) {
+        mResults = results;
     }
 }
