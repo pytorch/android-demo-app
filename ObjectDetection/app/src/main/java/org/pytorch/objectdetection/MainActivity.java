@@ -43,7 +43,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private Bitmap mBitmap = null;
     private Module mModule = null;
 
-    private float mImgScaleX, mImgScaleY, mIvScaleX, mIvScaleY;
+    private float mImgScaleX, mImgScaleY, mIvScaleX, mIvScaleY, mStartX, mStartY;
 
     public static String assetFilePath(Context context, String assetName) throws IOException {
         File file = new File(context.getFilesDir(), assetName);
@@ -110,8 +110,11 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 mImgScaleX = (float)mBitmap.getWidth() / PrePostProcessor.inputWidth;
                 mImgScaleY = (float)mBitmap.getHeight() / PrePostProcessor.inputHeight;
 
-                mIvScaleX = (mBitmap.getWidth() > mBitmap.getHeight() ? (float)mImageView.getWidth() / mBitmap.getWidth() : (float)mBitmap.getWidth() / mBitmap.getHeight());
-                mIvScaleY  = (mBitmap.getWidth() < mBitmap.getHeight() ? (float)mBitmap.getHeight() / mBitmap.getWidth() : (float)mImageView.getHeight() / mBitmap.getWidth());
+                mIvScaleX = (mBitmap.getWidth() > mBitmap.getHeight() ? (float)mImageView.getWidth() / mBitmap.getWidth() : (float)mImageView.getHeight() / mBitmap.getHeight());
+                mIvScaleY  = (mBitmap.getHeight() > mBitmap.getWidth() ? (float)mImageView.getHeight() / mBitmap.getHeight() : (float)mImageView.getWidth() / mBitmap.getWidth());
+
+                mStartX = (mImageView.getWidth() - mIvScaleX * mBitmap.getWidth())/2;
+                mStartY = (mImageView.getHeight() -  mIvScaleY * mBitmap.getHeight())/2;
 
                 Thread thread = new Thread(MainActivity.this);
                 thread.start();
@@ -137,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         final Tensor outputTensor = outputTuple[0].toTensor();
         final float[] outputs = outputTensor.getDataAsFloatArray();
 
-        final ArrayList<Result> results =  PrePostProcessor.outputsToNMSPredictions(outputs, mImgScaleX, mImgScaleY, mIvScaleX, mIvScaleY, mImageView.getX(), mImageView.getY());
+        final ArrayList<Result> results =  PrePostProcessor.outputsToNMSPredictions(outputs, mImgScaleX, mImgScaleY, mIvScaleX, mIvScaleY, mStartX, mStartY);
 
         runOnUiThread(new Runnable() {
             @Override
