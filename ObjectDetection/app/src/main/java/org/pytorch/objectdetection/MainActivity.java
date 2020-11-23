@@ -8,13 +8,18 @@ package org.pytorch.objectdetection;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -73,6 +78,15 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE}, 1);
+        }
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, 1);
+        }
+
         setContentView(R.layout.activity_main);
 
         try {
@@ -111,7 +125,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             public void onClick(View v) {
                 mResultView.setVisibility(View.INVISIBLE);
 
-                final CharSequence[] options = { "Take Picture", "Choose from Photos", "Cancel" };
+                final CharSequence[] options = { "Choose from Photos", "Take Picture", "Cancel" };
                 AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                 builder.setTitle("New Test Image");
 
@@ -123,7 +137,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                             startActivityForResult(takePicture, 0);
                         }
                         else if (options[item].equals("Choose from Photos")) {
-                            Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                            Intent pickPhoto = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.INTERNAL_CONTENT_URI);
                             startActivityForResult(pickPhoto , 1);
                         }
                         else if (options[item].equals("Cancel")) {
@@ -172,10 +186,13 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             switch (requestCode) {
                 case 0:
                     if (resultCode == RESULT_OK && data != null) {
-                        Bitmap selectedImage = (Bitmap) data.getExtras().get("data");
-                        mImageView.setImageBitmap(selectedImage);
-                    }
+                        mBitmap = (Bitmap) data.getExtras().get("data");
+                        Matrix matrix = new Matrix();
+                        matrix.postRotate(90.0f);
+                        mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), matrix, true);
+                        mImageView.setImageBitmap(mBitmap);
 
+                    }
                     break;
                 case 1:
                     if (resultCode == RESULT_OK && data != null) {
@@ -189,7 +206,11 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
                                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                                 String picturePath = cursor.getString(columnIndex);
-                                mImageView.setImageBitmap(BitmapFactory.decodeFile(picturePath));
+                                mBitmap = BitmapFactory.decodeFile(picturePath);
+                                Matrix matrix = new Matrix();
+                                matrix.postRotate(90.0f);
+                                mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), matrix, true);
+                                mImageView.setImageBitmap(mBitmap);
                                 cursor.close();
                             }
                         }
