@@ -51,12 +51,6 @@ public class ResultView extends View {
     }
 
     @Override
-    protected void onSizeChanged (int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
-
-    }
-
-    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
