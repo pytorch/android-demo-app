@@ -3,6 +3,7 @@ package org.pytorch.objectdetection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.media.Image;
@@ -11,6 +12,7 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.TextureView;
 import android.view.ViewStub;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
@@ -97,12 +99,14 @@ public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetec
     @WorkerThread
     @Nullable
     protected AnalysisResult analyzeImage(ImageProxy image, int rotationDegrees) {
-
         try {
             if (mModule == null) {
                 mModule = Module.load(MainActivity.assetFilePath(getApplicationContext(), "yolov5s.torchscript.pt"));
             }
             Bitmap bitmap = imgToBitmap(image.getImage());
+            Matrix matrix = new Matrix();
+            matrix.postRotate(90.0f);
+            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
             Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, PrePostProcessor.inputWidth, PrePostProcessor.inputHeight, true);
 
             long tmstart = SystemClock.elapsedRealtime();
@@ -116,7 +120,7 @@ public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetec
             float imgScaleX = (float)bitmap.getWidth() / PrePostProcessor.inputWidth;
             float imgScaleY = (float)bitmap.getHeight() / PrePostProcessor.inputHeight;
 
-//            mIvScaleX = (mBitmap.getWidth() > mBitmap.getHeight() ? (float)mImageView.getWidth() / mBitmap.getWidth() : (float)mImageView.getHeight() / mBitmap.getHeight());
+//            float ivScaleX = (float)mImageView.getWidth() / bitmap.getWidth();
 //            mIvScaleY  = (mBitmap.getHeight() > mBitmap.getWidth() ? (float)mImageView.getHeight() / mBitmap.getHeight() : (float)mImageView.getWidth() / mBitmap.getWidth());
 //
 //            mStartX = (mImageView.getWidth() - mIvScaleX * mBitmap.getWidth())/2;
@@ -124,7 +128,7 @@ public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetec
 
 
 
-            final ArrayList<Result> results = PrePostProcessor.outputsToNMSPredictions(outputs, imgScaleX, imgScaleY, 1.0f, 1.0f, 0, 0);
+            final ArrayList<Result> results = PrePostProcessor.outputsToNMSPredictions(outputs, imgScaleX, imgScaleY, 1.5f, 1.0f, 0, 0);
             for (Result result: results) {
                 Log.d("<<<", ResultView.classes[result.classIndex]);
             }

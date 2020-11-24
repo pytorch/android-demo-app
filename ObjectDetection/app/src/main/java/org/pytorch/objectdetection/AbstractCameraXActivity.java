@@ -79,14 +79,14 @@ public abstract class AbstractCameraXActivity<R> extends BaseModuleActivity {
 
     final ImageAnalysisConfig imageAnalysisConfig =
         new ImageAnalysisConfig.Builder()
-            .setTargetResolution(new Size(224, 224))
+            .setTargetResolution(new Size(640, 480))
             .setCallbackHandler(mBackgroundHandler)
             .setImageReaderMode(ImageAnalysis.ImageReaderMode.ACQUIRE_LATEST_IMAGE)
             .build();
     final ImageAnalysis imageAnalysis = new ImageAnalysis(imageAnalysisConfig);
     imageAnalysis.setAnalyzer(
         (image, rotationDegrees) -> {
-          if (SystemClock.elapsedRealtime() - mLastAnalysisResultTime < 1000) {
+          if (SystemClock.elapsedRealtime() - mLastAnalysisResultTime < 500) {
             return;
           }
 
