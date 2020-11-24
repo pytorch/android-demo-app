@@ -149,6 +149,14 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             }
         });
 
+        final Button buttonLive = findViewById(R.id.liveButton);
+        buttonLive.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+              final Intent intent = new Intent(MainActivity.this, ObjectDetectionActivity.class);
+              startActivity(intent);
+            }
+        });
+
         mButtonDetect = findViewById(R.id.detectButton);
         mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mButtonDetect.setOnClickListener(new View.OnClickListener() {
@@ -177,6 +185,10 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             Log.e("Object Detection", "Error reading assets", e);
             finish();
         }
+    }
+
+    public Module getmModule() {
+        return mModule;
     }
 
     @Override
@@ -224,7 +236,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
     @Override
     public void run() {
-
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(mBitmap, PrePostProcessor.inputWidth, PrePostProcessor.inputHeight, true);
         final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(resizedBitmap, NO_MEAN_RGB, NO_STD_RGB);
 
