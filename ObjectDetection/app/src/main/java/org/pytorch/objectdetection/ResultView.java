@@ -24,8 +24,9 @@ public class ResultView extends View {
     private final static int TEXT_Y = 35;
     private final static int TEXT_WIDTH = 260;
     private final static int TEXT_HEIGHT = 50;
-    
-    private final static String[] classes = {"person", "bicycle", "car", "motorcycle", "airplane", "bus", "train", "truck", "boat", "traffic light",
+
+    // TODO read from a file
+    public  final static String[] classes = {"person", "bicycle", "car", "motorcycle", "airplane", "bus", "train", "truck", "boat", "traffic light",
             "fire hydrant", "stop sign", "parking meter", "bench", "bird", "cat", "dog", "horse", "sheep", "cow",
             "elephant", "bear", "zebra", "giraffe", "backpack", "umbrella", "handbag", "tie", "suitcase", "frisbee",
             "skis", "snowboard", "sports ball", "kite", "baseball bat", "baseball glove", "skateboard", "surfboard",
@@ -54,6 +55,7 @@ public class ResultView extends View {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
 
+        if (mResults == null) return;
         for (Result result : mResults) {
             mPaintRectangle.setStrokeWidth(5);
             mPaintRectangle.setStyle(Paint.Style.STROKE);

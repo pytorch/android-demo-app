@@ -7,10 +7,10 @@ import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.media.Image;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.TextureView;
 import android.view.ViewStub;
-import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
@@ -30,16 +30,16 @@ public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetec
     private static float[] NO_MEAN_RGB = new float[] {0.0f, 0.0f, 0.0f};
     public static float[] NO_STD_RGB = new float[] {1.0f, 1.0f, 1.0f};
 
-
     private Module mModule = null;
-
+    private ResultView mResultView;
 
     static class AnalysisResult {
-        public AnalysisResult(String[] topNClassNames, float[] topNScores,
-                              long moduleForwardDuration, long analysisDuration) {
+        private final ArrayList<Result> mResults;
+
+        public AnalysisResult(ArrayList<Result> results) {
+            mResults = results;
         }
     }
-
 
     @Override
     protected int getContentViewLayoutId() {
@@ -48,6 +48,7 @@ public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetec
 
     @Override
     protected TextureView getCameraPreviewTextureView() {
+        mResultView = findViewById(R.id.resultView);
         return ((ViewStub) findViewById(R.id.object_detection_texture_view_stub))
                 .inflate()
                 .findViewById(R.id.object_detection_texture_view);
@@ -55,14 +56,19 @@ public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetec
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
     }
 
     @Override
     protected void applyToUiAnalyzeImageResult(AnalysisResult result) {
-    }
+        for (Result rslt: result.mResults) {
+            Log.d("<<<!!!", ResultView.classes[rslt.classIndex]);
+        }
 
+
+        mResultView.setResults(result.mResults);
+        mResultView.invalidate();
+    }
 
     private Bitmap imgToBitmap(Image image) {
         Image.Plane[] planes = image.getPlanes();
@@ -75,7 +81,6 @@ public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetec
         int vSize = vBuffer.remaining();
 
         byte[] nv21 = new byte[ySize + uSize + vSize];
-        //U and V are swapped
         yBuffer.get(nv21, 0, ySize);
         vBuffer.get(nv21, ySize, vSize);
         uBuffer.get(nv21, ySize + vSize, uSize);
@@ -99,32 +104,41 @@ public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetec
             }
             Bitmap bitmap = imgToBitmap(image.getImage());
             Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, PrePostProcessor.inputWidth, PrePostProcessor.inputHeight, true);
-            final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(resizedBitmap, NO_MEAN_RGB, NO_STD_RGB);
 
-            final float[] inputs = inputTensor.getDataAsFloatArray();
+            long tmstart = SystemClock.elapsedRealtime();
+
+            final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(resizedBitmap, NO_MEAN_RGB, NO_STD_RGB);
+            //final float[] inputs = inputTensor.getDataAsFloatArray();
             IValue[] outputTuple = mModule.forward(IValue.from(inputTensor)).toTuple();
             final Tensor outputTensor = outputTuple[0].toTensor();
             final float[] outputs = outputTensor.getDataAsFloatArray();
 
-            final ArrayList<Result> results =  PrePostProcessor.outputsToNMSPredictions(outputs, 1.0f, 1.0f, 1.0f, 1.0f, 0, 0);
+            float imgScaleX = (float)bitmap.getWidth() / PrePostProcessor.inputWidth;
+            float imgScaleY = (float)bitmap.getHeight() / PrePostProcessor.inputHeight;
+
+//            mIvScaleX = (mBitmap.getWidth() > mBitmap.getHeight() ? (float)mImageView.getWidth() / mBitmap.getWidth() : (float)mImageView.getHeight() / mBitmap.getHeight());
+//            mIvScaleY  = (mBitmap.getHeight() > mBitmap.getWidth() ? (float)mImageView.getHeight() / mBitmap.getHeight() : (float)mImageView.getWidth() / mBitmap.getWidth());
+//
+//            mStartX = (mImageView.getWidth() - mIvScaleX * mBitmap.getWidth())/2;
+//            mStartY = (mImageView.getHeight() -  mIvScaleY * mBitmap.getHeight())/2;
 
 
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    for (Result result : results) {
-                        Toast.makeText(getApplicationContext(), ""+result.classIndex, Toast.LENGTH_SHORT);
-                    }
-                }
-            });
+
+            final ArrayList<Result> results = PrePostProcessor.outputsToNMSPredictions(outputs, imgScaleX, imgScaleY, 1.0f, 1.0f, 0, 0);
+            for (Result result: results) {
+                Log.d("<<<", ResultView.classes[result.classIndex]);
+            }
+
+            Log.d(">>>>>>>>>INFERENCE", "" + (SystemClock.elapsedRealtime() - tmstart));
+
+
+            return new AnalysisResult(results);
 
         }
         catch (IOException e) {
             Log.e("Object Detection", "Error reading assets", e);
             finish();
         }
-
-
 
         return null;
     }
