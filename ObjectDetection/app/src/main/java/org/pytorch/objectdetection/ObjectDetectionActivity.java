@@ -8,11 +8,9 @@ import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.media.Image;
 import android.os.Bundle;
-import android.os.SystemClock;
 import android.util.Log;
 import android.view.TextureView;
 import android.view.ViewStub;
-import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.annotation.WorkerThread;
@@ -29,9 +27,6 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 
 public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetectionActivity.AnalysisResult> {
-    private static float[] NO_MEAN_RGB = new float[] {0.0f, 0.0f, 0.0f};
-    public static float[] NO_STD_RGB = new float[] {1.0f, 1.0f, 1.0f};
-
     private Module mModule = null;
     private ResultView mResultView;
 
@@ -63,11 +58,6 @@ public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetec
 
     @Override
     protected void applyToUiAnalyzeImageResult(AnalysisResult result) {
-        for (Result rslt: result.mResults) {
-            Log.d("<<<!!!", ResultView.classes[rslt.classIndex]);
-        }
-
-
         mResultView.setResults(result.mResults);
         mResultView.invalidate();
     }
@@ -109,41 +99,23 @@ public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetec
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
             Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, PrePostProcessor.inputWidth, PrePostProcessor.inputHeight, true);
 
-            long tmstart = SystemClock.elapsedRealtime();
-
-            final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(resizedBitmap, NO_MEAN_RGB, NO_STD_RGB);
-            //final float[] inputs = inputTensor.getDataAsFloatArray();
+            final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(resizedBitmap, PrePostProcessor.NO_MEAN_RGB, PrePostProcessor.NO_STD_RGB);
             IValue[] outputTuple = mModule.forward(IValue.from(inputTensor)).toTuple();
             final Tensor outputTensor = outputTuple[0].toTensor();
             final float[] outputs = outputTensor.getDataAsFloatArray();
 
             float imgScaleX = (float)bitmap.getWidth() / PrePostProcessor.inputWidth;
             float imgScaleY = (float)bitmap.getHeight() / PrePostProcessor.inputHeight;
+            float ivScaleX = (float)mResultView.getWidth() / bitmap.getWidth();
+            float ivScaleY = (float)mResultView.getHeight() / bitmap.getHeight();
 
-//            float ivScaleX = (float)mImageView.getWidth() / bitmap.getWidth();
-//            mIvScaleY  = (mBitmap.getHeight() > mBitmap.getWidth() ? (float)mImageView.getHeight() / mBitmap.getHeight() : (float)mImageView.getWidth() / mBitmap.getWidth());
-//
-//            mStartX = (mImageView.getWidth() - mIvScaleX * mBitmap.getWidth())/2;
-//            mStartY = (mImageView.getHeight() -  mIvScaleY * mBitmap.getHeight())/2;
-
-
-
-            final ArrayList<Result> results = PrePostProcessor.outputsToNMSPredictions(outputs, imgScaleX, imgScaleY, 1.5f, 1.0f, 0, 0);
-            for (Result result: results) {
-                Log.d("<<<", ResultView.classes[result.classIndex]);
-            }
-
-            Log.d(">>>>>>>>>INFERENCE", "" + (SystemClock.elapsedRealtime() - tmstart));
-
-
+            final ArrayList<Result> results = PrePostProcessor.outputsToNMSPredictions(outputs, imgScaleX, imgScaleY, ivScaleX, ivScaleY, 0, 0);
             return new AnalysisResult(results);
-
         }
         catch (IOException e) {
             Log.e("Object Detection", "Error reading assets", e);
             finish();
         }
-
         return null;
     }
 

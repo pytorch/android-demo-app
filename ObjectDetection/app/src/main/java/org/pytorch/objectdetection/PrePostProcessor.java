@@ -26,6 +26,10 @@ class Result {
 };
 
 public class PrePostProcessor {
+    // for yolov5 model, no need to apply MEAN and STD
+    static float[] NO_MEAN_RGB = new float[] {0.0f, 0.0f, 0.0f};
+    static float[] NO_STD_RGB = new float[] {1.0f, 1.0f, 1.0f};
+
     // model input image size
     static int inputWidth = 640;
     static int inputHeight = 640;

@@ -44,8 +44,6 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements Runnable {
     private int mImageIndex = 0;
     private String[] mTestImages = {"test1.png", "test2.jpg", "test3.png"};
-    private static float[] NO_MEAN_RGB = new float[] {0.0f, 0.0f, 0.0f};
-    public static float[] NO_STD_RGB = new float[] {1.0f, 1.0f, 1.0f};
 
     private ImageView mImageView;
     private ResultView mResultView;
@@ -187,10 +185,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         }
     }
 
-    public Module getmModule() {
-        return mModule;
-    }
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -203,7 +197,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                         matrix.postRotate(90.0f);
                         mBitmap = Bitmap.createBitmap(mBitmap, 0, 0, mBitmap.getWidth(), mBitmap.getHeight(), matrix, true);
                         mImageView.setImageBitmap(mBitmap);
-
                     }
                     break;
                 case 1:
@@ -215,7 +208,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                                     filePathColumn, null, null, null);
                             if (cursor != null) {
                                 cursor.moveToFirst();
-
                                 int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
                                 String picturePath = cursor.getString(columnIndex);
                                 mBitmap = BitmapFactory.decodeFile(picturePath);
@@ -226,36 +218,28 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                                 cursor.close();
                             }
                         }
-
                     }
                     break;
             }
         }
     }
 
-
     @Override
     public void run() {
         Bitmap resizedBitmap = Bitmap.createScaledBitmap(mBitmap, PrePostProcessor.inputWidth, PrePostProcessor.inputHeight, true);
-        final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(resizedBitmap, NO_MEAN_RGB, NO_STD_RGB);
-
-        final float[] inputs = inputTensor.getDataAsFloatArray();
+        final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(resizedBitmap, PrePostProcessor.NO_MEAN_RGB, PrePostProcessor.NO_STD_RGB);
         IValue[] outputTuple = mModule.forward(IValue.from(inputTensor)).toTuple();
         final Tensor outputTensor = outputTuple[0].toTensor();
         final float[] outputs = outputTensor.getDataAsFloatArray();
-
         final ArrayList<Result> results =  PrePostProcessor.outputsToNMSPredictions(outputs, mImgScaleX, mImgScaleY, mIvScaleX, mIvScaleY, mStartX, mStartY);
 
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                mButtonDetect.setEnabled(true);
-                mButtonDetect.setText(getString(R.string.detect));
-                mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-                mResultView.setResults(results);
-                mResultView.invalidate();
-                mResultView.setVisibility(View.VISIBLE);
-            }
+        runOnUiThread(() -> {
+            mButtonDetect.setEnabled(true);
+            mButtonDetect.setText(getString(R.string.detect));
+            mProgressBar.setVisibility(ProgressBar.INVISIBLE);
+            mResultView.setResults(results);
+            mResultView.invalidate();
+            mResultView.setVisibility(View.VISIBLE);
         });
     }
 }
