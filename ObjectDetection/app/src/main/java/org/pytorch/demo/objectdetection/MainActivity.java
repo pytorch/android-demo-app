@@ -31,8 +31,8 @@ import android.widget.ProgressBar;
 
 import org.pytorch.IValue;
 import org.pytorch.Module;
+import org.pytorch.PyTorchAndroid;
 import org.pytorch.Tensor;
-import org.pytorch.demo.objectdetection.R;
 import org.pytorch.torchvision.TensorImageUtils;
 
 import java.io.BufferedReader;
@@ -55,27 +55,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private ProgressBar mProgressBar;
     private Bitmap mBitmap = null;
     private Module mModule = null;
-
     private float mImgScaleX, mImgScaleY, mIvScaleX, mIvScaleY, mStartX, mStartY;
-
-    public static String assetFilePath(Context context, String assetName) throws IOException {
-        File file = new File(context.getFilesDir(), assetName);
-        if (file.exists() && file.length() > 0) {
-            return file.getAbsolutePath();
-        }
-
-        try (InputStream is = context.getAssets().open(assetName)) {
-            try (OutputStream os = new FileOutputStream(file)) {
-                byte[] buffer = new byte[4 * 1024];
-                int read;
-                while ((read = is.read(buffer)) != -1) {
-                    os.write(buffer, 0, read);
-                }
-                os.flush();
-            }
-            return file.getAbsolutePath();
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -167,8 +147,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 mProgressBar.setVisibility(ProgressBar.VISIBLE);
                 mButtonDetect.setText(getString(R.string.run_model));
 
-                mImgScaleX = (float)mBitmap.getWidth() / PrePostProcessor.inputWidth;
-                mImgScaleY = (float)mBitmap.getHeight() / PrePostProcessor.inputHeight;
+                mImgScaleX = (float)mBitmap.getWidth() / PrePostProcessor.mInputWidth;
+                mImgScaleY = (float)mBitmap.getHeight() / PrePostProcessor.mInputHeight;
 
                 mIvScaleX = (mBitmap.getWidth() > mBitmap.getHeight() ? (float)mImageView.getWidth() / mBitmap.getWidth() : (float)mImageView.getHeight() / mBitmap.getHeight());
                 mIvScaleY  = (mBitmap.getHeight() > mBitmap.getWidth() ? (float)mImageView.getHeight() / mBitmap.getHeight() : (float)mImageView.getWidth() / mBitmap.getWidth());
@@ -182,16 +162,15 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         });
 
         try {
-            mModule = Module.load(MainActivity.assetFilePath(getApplicationContext(), "yolov5s.torchscript.pt"));
-
+            mModule = PyTorchAndroid.loadModuleFromAsset(getAssets(), "yolov5s.torchscript.pt");
             BufferedReader br = new BufferedReader(new InputStreamReader(getAssets().open("classes.txt")));
             String line;
             List<String> classes = new ArrayList<>();
             while ((line = br.readLine()) != null) {
                 classes.add(line);
             }
-            PrePostProcessor.classes = new String[classes.size()];
-            classes.toArray(PrePostProcessor.classes);
+            PrePostProcessor.mClasses = new String[classes.size()];
+            classes.toArray(PrePostProcessor.mClasses);
         } catch (IOException e) {
             Log.e("Object Detection", "Error reading assets", e);
             finish();
@@ -239,7 +218,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
     @Override
     public void run() {
-        Bitmap resizedBitmap = Bitmap.createScaledBitmap(mBitmap, PrePostProcessor.inputWidth, PrePostProcessor.inputHeight, true);
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(mBitmap, PrePostProcessor.mInputWidth, PrePostProcessor.mInputHeight, true);
         final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(resizedBitmap, PrePostProcessor.NO_MEAN_RGB, PrePostProcessor.NO_STD_RGB);
         IValue[] outputTuple = mModule.forward(IValue.from(inputTensor)).toTuple();
         final Tensor outputTensor = outputTuple[0].toTensor();

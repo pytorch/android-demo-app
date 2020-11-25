@@ -60,7 +60,7 @@ public class ResultView extends View {
             mPaintText.setStrokeWidth(0);
             mPaintText.setStyle(Paint.Style.FILL);
             mPaintText.setTextSize(32);
-            canvas.drawText(String.format("%s %.2f", PrePostProcessor.classes[result.classIndex], result.score), result.rect.left + TEXT_X, result.rect.top + TEXT_Y, mPaintText);
+            canvas.drawText(String.format("%s %.2f", PrePostProcessor.mClasses[result.classIndex], result.score), result.rect.left + TEXT_X, result.rect.top + TEXT_Y, mPaintText);
         }
     }
 

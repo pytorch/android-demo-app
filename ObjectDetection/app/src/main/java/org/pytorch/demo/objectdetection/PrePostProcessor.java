@@ -31,16 +31,16 @@ public class PrePostProcessor {
     static float[] NO_STD_RGB = new float[] {1.0f, 1.0f, 1.0f};
 
     // model input image size
-    static int inputWidth = 640;
-    static int inputHeight = 640;
+    static int mInputWidth = 640;
+    static int mInputHeight = 640;
 
     // model output is of size 25200*85
-    private static int outputRow = 25200; // as decided by the YOLOv5 model for input image of size 640*640
-    private static int outputColumn = 85; // left, top, right, bottom, score and 80 class probability
-    private static float threshold = 0.30f; // score above which a detection is generated
-    private static int nmsLimit = 15;
+    private static int mOutputRow = 25200; // as decided by the YOLOv5 model for input image of size 640*640
+    private static int mOutputColumn = 85; // left, top, right, bottom, score and 80 class probability
+    private static float mThreshold = 0.30f; // score above which a detection is generated
+    private static int mNmsLimit = 15;
 
-    static String[] classes;
+    static String[] mClasses;
 
     // The two methods nonMaxSuppression and IOU below are ported from https://github.com/hollance/YOLO-CoreML-MPSNNGraph/blob/master/Common/Helpers.swift
     /**
@@ -118,23 +118,23 @@ public class PrePostProcessor {
 
     static ArrayList<Result> outputsToNMSPredictions(float[] outputs, float imgScaleX, float imgScaleY, float ivScaleX, float ivScaleY, float startX, float startY) {
         ArrayList<Result> results = new ArrayList<>();
-        for (int i=0; i<outputRow; i++) {
-            if (outputs[i*outputColumn+4] > threshold) {
-                float x = outputs[i*outputColumn];
-                float y = outputs[i*outputColumn+1];
-                float w = outputs[i*outputColumn+2];
-                float h = outputs[i*outputColumn+3];
+        for (int i = 0; i< mOutputRow; i++) {
+            if (outputs[i* mOutputColumn +4] > mThreshold) {
+                float x = outputs[i* mOutputColumn];
+                float y = outputs[i* mOutputColumn +1];
+                float w = outputs[i* mOutputColumn +2];
+                float h = outputs[i* mOutputColumn +3];
 
                 float left = imgScaleX * (x - w/2);
                 float top = imgScaleY * (y - h/2);
                 float right = imgScaleX * (x + w/2);
                 float bottom = imgScaleY * (y + h/2);
 
-                float max = outputs[i*outputColumn+5];
+                float max = outputs[i* mOutputColumn +5];
                 int cls = 0;
-                for (int j=0; j < outputColumn-5; j++) {
-                    if (outputs[i*outputColumn+5+j] > max) {
-                        max = outputs[i*outputColumn+5+j];
+                for (int j = 0; j < mOutputColumn -5; j++) {
+                    if (outputs[i* mOutputColumn +5+j] > max) {
+                        max = outputs[i* mOutputColumn +5+j];
                         cls = j;
                     }
                 }
@@ -144,6 +144,6 @@ public class PrePostProcessor {
                 results.add(result);
             }
         }
-        return nonMaxSuppression(results, nmsLimit, threshold);
+        return nonMaxSuppression(results, mNmsLimit, mThreshold);
     }
 }

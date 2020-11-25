@@ -18,8 +18,8 @@ import androidx.camera.core.ImageProxy;
 
 import org.pytorch.IValue;
 import org.pytorch.Module;
+import org.pytorch.PyTorchAndroid;
 import org.pytorch.Tensor;
-import org.pytorch.demo.objectdetection.R;
 import org.pytorch.torchvision.TensorImageUtils;
 
 import java.io.ByteArrayOutputStream;
@@ -90,34 +90,27 @@ public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetec
     @WorkerThread
     @Nullable
     protected AnalysisResult analyzeImage(ImageProxy image, int rotationDegrees) {
-        try {
-            if (mModule == null) {
-                mModule = Module.load(MainActivity.assetFilePath(getApplicationContext(), "yolov5s.torchscript.pt"));
-            }
-            Bitmap bitmap = imgToBitmap(image.getImage());
-            Matrix matrix = new Matrix();
-            matrix.postRotate(90.0f);
-            bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-            Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, PrePostProcessor.inputWidth, PrePostProcessor.inputHeight, true);
-
-            final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(resizedBitmap, PrePostProcessor.NO_MEAN_RGB, PrePostProcessor.NO_STD_RGB);
-            IValue[] outputTuple = mModule.forward(IValue.from(inputTensor)).toTuple();
-            final Tensor outputTensor = outputTuple[0].toTensor();
-            final float[] outputs = outputTensor.getDataAsFloatArray();
-
-            float imgScaleX = (float)bitmap.getWidth() / PrePostProcessor.inputWidth;
-            float imgScaleY = (float)bitmap.getHeight() / PrePostProcessor.inputHeight;
-            float ivScaleX = (float)mResultView.getWidth() / bitmap.getWidth();
-            float ivScaleY = (float)mResultView.getHeight() / bitmap.getHeight();
-
-            final ArrayList<Result> results = PrePostProcessor.outputsToNMSPredictions(outputs, imgScaleX, imgScaleY, ivScaleX, ivScaleY, 0, 0);
-            return new AnalysisResult(results);
+        if (mModule == null) {
+            mModule = PyTorchAndroid.loadModuleFromAsset(getAssets(), "yolov5s.torchscript.pt");
         }
-        catch (IOException e) {
-            Log.e("Object Detection", "Error reading assets", e);
-            finish();
-        }
-        return null;
+        Bitmap bitmap = imgToBitmap(image.getImage());
+        Matrix matrix = new Matrix();
+        matrix.postRotate(90.0f);
+        bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+        Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, PrePostProcessor.mInputWidth, PrePostProcessor.mInputHeight, true);
+
+        final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(resizedBitmap, PrePostProcessor.NO_MEAN_RGB, PrePostProcessor.NO_STD_RGB);
+        IValue[] outputTuple = mModule.forward(IValue.from(inputTensor)).toTuple();
+        final Tensor outputTensor = outputTuple[0].toTensor();
+        final float[] outputs = outputTensor.getDataAsFloatArray();
+
+        float imgScaleX = (float)bitmap.getWidth() / PrePostProcessor.mInputWidth;
+        float imgScaleY = (float)bitmap.getHeight() / PrePostProcessor.mInputHeight;
+        float ivScaleX = (float)mResultView.getWidth() / bitmap.getWidth();
+        float ivScaleY = (float)mResultView.getHeight() / bitmap.getHeight();
+
+        final ArrayList<Result> results = PrePostProcessor.outputsToNMSPredictions(outputs, imgScaleX, imgScaleY, ivScaleX, ivScaleY, 0, 0);
+        return new AnalysisResult(results);
     }
 
     @Override
