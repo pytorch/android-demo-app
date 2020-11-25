@@ -37,9 +37,10 @@ public class PrePostProcessor {
     // model output is of size 25200*85
     private static int outputRow = 25200; // as decided by the YOLOv5 model for input image of size 640*640
     private static int outputColumn = 85; // left, top, right, bottom, score and 80 class probability
-    private static float threshold = 0.20f; // score above which a detection is generated
+    private static float threshold = 0.30f; // score above which a detection is generated
     private static int nmsLimit = 15;
 
+    static String[] classes;
 
     // The two methods nonMaxSuppression and IOU below are ported from https://github.com/hollance/YOLO-CoreML-MPSNNGraph/blob/master/Common/Helpers.swift
     /**
@@ -60,7 +61,6 @@ public class PrePostProcessor {
                         return o1.score.compareTo(o2.score);
                     }
                 });
-
 
         ArrayList<Result> selected = new ArrayList<>();
         boolean[] active = new boolean[boxes.size()];
@@ -116,8 +116,6 @@ public class PrePostProcessor {
         return intersectionArea / (areaA + areaB - intersectionArea);
     }
 
-
-
     static ArrayList<Result> outputsToNMSPredictions(float[] outputs, float imgScaleX, float imgScaleY, float ivScaleX, float ivScaleY, float startX, float startY) {
         ArrayList<Result> results = new ArrayList<>();
         for (int i=0; i<outputRow; i++) {
@@ -148,6 +146,4 @@ public class PrePostProcessor {
         }
         return nonMaxSuppression(results, nmsLimit, threshold);
     }
-
-
 }

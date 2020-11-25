@@ -34,12 +34,15 @@ import org.pytorch.Module;
 import org.pytorch.Tensor;
 import org.pytorch.torchvision.TensorImageUtils;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements Runnable {
     private int mImageIndex = 0;
@@ -179,6 +182,15 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         try {
             mModule = Module.load(MainActivity.assetFilePath(getApplicationContext(), "yolov5s.torchscript.pt"));
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(getAssets().open("classes.txt")));
+            String line;
+            List<String> classes = new ArrayList<>();
+            while ((line = br.readLine()) != null) {
+                classes.add(line);
+            }
+            PrePostProcessor.classes = new String[classes.size()];
+            classes.toArray(PrePostProcessor.classes);
         } catch (IOException e) {
             Log.e("Object Detection", "Error reading assets", e);
             finish();
