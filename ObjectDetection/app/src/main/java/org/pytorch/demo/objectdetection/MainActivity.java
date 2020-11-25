@@ -4,7 +4,7 @@
 // This source code is licensed under the BSD-style license found in the
 // LICENSE file in the root directory of this source tree.
 
-package org.pytorch.objectdetection;
+package org.pytorch.demo.objectdetection;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -32,6 +32,7 @@ import android.widget.ProgressBar;
 import org.pytorch.IValue;
 import org.pytorch.Module;
 import org.pytorch.Tensor;
+import org.pytorch.demo.objectdetection.R;
 import org.pytorch.torchvision.TensorImageUtils;
 
 import java.io.BufferedReader;

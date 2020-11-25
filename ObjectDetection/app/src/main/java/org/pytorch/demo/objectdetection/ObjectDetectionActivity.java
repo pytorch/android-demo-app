@@ -1,4 +1,4 @@
-package org.pytorch.objectdetection;
+package org.pytorch.demo.objectdetection;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -19,6 +19,7 @@ import androidx.camera.core.ImageProxy;
 import org.pytorch.IValue;
 import org.pytorch.Module;
 import org.pytorch.Tensor;
+import org.pytorch.demo.objectdetection.R;
 import org.pytorch.torchvision.TensorImageUtils;
 
 import java.io.ByteArrayOutputStream;

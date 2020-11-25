@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <org.pytorch.objectdetection.ResultView
+    <org.pytorch.demo.objectdetection.ResultView
         android:id="@+id/resultView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
