@@ -25,7 +25,7 @@ To Test Run the Object Detection Android App, follow the steps below:
 
 If you have a good GPU and want to train your model from scratch, uncomment the line `trainIters(encoder, decoder, 450100, print_every=5000)` in `seq2seq_nmt.py` before running `python seq2seq2_nmt.py` to go through the whole process of training, saving, loading and optimizing and saving the final mobile-ready models. After `optimized_encoder_150k.pth` and `optimized_encoder_150k.pth` are generated, copy them to the Android app's assets folder.
 
-You can also download the PyTorch trained and optimized NMT encoder and decoder models compressed in a zip [here]( https://drive.google.com/file/d/1TxB5oStgShrNvlSVlVaGylNUi4PTtufQ/view?usp=sharing), unzip it and then copy to the Android app's assets folder.
+You can also download the PyTorch trained and optimized NMT encoder and decoder models compressed in a zip [here](https://drive.google.com/file/d/1TxB5oStgShrNvlSVlVaGylNUi4PTtufQ/view?usp=sharing), unzip it and then copy to the Android app's assets folder.
 
 ### 2. Build and run with Android Studio
 
