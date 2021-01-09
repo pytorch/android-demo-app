@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android" xmlns:tools="http://schemas.android.com/tools" android:shape="rectangle"
+    android:useLevel="false">
+    <!--这里设置badge的颜色-->
+    <solid android:color="@android:color/holo_green_light" tools:ignore="StateListReachable" />
+
+    <!--这里设置badge的大小-->
+    <size
+        android:width="20dp"
+        android:height="20dp"/>
+</selector>

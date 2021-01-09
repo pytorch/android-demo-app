@@ -58,4 +58,9 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
+<!--    丁豪添加-->
+    <string name="navigation_bar">导航栏</string>
+    <string name="Setup">设置</string>
+    <string name="person_name">张三</string>
+
 </resources>

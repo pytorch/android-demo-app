@@ -1,39 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/ActivityContentBase"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/bg_welcome">
+    tools:context=".MainActivity"
+    android:background="@mipmap/bg_vision"
+    android:orientation="vertical">
 
-    <Button
-        android:id="@+id/skip_button"
-        style="@style/Button"
+    <TextView
+        android:id="@+id/tv_1"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/button_height"
-        android:text="@string/welcome_skip_button"
+        android:layout_height="50dp"
+        android:text="人脸识别"
         android:textColor="@android:color/black"
-        android:background="@drawable/bg_skip_button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent" />
+        android:textSize="30sp"
+        android:gravity="center"
+        android:layout_marginTop="100dp"
+        tools:ignore="MissingConstraints" />
 
-    <androidx.viewpager.widget.ViewPager
-        android:id="@+id/welcome_view_pager"
+    <EditText
+        android:id="@+id/et_1"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@id/welcome_tab_layout"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:layout_height="50dp"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:hint="用户名"
+        android:maxLines="1"
+        android:padding="5dp"
+        android:layout_marginTop="300dp"
 
-    <com.google.android.material.tabs.TabLayout
-        android:id="@+id/welcome_tab_layout"
+        tools:ignore="MissingConstraints"/>
+
+    <EditText
+        android:id="@+id/et_2"
         android:layout_width="match_parent"
-        android:layout_height="60dp"
-        app:tabIndicatorColor="@android:color/white"
-        app:tabIndicatorHeight="6dp"
-        app:tabPaddingTop="16dp"
-        android:layout_marginBottom="16dp"
-        android:background="@drawable/bg_tab_indicator"
-        app:layout_constraintBottom_toTopOf="@id/skip_button" />
+        android:layout_height="50dp"
+        android:textSize="16sp"
+        android:textColor="@android:color/black"
+        android:hint="密码"
+        android:maxLines="1"
+        android:padding="5dp"
+        android:inputType="textPassword"
+        android:layout_marginTop="10dp"
+        tools:ignore="MissingConstraints"/>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp">
+
+        <Button
+            android:id="@+id/btn_onlinelogin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:text="在线登录" />
+
+        <Button
+            android:id="@+id/btn_offlinelogin"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="离线登录"
+            android:onClick="get_sidebar"
+            android:layout_gravity="center"
+            tools:ignore="OnClick"
+            />
+    </LinearLayout>
+
+</LinearLayout>
+

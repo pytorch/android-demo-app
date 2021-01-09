@@ -32,6 +32,12 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".SideBarActivity"
+            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".SetupMenuActivity"
+            android:screenOrientation="portrait"/>
         <activity android:name=".MainActivity" />
         <activity android:name=".vision.VisionListActivity" />
         <activity android:name=".nlp.NLPListActivity" />

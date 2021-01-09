@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg_main">
+<!--    android:background="@android:color/transparent">-->
+
+
+    <!--标题栏样式一-->
+<!--    <androidx.appcompat.widget.Toolbar-->
+<!--        android:id="@+id/toolbar"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="?actionBarSize"-->
+<!--        android:background="@color/colorPrimary"-->
+<!--        app:subtitleTextColor="@android:color/white"-->
+<!--        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"-->
+<!--        app:title="侧边栏"-->
+<!--        app:titleTextColor="@android:color/white"-->
+<!--        tools:ignore="MissingConstraints">-->
+<!--    </androidx.appcompat.widget.Toolbar>-->
+
+    <!--整体设计-->
+
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:openDrawer="start">
+
+        <!--主页内容-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main_context"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/main_vision_click_view"
+                style="@style/Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintHeight_percent=".5"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableTop="@drawable/ic_vision_s"
+                    android:drawablePadding="16dp"
+                    android:text="@string/main_vision_button"
+                    android:textAppearance="@style/TextAppearanceMainVisionNlp" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/main_nlp_click_view"
+                style="@style/Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHeight_percent=".5"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/main_vision_click_view">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableTop="@drawable/ic_language_s"
+                    android:drawablePadding="16dp"
+                    android:text="@string/main_nlp_button"
+                    android:textAppearance="@style/TextAppearanceMainVisionNlp" />
+            </FrameLayout>
+            <!--            <TextView-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:gravity="center"-->
+            <!--                android:text="欢迎登录执法记录仪!"-->
+            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--                app:layout_constraintLeft_toLeftOf="parent"-->
+            <!--                app:layout_constraintRight_toRightOf="parent"-->
+            <!--                app:layout_constraintTop_toTopOf="parent" />-->
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navigation_view"
+            android:layout_width="240dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            app:headerLayout="@layout/navigationview_header"
+            app:menu="@menu/menu_navigation">
+
+            <!--添加脚布局-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_gravity="bottom"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/footer_item_setting"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:background="@android:color/transparent"
+                    android:drawableStart="@drawable/ic_setting"
+                    android:drawableLeft="@drawable/ic_setting"
+                    android:drawablePadding="1dp"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:onClick="SetupMenu"
+                    android:text="@string/Setup"
+                    android:textAlignment="inherit"
+                    android:textColor="@color/colorPrimary"
+                    tools:ignore="OnClick" />
+
+                <Button
+                    android:id="@+id/footer_item_out"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:drawableStart="@drawable/ic_out"
+                    android:drawablePadding="1dp"
+                    android:gravity="center"
+                    android:paddingLeft="5dp"
+                    android:text="退出"
+                    android:textAlignment="center"
+                    android:textColor="@color/colorPrimary" />
+            </LinearLayout>
+
+        </com.google.android.material.navigation.NavigationView>
+    </androidx.drawerlayout.widget.DrawerLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:fromDegrees="45"
+    android:toDegrees="45"
+    android:pivotX="-40%"
+    android:pivotY="80%">
+    <shape android:shape="rectangle">
+        <solid android:color="#D42D2E"/>
+    </shape>
+
+</rotate>
