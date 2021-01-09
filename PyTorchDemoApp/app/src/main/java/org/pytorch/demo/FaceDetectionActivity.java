@@ -41,6 +41,7 @@ import org.pytorch.demo.R;
 import org.pytorch.demo.Utils;
 import org.pytorch.demo.YuvToRgbConverter;
 
+import org.pytorch.demo.util.Util;
 import org.pytorch.demo.vision.AbstractCameraXActivity;
 import org.pytorch.demo.vision.Helper.GraphicOverlay;
 import org.pytorch.demo.vision.Helper.DrawImageView;
@@ -190,8 +191,8 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
         webSocket.sendText("get embeddings");
     }
     private String get_embeddings_from_files(){
-        File Directory = getFilesDir();
-        File[] files = Directory.listFiles();
+//        File Directory = getFilesDir();
+        File[] files = Util.GetLocalDatagramFiles();
         String embedding_str = "";
         for (File f: files){
             try{
@@ -445,7 +446,8 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
         }
 
         //get_embeddings from server
-        get_embeddings();
+//        get_embeddings();
+        update_embeddings(get_embeddings_from_files());
         graphicOverlay = findViewById(R.id.graphic_overlay);
         graphicOverlay.bringToFront();
 
