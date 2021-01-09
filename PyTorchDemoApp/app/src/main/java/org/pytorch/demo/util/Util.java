@@ -42,7 +42,7 @@ public class Util {
     private static WebSocket webSocket;
     private static String available_datagrams;
 
-    private static String deliminator = "\\$\\$\\$\\$\\$\\$\\$\\$\\$\\$";
+    public static String deliminator = "\\${10,}";
 
     public static String DownloadDatagramByName(String s) {
         datagram = null;
