@@ -2,6 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.pytorch.demo">
 
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <uses-feature android:name="android.hardware.type.watch" />
+
+    <uses-permission android:name="android.permission.CAMERA" /> <!-- 允许程序打开网络套接字 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -10,24 +19,32 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
+            android:name=".SelectFaceDatagram"
+            android:label="@string/title_activity_select_face_datagram"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+
+        <activity
             android:name=".WelcomeActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".MainActivity"></activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".vision.VisionListActivity" />
         <activity android:name=".nlp.NLPListActivity" />
         <activity
             android:name=".vision.ImageClassificationActivity"
-            android:label="@string/image_classification_title"></activity>
+            android:label="@string/image_classification_title" />
+        <activity
+            android:name=".FaceDetectionActivity"
+            android:label="@string/face_recognition_title" />
+        <activity
+            android:name=".RemoteFaceDetectActivity"
+            android:label="@string/vision_card_face_recognition_remote_title" />
         <activity android:name=".nlp.TextClassificationActivity" />
-
     </application>
-
-    <uses-permission android:name="android.permission.CAMERA" />
 
 </manifest>

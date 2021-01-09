@@ -1,3 +1,6 @@
+ext {
+    buildToolsVersion = '29.0.2'
+}
 buildscript {
     repositories {
         google()

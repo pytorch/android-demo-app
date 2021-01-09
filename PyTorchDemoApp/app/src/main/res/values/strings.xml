@@ -9,7 +9,9 @@
     <string name="image_classification_title">Image Classification</string>
     <string name="image_classification_results_header_row_name">Classification</string>
     <string name="image_classification_results_header_row_score">Score</string>
-
+    <string name="face_recognition_title">Face Recognition</string>
+    <!--    <string name="image_classification_results_header_row_name">Classification</string>-->
+    <!--    <string name="image_classification_results_header_row_score">Score</string>-->
     <string name="text_classification">Text Classification</string>
 
     <string name="welcome_page_title">Welcome</string>
@@ -27,6 +29,12 @@
     <string name="vision_card_resnet_title">Image Classification\nResnet18</string>
     <string name="vision_card_resnet_description">Default TorchVision pretrained Resnet18 model. Input is float32 tensor of 1x3x224x224 shape</string>
 
+    <string name="vision_card_face_recognition_title">Face Detection\ndetect and draw rect on face</string>
+    <string name="vision_card_face_recognition_description">Inference in int8.\nInput is float32 tensor of 1x3x360x480 shape</string>
+
+    <string name="vision_card_face_recognition_remote_title">Face Detection\ndetect and draw rect on face on remote server</string>
+    <string name="vision_card_face_recognition_remote_description">push rtmp stream and get and draw rects</string>
+
     <string name="nlp_card_lstm_title">Text Classification.\nLSTM model trained on Reddit comments dataset. </string>
     <string name="nlp_card_lstm_description">Predicts subreddit by given comment.\nInput is uint8 1xN shaped tensor, where N is the length of text\'s bytes representation in utf-8 encoding. Output classes are subreddits.</string>
     <string name="clear">Clear</string>
@@ -34,5 +42,20 @@
     <string name="text_classification_score">Score</string>
     <string name="error_dialog_text">Sorry there was an error.</string>
     <string name="text_classification_edittext_hint">Something like a reddit comment...</string>
+    <string name="title_activity_select_datagram">SelectDatagram</string>
+    <!--
+    This string is used for square devices and overridden by hello_world in
+    values-round/strings.xml for round devices.
+    -->
+    <string name="hello_world">Hello Square World!</string>
+    <string name="title_activity_select_face_datagram">SelectFaceDatagram</string>
+    <!-- Strings used for fragments for navigation -->
+    <string name="first_fragment_label">First Fragment</string>
+    <string name="second_fragment_label">Second Fragment</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+
+    <string name="hello_first_fragment">Hello first fragment</string>
+    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
 
 </resources>
