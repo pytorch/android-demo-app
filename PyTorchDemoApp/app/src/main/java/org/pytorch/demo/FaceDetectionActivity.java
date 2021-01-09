@@ -374,75 +374,75 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
         });
         namedboxpool = new ArrayList<>();
         namedEmbeddings = new ArrayList<>();
-        webSocketFactory = new WebSocketFactory();
-//        WebSocket webSocket;
-        try{
-            webSocket=webSocketFactory.createSocket(serverUri);
-            // Android 4.0 之后不能在主线程中请求HTTP请求
-//            new Thread(new Runnable(){
+//        webSocketFactory = new WebSocketFactory();
+////        WebSocket webSocket;
+//        try{
+//            webSocket=webSocketFactory.createSocket(serverUri);
+//            // Android 4.0 之后不能在主线程中请求HTTP请求
+////            new Thread(new Runnable(){
+////                @Override
+////                public void run() {
+////                    try{
+////                        webSocket.connect();
+////                    }catch (WebSocketException exception)
+////                    {
+////                        exception.printStackTrace();
+////                    }
+////
+////                }
+////            }).start();
+//            // force main thread permitting network
+//            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//            StrictMode.setThreadPolicy(policy);
+//
+//            webSocket.connect();
+//            webSocket.addListener(new WebSocketAdapter() {
 //                @Override
-//                public void run() {
-//                    try{
-//                        webSocket.connect();
-//                    }catch (WebSocketException exception)
+//                public void onTextMessage(WebSocket websocket, String message) throws Exception {
+//                    // Received a text message.
+//                    System.out.println("in listener, text message received "+ message);
+//
+////                    System.out.println(message);
+//                    //TODO info can be retrived here
+//                    // need further operation
+//                    // put box and info into boxpool
+//
+//                    if (message != null)
 //                    {
-//                        exception.printStackTrace();
+////                        NamedBox namedBox = new NamedBox(message);
+////                        namedboxpool.add(namedBox);
+//                        update_embeddings(message);
 //                    }
+//                    else
+//                        System.out.println("in onTextMessage namedbox is null");
 //
 //                }
-//            }).start();
-            // force main thread permitting network
-            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
-            StrictMode.setThreadPolicy(policy);
-
-            webSocket.connect();
-            webSocket.addListener(new WebSocketAdapter() {
-                @Override
-                public void onTextMessage(WebSocket websocket, String message) throws Exception {
-                    // Received a text message.
-                    System.out.println("in listener, text message received "+ message);
-
-//                    System.out.println(message);
-                    //TODO info can be retrived here
-                    // need further operation
-                    // put box and info into boxpool
-
-                    if (message != null)
-                    {
-//                        NamedBox namedBox = new NamedBox(message);
-//                        namedboxpool.add(namedBox);
-                        update_embeddings(message);
-                    }
-                    else
-                        System.out.println("in onTextMessage namedbox is null");
-
-                }
-            });
-            webSocket.addListener(new WebSocketAdapter(){
-                @Override
-                public void onBinaryMessage(WebSocket webSocket, byte[] bytes) throws Exception{
-                    System.out.println("in binary message listener received bytes of size " + bytes.length);
-                }
-
-            });
-//            webSocket.sendText("String websocket");
-        }catch (IOException ioe)
-        {
-            System.out.println(ioe.toString());
-        }
-        catch (OpeningHandshakeException e)
-        {
-            // A violation against the WebSocket protocol was detected
-            // during the opening handshake.
-        }
-        catch (HostnameUnverifiedException e)
-        {
-            // The certificate of the peer does not match the expected hostname.
-        }
-        catch (WebSocketException e)
-        {
-            // Failed to establish a WebSocket connection.
-        }
+//            });
+//            webSocket.addListener(new WebSocketAdapter(){
+//                @Override
+//                public void onBinaryMessage(WebSocket webSocket, byte[] bytes) throws Exception{
+//                    System.out.println("in binary message listener received bytes of size " + bytes.length);
+//                }
+//
+//            });
+////            webSocket.sendText("String websocket");
+//        }catch (IOException ioe)
+//        {
+//            System.out.println(ioe.toString());
+//        }
+//        catch (OpeningHandshakeException e)
+//        {
+//            // A violation against the WebSocket protocol was detected
+//            // during the opening handshake.
+//        }
+//        catch (HostnameUnverifiedException e)
+//        {
+//            // The certificate of the peer does not match the expected hostname.
+//        }
+//        catch (WebSocketException e)
+//        {
+//            // Failed to establish a WebSocket connection.
+//        }
 
         //get_embeddings from server
         get_embeddings();
