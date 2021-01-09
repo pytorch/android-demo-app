@@ -42,8 +42,9 @@ public class Util {
     private static WebSocket webSocket;
     private static String available_datagrams;
 
-    private static String deliminator = "\\$\\$\\$\\$\\$\\$\\$\\$\\$\\$";
-
+//    private static String deliminator = "";
+//    private static String deli
+    public static String deliminator = "\\${10,}";
     public static String DownloadDatagramByName(String s) {
         datagram = null;
         webSocketFactory = new WebSocketFactory();
@@ -92,10 +93,15 @@ public class Util {
             }
 
             File Directory = Environment.getExternalStorageDirectory();
-            File datagram_file = new File(Directory, s+".json");
+            File project_dir = new File(Directory, "FaceRecogApp");
+            if (!project_dir.exists()){
+                project_dir.mkdir();
+            }
+            File datagram_file = new File(project_dir, s+".json");
             if (!datagram_file.exists()){
                 datagram_file.createNewFile();
             }
+
             FileOutputStream fileOutputStream = new FileOutputStream(datagram_file);
             fileOutputStream.write(datagram.getBytes());
             fileOutputStream.close();
@@ -123,6 +129,29 @@ public class Util {
 
         webSocket.disconnect();
         return "success";
+    }
+
+
+    public static String[] GetLocalDatagrams(){
+        File Directory = Environment.getExternalStorageDirectory();
+        File project_dir = new File(Directory, "FaceRecogApp");
+        if (!project_dir.exists()){
+            project_dir.mkdir();
+            return new String[0];
+        }
+//        File[] files = project_dir.listFiles();
+        String[] filenames = project_dir.list();
+        return filenames;
+    }
+    public static File[] GetLocalDatagramFiles(){
+        File Directory = Environment.getExternalStorageDirectory();
+        File project_dir = new File(Directory, "FaceRecogApp");
+        if (!project_dir.exists()){
+            project_dir.mkdir();
+            return new File[0];
+        }
+        File[] files = project_dir.listFiles();
+        return files;
     }
 
     private static void get_datagram_by_name(String s) {

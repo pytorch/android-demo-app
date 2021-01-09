@@ -41,81 +41,189 @@ public class DatagramSelectAdapter extends RecyclerView.Adapter<DatagramSelectAd
         return new ViewPagerViewHolder(view);
     }
     ListView listView;
+    ListView listView1;
 
     @Override
     public void onBindViewHolder(@NonNull ViewPagerViewHolder holder, int position) {
-        TextView textView = holder.itemView.findViewById(R.id.textView);
-        textView.setText(String.format("set to %d", position));
-
-        listView = holder.itemView.findViewById(R.id.listview);
-        Button button = holder.itemView.findViewById(R.id.button);
-
-        button.setOnClickListener(new View.OnClickListener() {
-                                      @SuppressLint("StaticFieldLeak")
-                                      @Override
-                                      public void onClick(View v) {
-                                          String login_id = "1";
-                                          new AsyncTask<String, Integer, String>(){
-
-
-                                              @Override
-                                              protected String doInBackground(String... arg0){
-                                                  String res = Util.GetAvailableDatagrams("id");
-                                                  return res;
-                                              }
-
-                                              protected void onPostExecute(String result){
-                                                  if (result != null){
-                                                      Toast.makeText(parent.getContext(), "刷新完成",Toast.LENGTH_SHORT).show();
-                                                      updateListView(result);
-                                                  }else{
-                                                      Toast.makeText(parent.getContext(), "刷新失败，检查网络",Toast.LENGTH_SHORT).show();
-                                                  }
-                                              }
-
+//        TextView textView = holder.itemView.findViewById(R.id.textView);
+//        textView.setText(String.format("set to %d", position));
+//
+//        listView = holder.itemView.findViewById(R.id.listview);
+//        Button button = holder.itemView.findViewById(R.id.button);
+//
+//        button.setOnClickListener(new View.OnClickListener() {
+//                                      @SuppressLint("StaticFieldLeak")
+//                                      @Override
+//                                      public void onClick(View v) {
+//                                          String login_id = "1";
+//                                          new AsyncTask<String, Integer, String>(){
+//
+//
 //                                              @Override
-//                                              protected onProgressUpdate(Integer... progress){
-//                                                  setProgressPercent(progress[0]);
+//                                              protected String doInBackground(String... arg0){
+//                                                  String res = Util.GetAvailableDatagrams("id");
+//                                                  return res;
 //                                              }
-                                          }.execute("1");
-                                      }
-                                  }
-        );
+//
+//                                              protected void onPostExecute(String result){
+//                                                  if (result != null){
+//                                                      Toast.makeText(parent.getContext(), "刷新完成",Toast.LENGTH_SHORT).show();
+//                                                      updateListView(result);
+//                                                  }else{
+//                                                      Toast.makeText(parent.getContext(), "刷新失败，检查网络",Toast.LENGTH_SHORT).show();
+//                                                  }
+//                                              }
+//
+////                                              @Override
+////                                              protected onProgressUpdate(Integer... progress){
+////                                                  setProgressPercent(progress[0]);
+////                                              }
+//                                          }.execute("1");
+//                                      }
+//                                  }
+//        );
 
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            @SuppressLint("StaticFieldLeak")
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                System.out.println("position "+position);
-                String name = ((HashMap<String, String>)(listView.getItemAtPosition(position))).get("name");
-                System.out.println(name);
-//                Environment.getDataDirectory()
-                new AsyncTask<String, Integer, String>(){
+        if(position == 0){
+            TextView textView = holder.itemView.findViewById(R.id.textView);
+            textView.setText(String.format("***********************set to %d", position));
+
+            System.out.println("in onbindviewholder position is "+position);
+            listView = holder.itemView.findViewById(R.id.listview);
+            Button button = holder.itemView.findViewById(R.id.button);
+
+            button.setOnClickListener(new View.OnClickListener() {
+                @SuppressLint("StaticFieldLeak")
+                @Override
+                public void onClick(View v) {
+                    String login_id = "1";
+                    new AsyncTask<String, Integer, String>() {
 
 
-
-                    @Override
-                    protected String doInBackground(String... arg0){
-                        String res = Util.DownloadDatagramByName(arg0[0]);
-                        return res;
-                    }
-
-                    protected void onPostExecute(String result){
-                        if (result != null){
-                            Toast.makeText(parent.getContext(), "下载完成",Toast.LENGTH_SHORT).show();
-                            System.out.println(result);
-//                            updateListView(result);
-                        }else{
-                            Toast.makeText(parent.getContext(), "下载失败，检查网络",Toast.LENGTH_SHORT).show();
+                        @Override
+                        protected String doInBackground(String... arg0) {
+                            String res = Util.GetAvailableDatagrams("id");
+                            return res;
                         }
+
+                        protected void onPostExecute(String result) {
+                            if (result != null) {
+                                Toast.makeText(parent.getContext(), "刷新完成", Toast.LENGTH_SHORT).show();
+                                updateListView0(result);
+                            } else {
+                                Toast.makeText(parent.getContext(), "刷新失败，检查网络", Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }.execute("1");
+                }
+            });
+
+
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                @SuppressLint("StaticFieldLeak")
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    System.out.println("position "+position);
+                    String name = ((HashMap<String, String>)(listView.getItemAtPosition(position))).get("name");
+                    System.out.println(name);
+                    new AsyncTask<String, Integer, String>(){
+                        @Override
+                        protected String doInBackground(String... arg0){
+                            String res = Util.DownloadDatagramByName(arg0[0]);
+                            return res;
+                        }
+                        protected void onPostExecute(String result) {
+                            if (result != null) {
+                                Toast.makeText(parent.getContext(), "下载完成", Toast.LENGTH_SHORT).show();
+                                System.out.println(result);
+                            }else{
+                                Toast.makeText(parent.getContext(), "下载失败，检查网络",Toast.LENGTH_SHORT).show();
+                            }
+                        }
+                    }.execute(name);
                     }
-                }.execute(name);
+                });
             }
-        });
+            else {
+                TextView textView = holder.itemView.findViewById(R.id.textView);
+                textView.setText(String.format("*****************set to %d", position));
+
+                System.out.println("in onbindviewholder position is " + position);
+                listView1 = holder.itemView.findViewById(R.id.listview);
+                Button button = holder.itemView.findViewById(R.id.button);
+
+                button.setOnClickListener(new View.OnClickListener() {
+                                              @Override
+                                              public void onClick(View v) {
+                                                  String login_id = "1";
+                                                  String[] filenames = Util.GetLocalDatagrams();
+                                                  updateListView1(filenames);
+                                              }
+                                          }
+                );
+
+//            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                @Override
+//                @SuppressLint("StaticFieldLeak")
+//                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                    System.out.println("position "+position);
+//                    String name = ((HashMap<String, String>)(listView.getItemAtPosition(position))).get("name");
+//                    System.out.println(name);
+////                Environment.getDataDirectory()
+//                    new AsyncTask<String, Integer, String>(){
+//
+//
+//
+//                        @Override
+//                        protected String doInBackground(String... arg0){
+//                            String res = Util.DownloadDatagramByName(arg0[0]);
+//                            return res;
+//                        }
+//
+//                        protected void onPostExecute(String result){
+//                            if (result != null){
+//                                Toast.makeText(parent.getContext(), "下载完成",Toast.LENGTH_SHORT).show();
+//                                System.out.println(result);
+////                            updateListView(result);
+//                            }else{
+//                                Toast.makeText(parent.getContext(), "下载失败，检查网络",Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    }.execute(name);
+//                }
+//            });
+            }
 
     }
 
-    public void updateListView(String jsonString){
+    public void updateListView1(String[] filenames){
+        if (filenames.length == 0){
+            return;
+        }
+        System.out.println("in updata listview first filename string is "+filenames[0]);
+        ArrayList<Map<String,String>> list = new ArrayList<>();
+
+
+        for (int i = 0; i < filenames.length; i++){
+            Map<String, String> map= new HashMap<>();
+            map.put("name", filenames[i]);
+//                map.put("mission", jsonArraym.getString(i));
+//                map.put("site", jsonArrays.getString(i));
+            list.add(map);
+        }
+
+
+        SimpleAdapter adapter = new SimpleAdapter(
+                parent.getContext(),
+                list,
+                R.layout.datagram_list_item,
+                new String[]{"name"},
+                new int[]{R.id.text1});
+
+
+        listView1.setAdapter(adapter);
+    }
+
+    public void updateListView0(String jsonString){
         System.out.println("in updata listview json string is "+jsonString);
         ArrayList<Map<String,String>> list = new ArrayList<>();
         try{
