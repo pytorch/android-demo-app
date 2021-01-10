@@ -114,13 +114,36 @@
 
         <TextView
             android:id="@+id/textView4"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:text="视频编码解码方式"
             android:textSize="20dp"
             app:layout_constraintTop_toBottomOf="@+id/checkBox"
              />
+        <RadioGroup
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/encode_method"
+            android:orientation="horizontal"
+            android:layout_marginTop="30dp"
+
+            app:layout_constraintLeft_toRightOf="@id/textView4"
+            app:layout_constraintTop_toBottomOf="@+id/checkBox">
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="方式一"
+                android:layout_marginStart="30dp"
+                android:id="@+id/method1"/>
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="方式二"
+                android:id="@+id/method2"/>
+
+        </RadioGroup>
+
         <Button
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
