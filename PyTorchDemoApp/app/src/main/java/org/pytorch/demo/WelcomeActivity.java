@@ -39,21 +39,21 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
     private Button online_loginbtn;
 //    private Button offline_loginbtn;
 
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-    }
-
-    private static class PageData {
-        private int titleTextResId;
-        private int imageResId;
-        private int descriptionTextResId;
-
-        public PageData(int titleTextResId, int imageResId, int descriptionTextResId) {
-            this.titleTextResId = titleTextResId;
-            this.imageResId = imageResId;
-            this.descriptionTextResId = descriptionTextResId;
-        }
-    }
+//    @Override
+//    public void onPointerCaptureChanged(boolean hasCapture) {
+//    }
+//
+//    private static class PageData {
+//        private int titleTextResId;
+//        private int imageResId;
+//        private int descriptionTextResId;
+//
+//        public PageData(int titleTextResId, int imageResId, int descriptionTextResId) {
+//            this.titleTextResId = titleTextResId;
+//            this.imageResId = imageResId;
+//            this.descriptionTextResId = descriptionTextResId;
+//        }
+//    }
 
 
     @Override

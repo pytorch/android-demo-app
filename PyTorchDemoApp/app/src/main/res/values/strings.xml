@@ -2,8 +2,8 @@
     <string name="app_name">PyTorchDemo</string>
     <string name="action_settings">Settings</string>
     <string name="welcome_skip_button">Skip</string>
-    <string name="main_vision_button">Vision</string>
-    <string name="main_nlp_button">Language</string>
+    <string name="main_vision_button">视觉</string>
+    <string name="main_nlp_button">语音</string>
 
     <string name="vision_list_image_classification_button">Image Classification</string>
     <string name="image_classification_title">Image Classification</string>
@@ -29,10 +29,10 @@
     <string name="vision_card_resnet_title">Image Classification\nResnet18</string>
     <string name="vision_card_resnet_description">Default TorchVision pretrained Resnet18 model. Input is float32 tensor of 1x3x224x224 shape</string>
 
-    <string name="vision_card_face_recognition_title">Face Detection\ndetect and draw rect on face</string>
+    <string name="vision_card_face_recognition_title">本地识别</string>
     <string name="vision_card_face_recognition_description">Inference in int8.\nInput is float32 tensor of 1x3x360x480 shape</string>
 
-    <string name="vision_card_face_recognition_remote_title">Face Detection\ndetect and draw rect on face on remote server</string>
+    <string name="vision_card_face_recognition_remote_title">远程识别</string>
     <string name="vision_card_face_recognition_remote_description">push rtmp stream and get and draw rects</string>
 
     <string name="nlp_card_lstm_title">Text Classification.\nLSTM model trained on Reddit comments dataset. </string>
