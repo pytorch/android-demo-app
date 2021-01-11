@@ -6,23 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/bg_main">
-<!--    android:background="@android:color/transparent">-->
 
-
-    <!--标题栏样式一-->
-<!--    <androidx.appcompat.widget.Toolbar-->
-<!--        android:id="@+id/toolbar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="?actionBarSize"-->
-<!--        android:background="@color/colorPrimary"-->
-<!--        app:subtitleTextColor="@android:color/white"-->
-<!--        app:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"-->
-<!--        app:title="侧边栏"-->
-<!--        app:titleTextColor="@android:color/white"-->
-<!--        tools:ignore="MissingConstraints">-->
-<!--    </androidx.appcompat.widget.Toolbar>-->
-
-    <!--整体设计-->
 
     <androidx.drawerlayout.widget.DrawerLayout
         android:id="@+id/drawer_layout"
@@ -54,6 +38,7 @@
                     android:drawablePadding="16dp"
                     android:text="@string/main_vision_button"
                     android:textAppearance="@style/TextAppearanceMainVisionNlp" />
+
             </FrameLayout>
 
             <FrameLayout
@@ -76,26 +61,156 @@
                     android:text="@string/main_nlp_button"
                     android:textAppearance="@style/TextAppearanceMainVisionNlp" />
             </FrameLayout>
-            <!--            <TextView-->
-            <!--                android:layout_width="wrap_content"-->
-            <!--                android:layout_height="wrap_content"-->
-            <!--                android:gravity="center"-->
-            <!--                android:text="欢迎登录执法记录仪!"-->
-            <!--                app:layout_constraintBottom_toBottomOf="parent"-->
-            <!--                app:layout_constraintLeft_toLeftOf="parent"-->
-            <!--                app:layout_constraintRight_toRightOf="parent"-->
-            <!--                app:layout_constraintTop_toTopOf="parent" />-->
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/navigation_view"
-            android:layout_width="240dp"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_gravity="start"
-            app:headerLayout="@layout/navigationview_header"
-            app:menu="@menu/menu_navigation">
+            android:layout_gravity="start">
+            <androidx.constraintlayout.widget.ConstraintLayout android:orientation="vertical"
+                android:layout_height="match_parent"
+                android:layout_width="match_parent">
 
-            <!--添加脚布局-->
+
+                <androidx.appcompat.widget.AppCompatImageView
+                    android:id="@+id/iv_head"
+                    android:layout_width="match_parent"
+                    android:layout_height="60dp"
+                    android:src="@drawable/ic_head"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/crew_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="10dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="30dp"
+                        android:text="执法队员"
+                        android:textSize="6pt"
+                        android:textColor="@android:color/black"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_head"
+                        tools:ignore="MissingConstraints" />
+
+                    <TextView
+                        android:id="@+id/cname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="30dp"
+                        android:layout_marginStart="50dp"
+                        android:layout_marginBottom="10dp"
+                        android:text="张三"
+                        android:textSize="6pt"
+                        android:textColor="@android:color/black"
+                        app:layout_constraintLeft_toRightOf="@+id/crew_name"
+                        app:layout_constraintTop_toBottomOf="@+id/iv_head"
+                        tools:ignore="MissingConstraints" />
+
+                    <TextView
+                        android:id="@+id/crewid"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@drawable/bg_personname"
+                        android:gravity="center"
+
+                        android:text="船员号码"
+                        android:layout_marginTop="20dp"
+                        android:textColor="@android:color/black"
+                        android:textSize="6pt"
+                        app:layout_constraintTop_toBottomOf="@id/cname"
+                        tools:ignore="MissingConstraints" />
+
+                    <TextView
+                        android:id="@+id/c_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/bg_personname"
+                        android:gravity="center"
+                        android:layout_marginStart="50dp"
+                        android:text="9527"
+                        android:textColor="@android:color/black"
+                        android:textSize="6pt"
+                        app:layout_constraintLeft_toRightOf="@+id/crewid"
+                        app:layout_constraintTop_toBottomOf="@id/cname" />
+                <TextView
+                    android:id="@+id/position"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/bg_personname"
+                    android:gravity="center"
+                    android:layout_marginStart="50dp"
+                    android:text="人员职位"
+                    android:textColor="@android:color/black"
+                    android:textSize="6pt"
+                    app:layout_constraintTop_toBottomOf="@id/crewid"
+                    tools:ignore="MissingConstraints" />
+                <TextView
+                    android:id="@+id/c_position"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/bg_personname"
+                    android:gravity="center"
+                    android:layout_marginStart="50dp"
+                    android:text="人员职位"
+                    android:textColor="@android:color/black"
+                    android:textSize="6pt"
+                    app:layout_constraintTop_toBottomOf="@id/crewid"
+                    tools:ignore="MissingConstraints" />
+                <TextView
+                    android:id="@+id/cposition"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/bg_personname"
+                    android:gravity="center"
+                    android:layout_marginStart="50dp"
+                    android:text="领导"
+                    android:textColor="@android:color/black"
+                    android:textSize="6pt"
+                    app:layout_constraintTop_toBottomOf="@id/crewid"
+                    app:layout_constraintLeft_toRightOf="@+id/c_position"
+                    tools:ignore="MissingConstraints" />
+                <TextView
+                    android:id="@+id/phone_ID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/bg_personname"
+                    android:gravity="center"
+                    android:layout_marginStart="50dp"
+                    android:text="手机证号"
+                    android:textColor="@android:color/black"
+                    android:textSize="6pt"
+                    app:layout_constraintTop_toBottomOf="@id/c_position"
+                    tools:ignore="MissingConstraints" />
+                <TextView
+                    android:id="@+id/phoneID"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/bg_personname"
+                    android:gravity="center"
+                    android:layout_marginStart="50dp"
+                    android:text="46513545312123123"
+                    android:textColor="@android:color/black"
+                    android:textSize="6pt"
+                    app:layout_constraintTop_toBottomOf="@id/c_position"
+                    app:layout_constraintLeft_toRightOf="@+id/phone_ID"
+                    tools:ignore="MissingConstraints" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
@@ -132,8 +247,10 @@
                     android:gravity="center"
                     android:paddingLeft="5dp"
                     android:text="退出"
+                    android:onClick="exit"
                     android:textAlignment="center"
                     android:textColor="@color/colorPrimary" />
+
             </LinearLayout>
 
         </com.google.android.material.navigation.NavigationView>
