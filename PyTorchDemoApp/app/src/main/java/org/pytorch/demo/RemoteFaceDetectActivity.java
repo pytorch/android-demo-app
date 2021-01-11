@@ -45,6 +45,7 @@ import net.ossrs.yasea.SrsRecordHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.pytorch.demo.util.Util;
 import org.pytorch.demo.vision.Helper.GraphicOverlay;
 import org.pytorch.demo.vision.Helper.RectOverlay;
 import org.pytorch.demo.R;
@@ -71,12 +72,12 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
     private Button btnPause;
     private Button record;
     private SharedPreferences sp;
-    private String rtmpUrl = "rtmp://ossrs.net/" + getRandomAlphaString(3) + '/' + getRandomAlphaDigitString(5);
+    private String rtmpUrl = "rtmp://120.27.241.217/" + getRandomAlphaString(3) + '/' + getRandomAlphaDigitString(5);
     private String recPath = Environment.getExternalStorageDirectory().getPath() + "/test.mp4";
-    final private String serverUri = "ws://10.138.118.224:8000/ws/chat/lobby/";
+    final private String serverUri = Util.ws;
     private WebSocket webSocket;
-    private ArrayList<NamedBox> namedboxpool;
     private SrsPublisher mPublisher;
+    private ArrayList<NamedBox> namedboxpool;
     private SrsCameraView mCameraView;
 
     private int mWidth = 1080;

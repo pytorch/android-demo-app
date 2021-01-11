@@ -146,7 +146,7 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
     private Bitmap bitmap_c = null;
     private float[] box_c = null;
     final private int REQUEST_CODE_INTERNET = 201;
-    final private String serverUri = "ws://10.138.94.7:8000/ws/chat/lobby/";
+    final private String serverUri = Util.ws;
     private ImageView imageView;
     private WebSocket webSocket;
     private ArrayList<NamedBox> namedboxpool;

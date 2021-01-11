@@ -36,7 +36,7 @@ import android.content.Context.*;
 
 
 public class Util {
-    public static final String ws = "ws://10.138.94.7:8000/ws/chat/lobby/";//websocket测试地址
+    public static final String ws = "ws://10.138.118.224:8000/ws/chat/lobby/";//websocket测试地址
 
     private static WebSocketFactory webSocketFactory;
     private static WebSocket webSocket;
