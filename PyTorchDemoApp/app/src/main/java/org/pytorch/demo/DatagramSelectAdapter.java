@@ -61,7 +61,7 @@ public class DatagramSelectAdapter extends RecyclerView.Adapter<DatagramSelectAd
 //
 //                                              @Override
 //                                              protected String doInBackground(String... arg0){
-//                                                  String res = Util.GetAvailableDatagrams("id");
+//                                                  String res = new Util().GetAvailableDatagrams("id");
 //                                                  return res;
 //                                              }
 //
@@ -101,7 +101,7 @@ public class DatagramSelectAdapter extends RecyclerView.Adapter<DatagramSelectAd
 
                         @Override
                         protected String doInBackground(String... arg0) {
-                            String res = Util.GetAvailableDatagrams("id");
+                            String res = new Util().GetAvailableDatagrams("id");
                             return res;
                         }
 
@@ -128,7 +128,7 @@ public class DatagramSelectAdapter extends RecyclerView.Adapter<DatagramSelectAd
                     new AsyncTask<String, Integer, String>(){
                         @Override
                         protected String doInBackground(String... arg0){
-                            String res = Util.DownloadDatagramByName(arg0[0]);
+                            String res = new Util().DownloadDatagramByName(arg0[0]);
                             return res;
                         }
                         protected void onPostExecute(String result) {
@@ -155,7 +155,7 @@ public class DatagramSelectAdapter extends RecyclerView.Adapter<DatagramSelectAd
                                               @Override
                                               public void onClick(View v) {
                                                   String login_id = "1";
-                                                  String[] filenames = Util.GetLocalDatagrams();
+                                                  String[] filenames = new Util().GetLocalDatagrams();
                                                   updateListView1(filenames);
                                               }
                                           }
@@ -175,7 +175,7 @@ public class DatagramSelectAdapter extends RecyclerView.Adapter<DatagramSelectAd
 //
 //                        @Override
 //                        protected String doInBackground(String... arg0){
-//                            String res = Util.DownloadDatagramByName(arg0[0]);
+//                            String res = new Util().DownloadDatagramByName(arg0[0]);
 //                            return res;
 //                        }
 //

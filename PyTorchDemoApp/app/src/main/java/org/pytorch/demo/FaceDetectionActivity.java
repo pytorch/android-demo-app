@@ -146,7 +146,7 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
     private Bitmap bitmap_c = null;
     private float[] box_c = null;
     final private int REQUEST_CODE_INTERNET = 201;
-    final private String serverUri = Util.ws;
+    final private String serverUri = new Util(this).ws;
     private ImageView imageView;
     private WebSocket webSocket;
     private ArrayList<NamedBox> namedboxpool;
@@ -198,7 +198,7 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
 //    }
     private String get_embeddings_from_files(){
 //        File Directory = getFilesDir();
-        File[] files = Util.GetLocalDatagramFiles();
+        File[] files = new Util(this).GetLocalDatagramFiles();
         String embedding_str = "";
         if(files.length == 0)
             return "";
@@ -222,7 +222,7 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
         return embedding_str;  
     }
     private void update_embeddings(String str){
-        String[] strings = str.split(Util.deliminator);
+        String[] strings = str.split(new Util(this).deliminator);
         for (String s : strings){
             if(s.length() > 100){
                 namedEmbeddings.add(new NamedEmbedding(s));

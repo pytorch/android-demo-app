@@ -1,6 +1,8 @@
 package org.pytorch.demo.util;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.StrictMode;
@@ -25,6 +27,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.io.ByteArrayOutputStream;
@@ -32,24 +35,64 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import android.content.Context.*;
+
 
 
 public class Util {
-    public static final String ws = "ws://10.138.118.224:8000/ws/chat/lobby/";//websocket测试地址
+    public String default_ws = "ws://10.138.94.7:8000/ws/chat/lobby/";//websocket测试地址
+    public String default_server = "120.27.241.217";
+    private WebSocketFactory webSocketFactory;
+    private WebSocket webSocket;
+    private String available_datagrams;
+    private SharedPreferences sharedPreferences;
+    public String ws = null;
+    public String server_uri = null;
+    public Util(Activity activity)  {
+//        Util();
+//        sharedPreferences = activity.getSharedPreferences("info",  Activity.MODE_PRIVATE);
+//        ws = sharedPreferences.getString("rtmp_uri", default_ws);
+//        server_uri = sharedPreferences.getString("server_uri", default_server);
+//        default_server = server_uri;
+//        default_ws = ws;
+        JSONObject jsonObject = GetLocalJson();
+        try{
+            ws = jsonObject.getString("rtmp_uri");
+            server_uri = jsonObject.getString("server_uri");
+        }catch (JSONException | NullPointerException jsonException){
+            jsonException.printStackTrace();
+        }
+        if (ws == null){
+            ws = default_ws;
+        }
+        if (server_uri == null)
+        {
+            server_uri = default_server;
+        }
+        System.out.println("server_uri "+server_uri);
+        System.out.println("rtmp uri " + ws);
 
-    private static WebSocketFactory webSocketFactory;
-    private static WebSocket webSocket;
-    private static String available_datagrams;
+    }
+    public Util(){
+        JSONObject jsonObject = GetLocalJson();
+        try{
+            ws = jsonObject.getString("rtmp_uri");
+            server_uri = jsonObject.getString("server_uri");
+        }catch (JSONException | NullPointerException jsonException){
+            jsonException.printStackTrace();
+        }
+        if (ws == null){
+            ws = default_ws;
+        }
+        if (server_uri == null)
+        {
+            server_uri = default_server;
+        }
+        System.out.println("server_uri "+server_uri);
+        System.out.println("rtmp uri " + ws);
+    }
 
-//    public Util(String ws) {
-//        ws = ws;
-//    }
-
-    //    private static String deliminator = "";
-//    private static String deli
-    public static String deliminator = "\\${10,}";
-    public static String DownloadDatagramByName(String s) {
+    public String deliminator = "\\${10,}";
+    public String DownloadDatagramByName(String s) {
         datagram = null;
         webSocketFactory = new WebSocketFactory();
 
@@ -135,8 +178,69 @@ public class Util {
         return "success";
     }
 
+    public void SetLocalJson(String str) throws IOException {
+        File Directory = Environment.getExternalStorageDirectory();
+        File project_dir = new File(Directory, "FaceRecogAppConfig");
+        if (!project_dir.exists()){
+            project_dir.mkdir();
+        }
+        File jsonfile = new File(project_dir, "config.json");
+        if (!jsonfile.exists()){
+            try{
+                jsonfile.createNewFile();
+            }catch (IOException exception){
+                exception.printStackTrace();
+            }
+        }
+        try{
 
-    public static String[] GetLocalDatagrams(){
+            FileOutputStream fileOutputStream = new FileOutputStream(jsonfile);
+            fileOutputStream.write(str.getBytes());
+            fileOutputStream.close();
+
+        }catch (FileNotFoundException fileNotFoundException){
+            fileNotFoundException.printStackTrace();
+        }
+    }
+
+
+    public JSONObject GetLocalJson(){
+        File Directory = Environment.getExternalStorageDirectory();
+        File project_dir = new File(Directory, "FaceRecogAppConfig");
+        if (!project_dir.exists()){
+            project_dir.mkdir();
+        }
+        File jsonfile = new File(project_dir, "config.json");
+        if (!jsonfile.exists()){
+            try{
+                jsonfile.createNewFile();
+                return new JSONObject("");
+            }catch (IOException | JSONException exception){
+                exception.printStackTrace();
+            }
+
+        }
+        try{
+            FileInputStream fileInputStream = new FileInputStream(jsonfile);
+            int length = fileInputStream.available();
+            byte bytes[] = new byte[length];
+            fileInputStream.read(bytes);
+            fileInputStream.close();
+            String str =new String(bytes, StandardCharsets.UTF_8);
+            JSONObject jsonObject = new JSONObject(str);
+            return jsonObject;
+        }catch (FileNotFoundException fileNotFoundException){
+            fileNotFoundException.printStackTrace();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        } catch (JSONException jsonException) {
+            jsonException.printStackTrace();
+        }
+        return null;
+
+    }
+
+    public String[] GetLocalDatagrams(){
         File Directory = Environment.getExternalStorageDirectory();
         File project_dir = new File(Directory, "FaceRecogApp");
         if (!project_dir.exists()){
@@ -147,7 +251,7 @@ public class Util {
         String[] filenames = project_dir.list();
         return filenames;
     }
-    public static File[] GetLocalDatagramFiles(){
+    public File[] GetLocalDatagramFiles(){
         File Directory = Environment.getExternalStorageDirectory();
         File project_dir = new File(Directory, "FaceRecogApp");
         if (!project_dir.exists()){
@@ -158,7 +262,7 @@ public class Util {
         return files;
     }
 
-    private static void get_datagram_by_name(String s) {
+    private void get_datagram_by_name(String s) {
         webSocket.sendText("{\"message\": \"get datagram by name\", \"name\": \""+s+"\"}");
 //        webSocket.sendText("get datagram by name:"+s);
     }
@@ -190,28 +294,28 @@ public class Util {
             id = null;
         }
     }
-    private static String datagram = null;
-    private static void get_embeddings(){
+    private String datagram = null;
+    private void get_embeddings(){
         webSocket.sendText("get embeddings");
     }
-    private static void get_datagrams(){
+    private void get_datagrams(){
         webSocket.sendText("get datagrams");
     }
 
-    public static void update_datagrams(String ad)
+    public void update_datagrams(String ad)
     {
-        Util.available_datagrams = ad;
+        this.available_datagrams = ad;
     }
-    public static void update_datagram(String d){
-        Util.datagram = d;
+    public void update_datagram(String d){
+        this.datagram = d;
     }
-    public static void showToast(Context ctx, String msg) {
+    public void showToast(Context ctx, String msg) {
         Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
     }
 
 
 
-    public static String GetAvailableDatagrams(String id){
+    public String GetAvailableDatagrams(String id){
         available_datagrams = null;
         webSocketFactory = new WebSocketFactory();
 

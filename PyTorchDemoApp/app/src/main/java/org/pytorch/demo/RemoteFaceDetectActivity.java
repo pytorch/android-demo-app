@@ -72,9 +72,9 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
     private Button btnPause;
     private Button record;
     private SharedPreferences sp;
-    private String rtmpUrl = "rtmp://120.27.241.217/" + getRandomAlphaString(3) + '/' + getRandomAlphaDigitString(5);
+    private String rtmpUrl = "rtmp://"+new Util().server_uri+"/" + getRandomAlphaString(3) + '/' + getRandomAlphaDigitString(5);
     private String recPath = Environment.getExternalStorageDirectory().getPath() + "/test.mp4";
-    final private String serverUri = Util.ws;
+    final private String serverUri = new Util(RemoteFaceDetectActivity.this).ws;
     private WebSocket webSocket;
     private SrsPublisher mPublisher;
     private ArrayList<NamedBox> namedboxpool;
@@ -185,8 +185,8 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 
     private void init() {
         // restore data.
-        sp = getSharedPreferences("FaceDetection", MODE_PRIVATE);
-        rtmpUrl = sp.getString("rtmpUrl", rtmpUrl);
+//        sp = getSharedPreferences("FaceDetection", MODE_PRIVATE);
+//        rtmpUrl = sp.getString("rtmpUrl", rtmpUrl);
         System.out.println("in init");
         // initialize url.
         final EditText efu = (EditText) findViewById(R.id.url);
@@ -255,9 +255,9 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
             public void onClick(View v) {
                 if (btnPublish.getText().toString().contentEquals("publish")) {
                     rtmpUrl = efu.getText().toString();
-                    SharedPreferences.Editor editor = sp.edit();
-                    editor.putString("rtmpUrl", rtmpUrl);
-                    editor.apply();
+//                    SharedPreferences.Editor editor = sp.edit();
+//                    editor.putString("rtmpUrl", rtmpUrl);
+//                    editor.apply();
 
                     mPublisher.startPublish(rtmpUrl);
                     mPublisher.startCamera();
