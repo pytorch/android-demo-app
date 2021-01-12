@@ -310,8 +310,11 @@ decoder_input1=torch.tensor([[0]])
 decoder_input2=torch.zeros(1,1,256)
 decoder_input3=torch.zeros(50,256)
 
+# dynamic quantization can be applied to the decoder for its nn.Linear parameters
+quantized_decoder = torch.quantization.quantize_dynamic(decoder, qconfig_spec={torch.nn.Linear}, dtype=torch.qint8)
+
 traced_encoder = torch.jit.trace(encoder, (encoder_input, encoder_hidden))
-traced_decoder = torch.jit.trace(decoder, (decoder_input1, decoder_input2, decoder_input3))
+traced_decoder = torch.jit.trace(quantized_decoder, (decoder_input1, decoder_input2, decoder_input3))
 
 from torch.utils.mobile_optimizer import optimize_for_mobile
 
