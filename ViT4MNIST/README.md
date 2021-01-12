@@ -2,7 +2,7 @@
 
 ## Introduction
 
-[ImageNet](http://image-net.org) is the most popular image dataset on which the breakthrough of deep learning took place in 2012. The handwritten digit dataset [MNIST](https://en.wikipedia.org/wiki/MNIST_database) is the oldest and most commonly used dataset for machine learning. And the Vision Transformer (ViT - [blog](https://ai.googleblog.com/2020/12/transformers-for-image-recognition-at.html) and [paper](https://arxiv.org/abs/2010.11929)) is one of the most recent models in deep learning, applying the revolutionary [transformer](ttps://arxiv.org/abs/1810.04805) model that was first successfully applied in natural language processing to computer vision.
+[ImageNet](http://image-net.org) is the most popular image dataset on which the breakthrough of deep learning took place in 2012, the handwritten digit dataset [MNIST](https://en.wikipedia.org/wiki/MNIST_database) is the oldest and most commonly used dataset for machine learning, and the Vision Transformer (ViT - [blog](https://ai.googleblog.com/2020/12/transformers-for-image-recognition-at.html) and [paper](https://arxiv.org/abs/2010.11929)) is one of the most recent models in deep learning, applying the revolutionary [transformer](ttps://arxiv.org/abs/1810.04805) model that was first successfully applied in natural language processing to computer vision.
 
 In this demo app, we'll integrate the two oldest and most popular image datasets with the latest deep learning model and show you:
 
@@ -21,7 +21,8 @@ In this demo app, we'll integrate the two oldest and most popular image datasets
 
 ### 1. Prepare the Model (Optional)
 
-To use a pre-trained Facebook DeiT model and convert it to TorchScript, simply run the following script with PyTorch 1.7 installed:
+To use a pre-trained Facebook DeiT model and convert it to TorchScript, first install [PyTorch](https://pytorch.org/get-started/locally/) 1.7 or later, then install [timm](https://github.com/rwightman/pytorch-image-models) using `pip install timm==0.3.2`, and finally run the following script:
+
 ```
 python convert_deit.py
 ```
@@ -59,12 +60,12 @@ To Test Run the Android ViT4MNIST demo app, follow the steps below:
 
 ### 1. Prepare the Model (Optional)
 
-On a Terminal, with PyTorch 1.7 installed, run:
+On a Terminal, with PyTorch 1.7 and [einops](https://pypi.org/project/einops/) installed, run :
 ```
 python mnist_vit.py
 ```
 
-The model definition in `vit_pytorch.py` and training code in `mnist_vit.py` are mostly taken from the blog [here](https://towardsdatascience.com/a-demonstration-of-using-vision-transformers-in-pytorch-mnist-handwritten-digit-recognition-407eafbc15b0). After the training, which takes about 20 minutes on a MacBook Pro, the model is converted to TorchScript and saved as `vit4mnist.pth`, which should be the same as the one already added in the app project.
+The model definition in `vit_pytorch.py` and training code in `mnist_vit.py` are mostly taken from the blog [here](https://towardsdatascience.com/a-demonstration-of-using-vision-transformers-in-pytorch-mnist-handwritten-digit-recognition-407eafbc15b0). After the training, which takes about 20 minutes on a MacBook Pro, the model is saved as   `vit4mnist.pt` and then dynamic-quantized, converted to TorchScript, optimized, and saved as `vit4mnist.pth`, which should be the same as the one already added in the app project, located at `app/src/main/assets`.
 
 ### 2. Build and run with Android Studio
 

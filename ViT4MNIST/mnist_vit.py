@@ -2,6 +2,8 @@ import torch
 import torchvision
 import time
 from vit_pytorch import *
+from torch.utils.mobile_optimizer import optimize_for_mobile
+
 
 torch.manual_seed(42)
 
@@ -84,14 +86,16 @@ with torch.no_grad():
         loss = F.nll_loss(output, target, reduction='sum')
         _, pred = torch.max(output, dim=1)
 
-#torch.save(model, "vit_mnist.pt")
-#model = torch.load("vit_mnist.pt")
+
+# the original trained model
+torch.save(model, "vit4mnist.pt")
+model = torch.load("vit4mnist.pt")
 
 model.eval()
 
-from torch.utils.mobile_optimizer import optimize_for_mobile
+quantized_model = torch.quantization.quantize_dynamic(model, qconfig_spec={torch.nn.Linear}, dtype=torch.qint8)
 dummy_input = torch.zeros(1, 1, 28, 28)
-
-ts_model = torch.jit.trace(model, dummy_input) #, strict=False)
+ts_model = torch.jit.trace(quantized_model, dummy_input)
 optimized_torchscript_model = optimize_for_mobile(ts_model)
+# the quantized, scripted, and optimized model
 optimized_torchscript_model.save("vit4mnist.pth")
