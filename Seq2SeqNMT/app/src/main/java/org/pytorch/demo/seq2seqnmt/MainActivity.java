@@ -28,7 +28,7 @@ import java.nio.LongBuffer;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements Runnable{
-    // to be consistent with what's defined in seq2seq_nmt.py, based on
+    // to be consistent with the model inputs defined in seq2seq_nmt.py, based on
     // https://pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html
     private final int HIDDEN_SIZE = 256;
     private final int EOS_token = 1;
