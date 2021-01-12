@@ -9,11 +9,11 @@
     <string name="image_classification_title">Image Classification</string>
     <string name="image_classification_results_header_row_name">Classification</string>
     <string name="image_classification_results_header_row_score">Score</string>
-<<<<<<< Updated upstream
-    <string name="face_recognition_title">识别中</string>
-=======
+<!--<<<<<<< Updated upstream-->
+<!--    <string name="face_recognition_title">识别中</string>-->
+<!--=======-->
     <string name="face_recognition_title">识别中...</string>
->>>>>>> Stashed changes
+<!--&gt;>>>>>> Stashed changes-->
     <!--    <string name="image_classification_results_header_row_name">Classification</string>-->
     <!--    <string name="image_classification_results_header_row_score">Score</string>-->
     <string name="text_classification">Text Classification</string>
@@ -34,10 +34,10 @@
     <string name="vision_card_resnet_description">Default TorchVision pretrained Resnet18 model. Input is float32 tensor of 1x3x224x224 shape</string>
 
     <string name="vision_card_face_recognition_title">本地识别</string>
-    <string name="vision_card_face_recognition_description">Inference in int8.\nInput is float32 tensor of 1x3x360x480 shape</string>
+    <string name="vision_card_face_recognition_description">使用下载数据包进行的本地人脸检测识别，识别速度较慢，但是延迟低</string>
 
     <string name="vision_card_face_recognition_remote_title">远程识别</string>
-    <string name="vision_card_face_recognition_remote_description">push rtmp stream and get and draw rects</string>
+    <string name="vision_card_face_recognition_remote_description">将视频rtmp推流到服务器上的远程识别，识别速度快，但是延迟较高</string>
 
     <string name="nlp_card_lstm_title">Text Classification.\nLSTM model trained on Reddit comments dataset. </string>
     <string name="nlp_card_lstm_description">Predicts subreddit by given comment.\nInput is uint8 1xN shaped tensor, where N is the length of text\'s bytes representation in utf-8 encoding. Output classes are subreddits.</string>
@@ -61,7 +61,8 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-
+    <string name="face_of_attention">中心人脸</string>
+    <string name="prediction">识别结果</string>
 <!--    丁豪添加-->
     <string name="navigation_bar">导航栏</string>
     <string name="Setup">设置</string>

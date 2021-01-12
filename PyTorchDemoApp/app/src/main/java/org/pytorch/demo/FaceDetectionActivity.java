@@ -310,8 +310,8 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
         super.onCreate(savedInstanceState);
         final ResultRowView headerResultRowView =
                 findViewById(R.id.image_classification_result_header_row);
-        headerResultRowView.nameTextView.setText("face of Attention");
-        headerResultRowView.scoreTextView.setText("Prediction");
+        headerResultRowView.nameTextView.setText(R.string.face_of_attention);
+        headerResultRowView.scoreTextView.setText(R.string.prediction);
         imageView = findViewById(R.id.imageView);
 //        detect_mode = LOCAL;
 //        local_remote_switcher = findViewById(R.id.local_remote_detect_switcher);
