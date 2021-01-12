@@ -303,22 +303,22 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
             }
         });
 
-        btnRecord.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (btnRecord.getText().toString().contentEquals("record")) {
-                    if (mPublisher.startRecord(recPath)) {
-                        btnRecord.setText("pause");
-                    }
-                } else if (btnRecord.getText().toString().contentEquals("pause")) {
-                    mPublisher.pauseRecord();
-                    btnRecord.setText("resume");
-                } else if (btnRecord.getText().toString().contentEquals("resume")) {
-                    mPublisher.resumeRecord();
-                    btnRecord.setText("pause");
-                }
-            }
-        });
+//        btnRecord.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (btnRecord.getText().toString().contentEquals("record")) {
+//                    if (mPublisher.startRecord(recPath)) {
+//                        btnRecord.setText("pause");
+//                    }
+//                } else if (btnRecord.getText().toString().contentEquals("pause")) {
+//                    mPublisher.pauseRecord();
+//                    btnRecord.setText("resume");
+//                } else if (btnRecord.getText().toString().contentEquals("resume")) {
+//                    mPublisher.resumeRecord();
+//                    btnRecord.setText("pause");
+//                }
+//            }
+//        });
 
         btnSwitchEncoder.setOnClickListener(new View.OnClickListener() {
             @Override

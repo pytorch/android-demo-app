@@ -9,7 +9,7 @@
     <string name="image_classification_title">Image Classification</string>
     <string name="image_classification_results_header_row_name">Classification</string>
     <string name="image_classification_results_header_row_score">Score</string>
-    <string name="face_recognition_title">Face Recognition</string>
+    <string name="face_recognition_title">识别中</string>
     <!--    <string name="image_classification_results_header_row_name">Classification</string>-->
     <!--    <string name="image_classification_results_header_row_score">Score</string>-->
     <string name="text_classification">Text Classification</string>
