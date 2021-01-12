@@ -24,10 +24,10 @@ public class SetupMenuActivity extends AppCompatActivity {
         setContentView(R.layout.activity_setupmenu);
         Util util = new Util(this);
 
-        AppCompatEditText rtmp_uri = findViewById(R.id.Input1);
+        AppCompatEditText rtmp_uri = findViewById(R.id.Input2);
         rtmp_uri.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         rtmp_uri.setText(util.ws);
-        AppCompatEditText server_uri = findViewById(R.id.Input2);
+        AppCompatEditText server_uri = findViewById(R.id.Input1);
         server_uri.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         server_uri.setText(util.server_uri);
 

@@ -39,7 +39,7 @@ import java.io.IOException;
 
 
 public class Util {
-    public String default_ws = "ws://10.138.94.7:8000/ws/chat/lobby/";//websocket测试地址
+    public String default_ws = "ws://10.138.118.224.7:8000/ws/chat/lobby/";//websocket测试地址
     public String default_server = "120.27.241.217";
     private WebSocketFactory webSocketFactory;
     private WebSocket webSocket;

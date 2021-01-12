@@ -64,7 +64,9 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         //找到控件
         offLogin = findViewById(R.id.btn_offlinelogin);
         mEtUser = findViewById(R.id.et_1);
+        mEtUser.setText("admin");
         mEtPassword = findViewById(R.id.et_2);
+        mEtPassword.setText("123456");
         offLogin.setOnClickListener(this);
         saveUser();
 
