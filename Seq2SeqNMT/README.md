@@ -7,7 +7,7 @@ The PyTorch tutorial [NLP FROM SCRATCH: TRANSLATION WITH A SEQUENCE TO SEQUENCE 
 This Android demo app shows:
 
 * The Python code that saves the encoder and attention-enhanced decoder models, trained based on the code in the PyTorch NMT tutorial;
-* The Python code that loads the saved encode and decoder models, optimizes them and saves again for mobile apps to use;
+* The Python code that loads the saved encoder and decoder models, optimizes them and saves again for mobile apps to use;
 * The Android app that uses the encoder and decoder models to do French-English translation.
 
 ## Prerequisites
@@ -23,9 +23,11 @@ To Test Run the Object Detection Android App, follow the steps below:
 
 ### 1. Prepare the Model
 
-If you have a good GPU and want to train your model from scratch, uncomment the line `trainIters(encoder, decoder, 450100, print_every=5000)` in `seq2seq_nmt.py` before running `python seq2seq2_nmt.py` to go through the whole process of training, saving, loading and optimizing and saving the final mobile-ready models. After `optimized_encoder_150k.pth` and `optimized_encoder_150k.pth` are generated, copy them to the Android app's assets folder.
+If you have a good GPU and want to train your model from scratch, uncomment the line `trainIters(encoder, decoder, 450100, print_every=5000)` in `seq2seq_nmt.py` before running `python seq2seq2_nmt.py` to go through the whole process of training, saving, loading, optimizing and saving the final mobile-ready models.
 
-You can also download the PyTorch trained and optimized NMT encoder and decoder models compressed in a zip [here](https://drive.google.com/file/d/1TxB5oStgShrNvlSVlVaGylNUi4PTtufQ/view?usp=sharing), unzip it and then copy to the Android app's assets folder.
+To just convert a pre-trained model `seq2seq_mt_150000.pt` to the TorchScript model used on mobile, download [seq2seq_mt_150000.pt](https://drive.google.com/file/d/1f91PvlkxS8JS0xGpMRZ3fmr0Ev80Guxk/view?usp=sharing) first to the same directory as `seq2seq2_nmt.py`, then run `python seq2seq2_nmt.py`. After `optimized_encoder_150k.pth` and `optimized_decoder_150k.pth` are generated, copy them to the Android app's assets folder. Note that dynamic quantization is applied to the decoder in `seq2seq2_nmt.py` for its `nn.Linear` parameters to reduce the decoder model size from 29MB to 18MB.
+
+You can also download the PyTorch trained and optimized NMT encoder and decoder models compressed in a zip [here](https://drive.google.com/file/d/1Ju9ceHi5e87UW1P09-XIvPVdMjOs5kiE/view?usp=sharing), unzip it and then copy to the Android app's assets folder.
 
 ### 2. Build and run with Android Studio
 
