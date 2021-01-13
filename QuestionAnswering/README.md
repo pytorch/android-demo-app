@@ -21,13 +21,29 @@ To Test Run the Android QA App, run the following commands on a Terminal:
 
 If you don't have PyTorch installed or want to have a quick try of the demo app, you can download the scripted QA model compressed in a zip file [here](https://drive.google.com/file/d/1RWZa_5oSQg5AfInkn344DN3FJ5WbbZbq/view?usp=sharing), then unzip it to the assets folder, and continue to Step 2.
 
-With PyTorch 1.7 installed, run:
+With PyTorch 1.7 installed, With PyTorch 1.7 installed, first install the Huggingface `transformers` by running `pip install transformers` (the versions that have been tested are 4.0.0 and 4.1.1), then run `python convert_distilbert_qa.py`.
+
+Note that a pre-defined question and text, resulting in the size of the input tokens (of question and text) being 360, is used in the `convert_distilbert_qa.py`, and 360 is the maximum token size for the user text and question in the app. If the token size of the inputs of the text and question is less than 360, padding will be needed to make the model work correctly.
+
+After the script completes, copy the model file qa360_quantized.pt to the Android app's assets folder. [Dynamic quantization](https://pytorch.org/tutorials/intermediate/dynamic_quantization_bert_tutorial.html) is used to quantize the model to reduce its size to half, without causing inference difference in question answering - you can verify this by changing the last 4 lines of code in `convert_distilbert_qa.py` from:
+
 ```
-pip install transformers
-python convert_distilbert_qa.py
+model_dynamic_quantized = torch.quantization.quantize_dynamic(model, qconfig_spec={torch.nn.Linear}, dtype=torch.qint8)
+traced_model = torch.jit.trace(model_dynamic_quantized, inputs['input_ids'], strict=False)
+optimized_traced_model = optimize_for_mobile(traced_model)
+torch.jit.save(optimized_traced_model, "qa360_quantized.pt")
 ```
 
-Then copy the model file qa360_quantized.pt to the Android app's assets folder. [Dynamic quantization](https://pytorch.org/tutorials/intermediate/dynamic_quantization_bert_tutorial.html) is used to quantize the model to reduce its size to half without causing inference difference in question answering.
+to
+
+```
+traced_model = torch.jit.trace(model, inputs['input_ids'], strict=False)
+optimized_traced_model = optimize_for_mobile(traced_model)
+torch.jit.save(optimized_traced_model, "qa360.pt")
+```
+
+and rerun `python convert_distilbert_qa.py` to generate a non-quantized model `qa360.pt` and use it in the app to compare with the quantized version `qa360_quantized.pt`.
+
 
 ### 2. Build and run with Android Studio
 
