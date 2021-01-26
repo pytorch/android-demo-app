@@ -30,9 +30,10 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements Runnable{
     // to be consistent with the model inputs defined in seq2seq_nmt.py, based on
     // https://pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html
-    private final int HIDDEN_SIZE = 256;
-    private final int EOS_token = 1;
-    private final int MAX_LENGTH = 50;
+    private static final int HIDDEN_SIZE = 256;
+    private static final int EOS_TOKEN = 1;
+    private static final int MAX_LENGTH = 50;
+    private static final String TAG = MainActivity.class.getName();
 
     private Module mModuleEncoder;
     private Module mModuleDecoder;
@@ -54,9 +55,9 @@ public class MainActivity extends AppCompatActivity implements Runnable{
 
         mButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-            mButton.setEnabled(false);
-            Thread thread = new Thread(MainActivity.this);
-            thread.start();
+                mButton.setEnabled(false);
+                Thread thread = new Thread(MainActivity.this);
+                thread.start();
             }
         });
     }
@@ -100,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements Runnable{
             json = new String(buffer, "UTF-8");
             wrd2idx = new JSONObject(json);
         } catch (JSONException | IOException e) {
-            e.printStackTrace();
+            android.util.Log.e(TAG, "JSONException | IOException ", e);
             return null;
         }
 
@@ -112,7 +113,7 @@ public class MainActivity extends AppCompatActivity implements Runnable{
             }
         }
         catch (JSONException e) {
-            e.printStackTrace();
+            android.util.Log.e(TAG, "JSONException ", e);
             return null;
         }
 
@@ -163,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements Runnable{
                 }
             }
 
-            if (topIdx == EOS_token) break;
+            if (topIdx == EOS_TOKEN) break;
 
             result.add(topIdx);
             mInputTensorBuffer = Tensor.allocateLongBuffer(1);
@@ -177,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements Runnable{
                 english += " " + idx2wrd.getString("" + result.get(i));
         }
         catch (JSONException e) {
-            e.printStackTrace();
+            android.util.Log.e(TAG, "JSONException ", e);
         }
         return english;
     }
