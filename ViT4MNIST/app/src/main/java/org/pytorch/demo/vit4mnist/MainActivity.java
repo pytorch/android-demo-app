@@ -37,11 +37,11 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private Button mClearButton;
     private HandWrittenDigitView mDrawView;
 
-    private float MNISI_STD = 0.1307f;
-    private float MNISI_MEAN = 0.3081f;
-    private float BLANK = - MNISI_STD / MNISI_MEAN;
-    private float NON_BLANK = (1.0f - MNISI_STD) / MNISI_MEAN;
-    private int MNIST_IMAGE_SIZE = 28;
+    private static final float MNISI_STD = 0.1307f;
+    private static final float MNISI_MEAN = 0.3081f;
+    private static final float BLANK = - MNISI_STD / MNISI_MEAN;
+    private static final float NON_BLANK = (1.0f - MNISI_STD) / MNISI_MEAN;
+    private static final int MNIST_IMAGE_SIZE = 28;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
