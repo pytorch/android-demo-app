@@ -18,7 +18,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "org.pytorch.demo"
-        minSdkVersion 23
+        minSdkVersion 26
         targetSdkVersion 26
         versionCode 1
         versionName "1.0"
@@ -70,5 +70,17 @@ dependencies {
     // local library
     implementation project(path: ':library')
     compileOnly 'com.google.android.wearable:wearable:2.6.0'
+
+
+    // for glass activity
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+    implementation 'com.valdesekamdem.library:md-toast:0.9.0'
+    implementation 'com.squareup.okio:okio:2.1.0'
+
+    implementation("com.serenegiant:common:1.5.20")
+    implementation project(':libuvccamera')
+    implementation project(':usbserial-release')
+    implementation project(':x5s-developmentkit')
 
 }

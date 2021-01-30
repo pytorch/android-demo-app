@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('X5S-devkit-release-v1.1.2.aar'))

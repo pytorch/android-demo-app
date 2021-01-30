@@ -145,10 +145,9 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
     private Queue<Long> mMovingAvgQueue = new LinkedList<>();
     private Bitmap bitmap_c = null;
     private float[] box_c = null;
-    final private int REQUEST_CODE_INTERNET = 201;
-    final private String serverUri = new Util(this).ws;
+
     private ImageView imageView;
-    private WebSocket webSocket;
+
     private ArrayList<NamedBox> namedboxpool;
     private ArrayList<NamedEmbedding> namedEmbeddings;
     private int detect_mode;
@@ -159,7 +158,7 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
     private int video_width = 960;
     private String record_mode = null;
 //    private String deliminator = "\\$\\$\\$\\$\\$\\$\\$\\$\\$\\$";
-    private class NamedEmbedding{
+    public class NamedEmbedding{
         public float[] embedding;
         public String id;
 
@@ -241,7 +240,7 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
     }
 
 
-    private class NamedBox{
+    public class NamedBox{
 
         public float[] rect;
         public String[] id_k;
@@ -482,30 +481,30 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
 
     }
 
-    public void send_croped_Image(Bitmap bitmap_c, float[] box_c)
-    {
-        System.out.println("in send cropped Image");
-//                webSocket.sendText("{\"message\": \"on create\"}");
-        if (bitmap_c != null)
-        {
-            try {
-                String box = "["+box_c[0]+","+box_c[1]+","+box_c[2]+","+box_c[3]+ "]";
-                String string = "{\"message\": \"cropped image\",\"box\": "+ box +"}";
-                String deliminater = "$$$$$$$$$$";
-                string = string + deliminater;
-                byte[] bytes1 = string.getBytes("UTF-8");
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap_c.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] bytes = baos.toByteArray();
-                System.out.println("in onclick bytes len is " + bytes.length);
-                webSocket.sendBinary(byteMerger(bytes1, bytes));
-            }catch (java.io.UnsupportedEncodingException uee)
-            {
-                uee.printStackTrace();
-            }
-
-        }
-    }
+//    public void send_croped_Image(Bitmap bitmap_c, float[] box_c)
+//    {
+//        System.out.println("in send cropped Image");
+////                webSocket.sendText("{\"message\": \"on create\"}");
+//        if (bitmap_c != null)
+//        {
+//            try {
+//                String box = "["+box_c[0]+","+box_c[1]+","+box_c[2]+","+box_c[3]+ "]";
+//                String string = "{\"message\": \"cropped image\",\"box\": "+ box +"}";
+//                String deliminater = "$$$$$$$$$$";
+//                string = string + deliminater;
+//                byte[] bytes1 = string.getBytes("UTF-8");
+//                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                bitmap_c.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+//                byte[] bytes = baos.toByteArray();
+//                System.out.println("in onclick bytes len is " + bytes.length);
+//                webSocket.sendBinary(byteMerger(bytes1, bytes));
+//            }catch (java.io.UnsupportedEncodingException uee)
+//            {
+//                uee.printStackTrace();
+//            }
+//
+//        }
+//    }
 
 
     public void update_namedboxpool()
@@ -716,8 +715,9 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
         }
 
         NamedBox midbox = null;
-        Bitmap bitmap2show;
-        final long moduleForwardDuration, moduleAnalysisDuration;
+        Bitmap bitmap2show = null;
+        long moduleForwardDuration = 0;
+        long moduleAnalysisDuration = 0;
         try {
             Bitmap bitmap;
             System.out.println("in analyze original image size is w "+image.getWidth() + "  h "+image.getHeight());
@@ -804,26 +804,26 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
 
                 System.out.println("inference time is "+moduleForwardDuration);
             }
-            else //remote detect: send whole image to server
-            {
-
-                long moduleForwardStartTime = SystemClock.elapsedRealtime();
-                send_whole_image(bitmap);
-                set_namedboxpool_isvalid_false();
-                update_namedboxpool();
-                moduleForwardDuration = moduleAnalysisDuration = SystemClock.elapsedRealtime() - moduleForwardStartTime;
-                bitmap2show = bitmap;
-
-                int width = graphicOverlay.getWidth();
-                int w1 = bitmap.getWidth();
-                int h1 = bitmap.getHeight();
-                int height = (int) (width * h1/(1.0f * w1));
-                midbox = drawFaceResults_nbp(width, height-100);
-//                set_prediction(bitmap, midbox);
-                if (bitmapToVideoEncoder != null) {
-                    bitmapToVideoEncoder.queueFrame(bitmap);
-                }
-            }
+//            else //remote detect: send whole image to server
+//            {
+//
+//                long moduleForwardStartTime = SystemClock.elapsedRealtime();
+////                send_whole_image(bitmap);
+//                set_namedboxpool_isvalid_false();
+//                update_namedboxpool();
+//                moduleForwardDuration = moduleAnalysisDuration = SystemClock.elapsedRealtime() - moduleForwardStartTime;
+//                bitmap2show = bitmap;
+//
+//                int width = graphicOverlay.getWidth();
+//                int w1 = bitmap.getWidth();
+//                int h1 = bitmap.getHeight();
+//                int height = (int) (width * h1/(1.0f * w1));
+//                midbox = drawFaceResults_nbp(width, height-100);
+////                set_prediction(bitmap, midbox);
+//                if (bitmapToVideoEncoder != null) {
+//                    bitmapToVideoEncoder.queueFrame(bitmap);
+//                }
+//            }
 
 
 //            Bitmap bmp = bitmap.copy(Bitmap.Config.ARGB_8888, true);
@@ -890,28 +890,28 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
         }
     }
 
-    private void send_whole_image(Bitmap bitmap){
-        System.out.println("in send whole Image");
-//                webSocket.sendText("{\"message\": \"on create\"}");
-        if (bitmap != null)
-        {
-            try {
-                String string = "{\"message\": \"whole image\",\"box\": 0}";
-                String deliminater = "$$$$$$$$$$";
-                string = string + deliminater;
-                byte[] bytes1 = string.getBytes("UTF-8");
-                ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                byte[] bytes = baos.toByteArray();
-                System.out.println("in onclick bytes len is " + bytes.length);
-                webSocket.sendBinary(byteMerger(bytes1, bytes));
-            }catch (java.io.UnsupportedEncodingException uee)
-            {
-                uee.printStackTrace();
-            }
-
-        }
-    }
+//    private void send_whole_image(Bitmap bitmap){
+//        System.out.println("in send whole Image");
+////                webSocket.sendText("{\"message\": \"on create\"}");
+//        if (bitmap != null)
+//        {
+//            try {
+//                String string = "{\"message\": \"whole image\",\"box\": 0}";
+//                String deliminater = "$$$$$$$$$$";
+//                string = string + deliminater;
+//                byte[] bytes1 = string.getBytes("UTF-8");
+//                ByteArrayOutputStream baos = new ByteArrayOutputStream();
+//                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+//                byte[] bytes = baos.toByteArray();
+//                System.out.println("in onclick bytes len is " + bytes.length);
+//                webSocket.sendBinary(byteMerger(bytes1, bytes));
+//            }catch (java.io.UnsupportedEncodingException uee)
+//            {
+//                uee.printStackTrace();
+//            }
+//
+//        }
+//    }
 
     private void set_prediction(Bitmap bitmap, NamedBox nb){
         if (nb == null)
@@ -946,25 +946,25 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
         }
     }
 
-    private void send_unrecognized_image(Bitmap bitmap, ArrayList<float[]> nms_boxes){
-        for (int i = 0; i < nms_boxes.size(); i++)
-        {
-            float[] box_c = nms_boxes.get(i).clone();
-            boolean flag = true;
-            for (NamedBox namedBox: namedboxpool)
-            {
-                if (IoU(box_c, namedBox.rect) > 0.5)
-                {
-                    flag = false;
-                }
-            }
-            if (flag){
-                Bitmap bitmap_c = cropBitmap(bitmap, box_c);
-                send_croped_Image(bitmap_c, box_c);
-            }
-        }
-
-    }
+//    private void send_unrecognized_image(Bitmap bitmap, ArrayList<float[]> nms_boxes){
+//        for (int i = 0; i < nms_boxes.size(); i++)
+//        {
+//            float[] box_c = nms_boxes.get(i).clone();
+//            boolean flag = true;
+//            for (NamedBox namedBox: namedboxpool)
+//            {
+//                if (IoU(box_c, namedBox.rect) > 0.5)
+//                {
+//                    flag = false;
+//                }
+//            }
+//            if (flag){
+//                Bitmap bitmap_c = cropBitmap(bitmap, box_c);
+//                send_croped_Image(bitmap_c, box_c);
+//            }
+//        }
+//
+//    }
 
     /*
     * 使用@param nms_box中的框截取@param bitmap，对于获得的人脸，计算embedding。

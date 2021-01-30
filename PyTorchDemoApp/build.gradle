@@ -16,7 +16,7 @@ allprojects {
     repositories {
         google()
         jcenter()
-        
+        maven { url 'https://gitee.com/liuchaoya/libcommon/raw/master/repository/' }//necessary for X5S SDK
     }
 }
 

@@ -1,0 +1,2 @@
+configurations.maybeCreate("default")
+artifacts.add("default", file('libuvccamera-v1.1.2.aar'))

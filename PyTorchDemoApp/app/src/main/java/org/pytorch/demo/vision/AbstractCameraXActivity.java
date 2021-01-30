@@ -122,7 +122,7 @@ public abstract class AbstractCameraXActivity<R> extends BaseModuleActivity {
         final Preview preview = new Preview(previewConfig);
         preview.setOnPreviewOutputUpdateListener(output -> textureView.setSurfaceTexture(output.getSurfaceTexture()));
 
-        //VideoCapture NOT SUPPORTED by current cameraX, wait till further implementation
+//        VideoCapture NOT SUPPORTED by current cameraX, wait till further implementation
 //        final VideoCaptureConfig videoCaptureConfig =
 //                new VideoCaptureConfig.Builder()
 //                        .setTargetRotation(getWindowManager().getDefaultDisplay().getRotation())
@@ -149,7 +149,7 @@ public abstract class AbstractCameraXActivity<R> extends BaseModuleActivity {
                     }
                 });
         //VideoCapture NOT SUPPORTED by current cameraX, wait till further implementation
-        CameraX.bindToLifecycle(this, preview, imageAnalysis);
+        CameraX.bindToLifecycle(this, preview,  imageAnalysis);
     }
 
     @WorkerThread

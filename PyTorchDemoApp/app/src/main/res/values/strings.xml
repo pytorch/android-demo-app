@@ -9,11 +9,11 @@
     <string name="image_classification_title">Image Classification</string>
     <string name="image_classification_results_header_row_name">Classification</string>
     <string name="image_classification_results_header_row_score">Score</string>
-<!--<<<<<<< Updated upstream-->
-<!--    <string name="face_recognition_title">识别中</string>-->
-<!--=======-->
+    <!--<<<<<<< Updated upstream-->
+    <!--    <string name="face_recognition_title">识别中</string>-->
+    <!--=======-->
     <string name="face_recognition_title">识别中...</string>
-<!--&gt;>>>>>> Stashed changes-->
+    <!--&gt;>>>>>> Stashed changes-->
     <!--    <string name="image_classification_results_header_row_name">Classification</string>-->
     <!--    <string name="image_classification_results_header_row_score">Score</string>-->
     <string name="text_classification">Text Classification</string>
@@ -63,8 +63,9 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="face_of_attention">中心人脸</string>
     <string name="prediction">识别结果</string>
-<!--    丁豪添加-->
+    <!--    丁豪添加-->
     <string name="navigation_bar">导航栏</string>
     <string name="Setup">设置</string>
+    <string name="title_activity_glass_local">GlassLocalActivity</string>
 
 </resources>

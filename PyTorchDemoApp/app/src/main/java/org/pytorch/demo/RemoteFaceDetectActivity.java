@@ -145,7 +145,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
         setContentView(R.layout.activity_remote_face_detect);
 
         // response screen rotation event
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
+//        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 
         requestPermission();
     }
@@ -466,7 +466,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
                 rowView.nameTextView.setText(namedBox.id_k[i]);
                 rowView.scoreTextView.setText(String.format(Locale.US, SCORES_FORMAT,
                         namedBox.prob_k[i]));
-                rowView.setProgressState(false);
+                rowView.setProgressState(true);
             }
         }
     }

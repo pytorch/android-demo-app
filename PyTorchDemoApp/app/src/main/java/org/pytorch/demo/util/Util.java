@@ -39,6 +39,9 @@ import java.io.IOException;
 
 
 public class Util {
+    public String project_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/FaceRecogApp";
+    public String datagram_path = project_path + "/datagrams";
+    public String video_path = project_path + "/videos";
     public String default_ws = "ws://10.138.118.224.7:8000/ws/chat/lobby/";//websocket测试地址
     public String default_server = "120.27.241.217";
     private WebSocketFactory webSocketFactory;
@@ -48,6 +51,10 @@ public class Util {
     public String ws = null;
     public String server_uri = null;
     public Util(Activity activity)  {
+        File project_dir = new File(project_path);
+        if (!project_dir.exists()){
+            project_dir.mkdir();
+        }
 //        Util();
 //        sharedPreferences = activity.getSharedPreferences("info",  Activity.MODE_PRIVATE);
 //        ws = sharedPreferences.getString("rtmp_uri", default_ws);
@@ -73,6 +80,10 @@ public class Util {
 
     }
     public Util(){
+        File project_dir = new File(project_path);
+        if (!project_dir.exists()){
+            project_dir.mkdir();
+        }
         JSONObject jsonObject = GetLocalJson();
         try{
             ws = jsonObject.getString("rtmp_uri");
@@ -139,11 +150,15 @@ public class Util {
                 Thread.sleep(200);
             }
 
-            File Directory = Environment.getExternalStorageDirectory();
-            File project_dir = new File(Directory, "FaceRecogApp");
+//            File Directory = Environment.getExternalStorageDirectory();
+//            File project_dir = new File(Directory, "FaceRecogApp");
+            File project_dir = new File(project_path);
             if (!project_dir.exists()){
                 project_dir.mkdir();
             }
+            File datagram_dir = new File(datagram_path);
+            if (!datagram_dir.exists())
+                datagram_dir.mkdir();
             File datagram_file = new File(project_dir, s+".json");
             if (!datagram_file.exists()){
                 datagram_file.createNewFile();

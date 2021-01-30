@@ -1,1 +1,1 @@
-include ':app', ":library"
+include ':app', ':libuvccamera',':usbserial-release', ':x5s-developmentkit', ":library"
