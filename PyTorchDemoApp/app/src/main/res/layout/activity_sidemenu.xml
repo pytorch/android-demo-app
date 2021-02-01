@@ -60,6 +60,7 @@
                     android:drawablePadding="16dp"
                     android:text="@string/main_nlp_button"
                     android:textAppearance="@style/TextAppearanceMainVisionNlp" />
+
             </FrameLayout>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -69,6 +70,9 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="start">
+
+
+
             <androidx.constraintlayout.widget.ConstraintLayout android:orientation="vertical"
                 android:layout_height="match_parent"
                 android:layout_width="match_parent">
@@ -84,20 +88,19 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                    <TextView
-                        android:id="@+id/crew_name"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="10dp"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="30dp"
-                        android:text="执法队员"
-                        android:textSize="6pt"
-                        android:textColor="@android:color/black"
-                        app:layout_constraintTop_toBottomOf="@+id/iv_head"
-                        tools:ignore="MissingConstraints" />
+                <TextView
+                    android:id="@+id/crew_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="30dp"
+                    android:text="执法队员"
+                    android:textColor="@android:color/black"
+                    android:textSize="6pt"
+                    app:layout_constraintTop_toBottomOf="@+id/iv_head"
+                    tools:ignore="MissingConstraints" />
 
-                    <TextView
+                <TextView
                         android:id="@+id/cname"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -210,6 +213,26 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="447dp"
+                android:layout_gravity="bottom"
+                android:gravity="start"
+                android:orientation="vertical">
+
+                <Button
+                    android:id="@+id/button_datagram"
+                    android:layout_width="344dp"
+                    android:layout_height="wrap_content"
+                    android:text="选择数据包" />
+
+                <Button
+                    android:id="@+id/button_video"
+                    android:layout_width="344dp"
+                    android:layout_height="wrap_content"
+                    android:text="选择视频" />
+
+            </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"

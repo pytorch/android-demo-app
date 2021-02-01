@@ -42,6 +42,7 @@ public class Util {
     public String project_path = Environment.getExternalStorageDirectory().getAbsolutePath() + "/FaceRecogApp";
     public String datagram_path = project_path + "/datagrams";
     public String video_path = project_path + "/videos";
+    public String config_path = project_path + "/config";
     public String default_ws = "ws://10.138.118.224.7:8000/ws/chat/lobby/";//websocket测试地址
     public String default_server = "120.27.241.217";
     private WebSocketFactory webSocketFactory;
@@ -50,6 +51,7 @@ public class Util {
     private SharedPreferences sharedPreferences;
     public String ws = null;
     public String server_uri = null;
+    public double upload_progress;
     public Util(Activity activity)  {
         File project_dir = new File(project_path);
         if (!project_dir.exists()){
@@ -103,6 +105,97 @@ public class Util {
     }
 
     public String deliminator = "\\${10,}";
+
+
+
+    public String UploadVideoByName(String s){
+        upload_progress = 0;
+        webSocketFactory = new WebSocketFactory();
+
+//        WebSocket webSocket;
+        try{
+            webSocket=webSocketFactory.createSocket(ws);
+
+            StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+            StrictMode.setThreadPolicy(policy);
+
+            webSocket.connect();
+            webSocket.addListener(new WebSocketAdapter() {
+                @Override
+                public void onTextMessage(WebSocket websocket, String message) throws Exception {
+                    System.out.println("in listener, text message received "+ message);
+
+                    //TODO info can be retrived here
+                    // need further operation
+                    // put box and info into boxpool
+
+                    if (message != null)
+                    {
+                        update_datagram(message);
+                    }
+                    else
+                        System.out.println("in onTextMessage namedbox is null");
+
+                }
+            });
+            webSocket.addListener(new WebSocketAdapter(){
+                @Override
+                public void onBinaryMessage(WebSocket webSocket, byte[] bytes) throws Exception{
+                    System.out.println("in binary message listener received bytes of size " + bytes.length);
+                }
+
+            });
+//            webSocket.sendText("String websocket");
+            upload_video_by_name(s);
+
+
+            File video_dir = new File(video_path);
+            if (!video_dir.exists()){
+                video_dir.mkdir();
+                return "no such local file";
+            }
+
+            File video_file = new File(video_dir, s);
+
+            FileInputStream fileInputStream = new FileInputStream(video_file);
+
+            int total = fileInputStream.available();
+            byte[] bytes = new byte[total];
+            while(fileInputStream.available() > 0){
+                System.out.println("in while available is " + fileInputStream.available());
+                this.upload_progress = 1 - (fileInputStream.available()* 1.0 / total);
+                fileInputStream.read(bytes);
+                webSocket.sendBinary(bytes);
+            }
+            System.out.println("out while available is " + fileInputStream.available());
+            this.upload_progress = 1 - (fileInputStream.available()* 1.0 / total);
+            webSocket.sendText("{\"message\": \"upload video done\", \"name\": \""+s+"\"}");
+            fileInputStream.close();
+
+        }
+        catch (IOException ioe)
+        {
+            System.out.println(ioe.toString());
+        }
+        catch (OpeningHandshakeException e)
+        {
+            // A violation against the WebSocket protocol was detected
+            // during the opening handshake.
+        }
+        catch (HostnameUnverifiedException e)
+        {
+            // The certificate of the peer does not match the expected hostname.
+        }
+        catch (WebSocketException e)
+        {
+            // Failed to establish a WebSocket connection.
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        webSocket.disconnect();
+        return "success";
+    }
     public String DownloadDatagramByName(String s) {
         datagram = null;
         webSocketFactory = new WebSocketFactory();
@@ -131,6 +224,7 @@ public class Util {
 //                        NamedBox namedBox = new NamedBox(message);
 //                        namedboxpool.add(namedBox);
                         update_datagram(message);
+
                     }
                     else
                         System.out.println("in onTextMessage namedbox is null");
@@ -194,8 +288,9 @@ public class Util {
     }
 
     public void SetLocalJson(String str) throws IOException {
-        File Directory = Environment.getExternalStorageDirectory();
-        File project_dir = new File(Directory, "FaceRecogAppConfig");
+//        File Directory = Environment.getExternalStorageDirectory();
+//        File project_dir = new File(Directory, "FaceRecogAppConfig");
+        File project_dir = new File(config_path);
         if (!project_dir.exists()){
             project_dir.mkdir();
         }
@@ -219,9 +314,11 @@ public class Util {
     }
 
 
+
     public JSONObject GetLocalJson(){
-        File Directory = Environment.getExternalStorageDirectory();
-        File project_dir = new File(Directory, "FaceRecogAppConfig");
+//        File Directory = Environment.getExternalStorageDirectory();
+//        File project_dir = new File(Directory, "FaceRecogAppConfig");
+        File project_dir = new File(config_path);
         if (!project_dir.exists()){
             project_dir.mkdir();
         }
@@ -243,6 +340,7 @@ public class Util {
             fileInputStream.close();
             String str =new String(bytes, StandardCharsets.UTF_8);
             JSONObject jsonObject = new JSONObject(str);
+            System.out.println("in get local json str is "+str);
             return jsonObject;
         }catch (FileNotFoundException fileNotFoundException){
             fileNotFoundException.printStackTrace();
@@ -254,10 +352,19 @@ public class Util {
         return null;
 
     }
-
+    public String[] GetLocalVideos(){
+        File project_dir  = new File(video_path);
+        if (!project_dir.exists()){
+            project_dir.mkdir();
+            return new String[0];
+        }
+        String[] filenames = project_dir.list();
+        return filenames;
+    }
     public String[] GetLocalDatagrams(){
-        File Directory = Environment.getExternalStorageDirectory();
-        File project_dir = new File(Directory, "FaceRecogApp");
+//        File Directory = Environment.getExternalStorageDirectory();
+//        File project_dir = new File(Directory, "FaceRecogApp");
+        File project_dir  = new File(datagram_path);
         if (!project_dir.exists()){
             project_dir.mkdir();
             return new String[0];
@@ -267,8 +374,9 @@ public class Util {
         return filenames;
     }
     public File[] GetLocalDatagramFiles(){
-        File Directory = Environment.getExternalStorageDirectory();
-        File project_dir = new File(Directory, "FaceRecogApp");
+//        File Directory = Environment.getExternalStorageDirectory();
+//        File project_dir = new File(Directory, "FaceRecogApp");
+        File project_dir  = new File(datagram_path);
         if (!project_dir.exists()){
             project_dir.mkdir();
             return new File[0];
@@ -277,9 +385,15 @@ public class Util {
         return files;
     }
 
+    private void upload_video_by_name(String s){
+        webSocket.sendText("{\"message\": \"upload video by name\", \"name\": \""+s+"\"}");
+    }
     private void get_datagram_by_name(String s) {
         webSocket.sendText("{\"message\": \"get datagram by name\", \"name\": \""+s+"\"}");
 //        webSocket.sendText("get datagram by name:"+s);
+    }
+    private void send_username_pass(String s){
+        webSocket.sendText("");
     }
 
     private static class NamedEmbedding{
@@ -323,6 +437,10 @@ public class Util {
     }
     public void update_datagram(String d){
         this.datagram = d;
+    }
+    private String login_status;
+    public void update_login_status(String s){
+        this.login_status = s;
     }
     public void showToast(Context ctx, String msg) {
         Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();

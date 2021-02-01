@@ -67,5 +67,6 @@
     <string name="navigation_bar">导航栏</string>
     <string name="Setup">设置</string>
     <string name="title_activity_glass_local">GlassLocalActivity</string>
+    <string name="title_activity_select_videos">选择视频文件</string>
 
 </resources>

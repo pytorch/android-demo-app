@@ -101,15 +101,15 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         String savedUsername = sp.getString("username", "");
         String savedPassword = sp.getString("password", "");
         if (username.equals(savedUsername) && password.equals(savedPassword)) {
-
-//            intent = new Intent(WelcomeActivity.this, SideBarActivity.class);
-//            String res = sp.getString("username","none");
-//            intent.putExtra("info", res);
-//            showToast("你好！"+res);
-//            startActivity(intent);
-//
-            intent = new Intent(WelcomeActivity.this, GlassLocalActivity.class);
+//             if new Util().sss === success
+            intent = new Intent(WelcomeActivity.this, SideBarActivity.class);
+            String res = sp.getString("username","none");
+            intent.putExtra("info", res);
+            showToast("你好！"+res);
             startActivity(intent);
+
+//            intent = new Intent(WelcomeActivity.this, SelectVideos.class);
+//            startActivity(intent);
         } else {
             showToast("用户名或密码错误，请重新登录");
 

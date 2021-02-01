@@ -19,10 +19,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".SelectVideos"
+            android:label="@string/title_activity_select_videos"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+
         <uses-library
             android:name="com.google.android.wearable"
             android:required="false" />
-
         <!--
                Set to true if your app is Standalone, that is, it does not require the handheld
                app to run.
@@ -35,11 +39,6 @@
             android:name=".GlassLocalActivity"
             android:label="@string/title_activity_glass_local"
             android:screenOrientation="landscape">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".SelectFaceDatagram"

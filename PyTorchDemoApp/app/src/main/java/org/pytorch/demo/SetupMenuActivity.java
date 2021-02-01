@@ -47,8 +47,12 @@ public class SetupMenuActivity extends AppCompatActivity {
             }
         });
 
-    }
-    public void selectfaceDatagram(View view){
-        startActivity(new Intent(SetupMenuActivity.this, SelectFaceDatagram.class));
+        findViewById(R.id.Return).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                SetupMenuActivity.this.finish();
+            }
+        });
+
     }
 }

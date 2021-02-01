@@ -830,7 +830,13 @@ public class GlassLocalActivity extends AppCompatActivity {
                 yuvImage.compressToJpeg(new Rect(0, 0, width, height), 100, os);
                 byte[] jpegByteArray = os.toByteArray();
                 Bitmap bitmap = BitmapFactory.decodeByteArray(jpegByteArray, 0, jpegByteArray.length);
-                analyzeImage(bitmap,0);
+//                runOnUiThread(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        analyzeImage(bitmap,0);
+//                    }
+//                });//卡死啦
+                analyzeImage(bitmap, 0);
 
             }
         });

@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import org.pytorch.demo.AbstractListActivity;
 import org.pytorch.demo.FaceDetectionActivity;
+import org.pytorch.demo.GlassLocalActivity;
 import org.pytorch.demo.InfoViewFactory;
 import org.pytorch.demo.R;
 import org.pytorch.demo.RemoteFaceDetectActivity;
@@ -25,7 +26,7 @@ public class VisionListActivity extends AbstractListActivity {
     });
     //TODO: make a new activity for face detection
     findViewById(R.id.vision_card_face_recognition_remote_click_area).setOnClickListener(v -> {
-      final Intent intent = new Intent(VisionListActivity.this, RemoteFaceDetectActivity.class);
+      final Intent intent = new Intent(VisionListActivity.this, GlassLocalActivity.class);
       startActivity(intent);
     });
   }

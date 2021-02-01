@@ -7,31 +7,24 @@ import android.os.Bundle;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.tabs.TabLayout;
+import com.google.android.material.tabs.TabLayoutMediator;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
 import androidx.viewpager2.widget.ViewPager2;
 
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Toast;
-
-import com.google.android.material.tabs.TabLayoutMediator;
 
 import org.jetbrains.annotations.NotNull;
 
-public class SelectFaceDatagram extends AppCompatActivity {
+public class SelectVideos extends AppCompatActivity {
 
 
     private TabLayout tabLayout;
     private ViewPager2 viewPager;
-    DatagramSelectAdapter datagramSelectAdapter;
+    VideoSelectAdapter videoSelectAdapter;
     private static final int REQUEST_CODE_FILE_PERMISSION = 204;
     private static final String[] PERMISSIONS = {Manifest.permission.INTERNET, Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
@@ -39,20 +32,20 @@ public class SelectFaceDatagram extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_select_face_datagram);
-        datagramSelectAdapter = new DatagramSelectAdapter();
+        setContentView(R.layout.activity_select_videos);
+        videoSelectAdapter = new VideoSelectAdapter();
         tabLayout = findViewById(R.id.tab_layout);
         viewPager = findViewById(R.id.pager);
-        viewPager.setAdapter(datagramSelectAdapter);
+        viewPager.setAdapter(videoSelectAdapter);
 
         new TabLayoutMediator(tabLayout, viewPager,
                 (tab, position) -> {
                     if(position == 1)
                     {
-                        tab.setText("本地数据包");
+                        tab.setText("本地视频文件");
                     }
                     else
-                        tab.setText("云端数据包");
+                        tab.setText("云端视频文件");
                 }
         ).attach();
 
@@ -101,4 +94,3 @@ public class SelectFaceDatagram extends AppCompatActivity {
         }
     }
 }
-

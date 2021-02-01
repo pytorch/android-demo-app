@@ -41,6 +41,7 @@ public class SideBarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         View view = this.getLayoutInflater().inflate(R.layout.activity_sidemenu,null);
         setContentView(view);
+        init_function_button();
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         NavigationView navigationview = (NavigationView) findViewById(R.id.navigation_view);
         final DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -70,7 +71,6 @@ public class SideBarActivity extends AppCompatActivity {
         TextView msg = navigationview.findViewById(R.id.cname);
         msg.setText(info);
 
-
         //寻找头部里面的控件
         androidx.appcompat.widget.AppCompatImageView imageView = view.findViewById(R.id.iv_head);
         imageView.setOnClickListener(v -> Toast.makeText(getApplicationContext(), msg.getText(), Toast.LENGTH_LONG).show());
@@ -90,6 +90,21 @@ public class SideBarActivity extends AppCompatActivity {
         findViewById(R.id.main_nlp_click_view).setOnClickListener(v -> startActivity(new Intent(SideBarActivity.this, NLPListActivity.class)));
     }
 
+    public void init_function_button(){
+        findViewById(R.id.button_datagram).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SideBarActivity.this, SelectFaceDatagram.class));
+            }
+        });
+
+        findViewById(R.id.button_video).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SideBarActivity.this, SelectVideos.class));
+            }
+        });
+    }
     //进入设置页面
     public void SetupMenu(View view) {
         startActivity(new Intent(SideBarActivity.this,SetupMenuActivity.class));
