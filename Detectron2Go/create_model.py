@@ -14,4 +14,4 @@ model = torchvision.models.detection.fasterrcnn_mobilenet_v3_large_320_fpn(
 model.eval()
 script_model = torch.jit.script(model)
 opt_script_model = optimize_for_mobile(script_model)
-opt_script_model.save("app/src/main/assets/frcnn_mnetv3_03.pt")
+opt_script_model.save("ObjectDetection/app/src/main/assets/frcnn_mnetv3_03.pt")
