@@ -16,8 +16,8 @@ This demo app shows how to use the Detectron2Go model and the native torchvision
 ```
 git clone https://github.com/jeffxtang/android-demo-app
 git clone https://github.com/pytorch/vision
-cd android-demo-apps
-ln -s ../../vision/torchvision torchvision
+cd android-demo-app
+ln -s ../vision/torchvision torchvision
 git checkout d2go
 cd Detectron2Go
 ```
