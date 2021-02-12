@@ -127,7 +127,18 @@ dependencies {
 }
 ```
 
-Now you're ready to build the project that uses the latest Detectron2 model created when running `create_model.py`. Of course, the model pre-processing and post-processing code needs to be updated as it differs from what YOLOv5 expects.
+5. Change the model pre-processing and post-processing code as it differs from what YOLOv5 expects, and add the initialization and load of the native library code in `MainActivity.java`:
+```
+static {
+    if (!NativeLoader.isInitialized()) {
+        NativeLoader.init(new SystemDelegate());
+    }
+    NativeLoader.loadLibrary("pytorch_jni");
+    NativeLoader.loadLibrary("torchvision_ops");
+}
+```
+
+Now you're ready to build the project that uses the latest Detectron2 model created when running `create_model.py`.
 
 ## Example Images and Detections
 
