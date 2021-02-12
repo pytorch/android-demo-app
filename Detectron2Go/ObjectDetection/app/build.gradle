@@ -6,17 +6,13 @@ repositories {
     maven {
         url "https://oss.sonatype.org/content/repositories/snapshots"
     }
-//    flatDir {
-//        dirs 'aars'
-//    }
 }
 
 android {
     configurations {
         extractForNativeBuild
     }
-//    compileSdkVersion 30
-//    buildToolsVersion "30.0.2"
+
     compileOptions {
         sourceCompatibility 1.8
         targetCompatibility 1.8
@@ -50,12 +46,6 @@ android {
         }
     }
 
-//    externalNativeBuild {
-//        cmake {
-//            path "CMakeLists.txt"
-//        }
-//    }
-
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -88,12 +78,10 @@ tasks.all { task ->
 
 
 dependencies {
-    //implementation fileTree(dir: "libs", include: ["*.jar"])
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
     implementation 'com.facebook.soloader:nativeloader:0.8.0'
     implementation project(':ops')
-
 
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     testImplementation 'junit:junit:4.12'
@@ -104,40 +92,7 @@ dependencies {
     implementation "androidx.camera:camera-core:$camerax_version"
     implementation "androidx.camera:camera-camera2:$camerax_version"
 
-//    implementation(name:'pytorch_android-release', ext:'aar')
-//    implementation(name:'pytorch_android_torchvision-release', ext:'aar')
-    //implementation(name:'torchvision_ops-0.0.1', ext:'aar')
-    //implementation 'com.facebook.fbjni:fbjni-java-only:0.0.3'
-
-//    implementation 'org.pytorch:pytorch_android:1.7.0'
-//    implementation 'org.pytorch:pytorch_android_torchvision:1.7.0'
-
     implementation 'org.pytorch:pytorch_android:1.8.0-SNAPSHOT'
     implementation 'org.pytorch:pytorch_android_torchvision:1.8.0-SNAPSHOT'
     implementation 'org.pytorch:torchvision_ops:0.0.1-SNAPSHOT'
-
-//    aarImplementation(name: 'pytorch_android-release', ext: 'aar')
-//    aarImplementation(name: 'pytorch_android_torchvision-release', ext: 'aar')
-
-    //extractForNativeBuild 'org.pytorch:torchvision_ops:0.0.1-SNAPSHOT'
-
-//    task extractAARForNativeBuild {
-//        doLast {
-//            configurations.extractForNativeBuild.files.each {
-//                def file = it.absoluteFile
-//                copy {
-//                    from zipTree(file)
-//                    into "$buildDir/$file.name"
-//                    include "headers/**"
-//                    include "jni/**"
-//                }
-//            }
-//        }
-//    }
-//
-//    tasks.whenTaskAdded { task ->
-//        if (task.name.contains('externalNativeBuild')) {
-//            task.dependsOn(extractAARForNativeBuild)
-//        }
-//    }
 }
