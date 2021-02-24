@@ -81,7 +81,6 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
 
     implementation 'com.facebook.soloader:nativeloader:0.8.0'
-    implementation project(':ops')
 
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
     testImplementation 'junit:junit:4.12'
@@ -94,5 +93,5 @@ dependencies {
 
     implementation 'org.pytorch:pytorch_android:1.8.0-SNAPSHOT'
     implementation 'org.pytorch:pytorch_android_torchvision:1.8.0-SNAPSHOT'
-    implementation 'org.pytorch:torchvision_ops:0.0.1-SNAPSHOT'
+    implementation 'org.pytorch:torchvision_ops:0.9.0-SNAPSHOT'
 }

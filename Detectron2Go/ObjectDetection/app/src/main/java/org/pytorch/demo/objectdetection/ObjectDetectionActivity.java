@@ -85,7 +85,7 @@ public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetec
     @Nullable
     protected AnalysisResult analyzeImage(ImageProxy image, int rotationDegrees) {
         if (mModule == null) {
-            mModule = PyTorchAndroid.loadModuleFromAsset(getAssets(), "frcnn_mnetv3_03.pt");
+            mModule = PyTorchAndroid.loadModuleFromAsset(getAssets(), "frcnn_mnetv3.pt");
         }
         Bitmap bitmap = imgToBitmap(image.getImage());
         Matrix matrix = new Matrix();

@@ -1,4 +1,3 @@
-include ':ops', ':ObjectDetection'
+include ':ObjectDetection'
 
-project(':ops').projectDir = file('ops')
 project(':ObjectDetection').projectDir = file('ObjectDetection/app')

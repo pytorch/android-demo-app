@@ -2,22 +2,30 @@
 
 ## Introduction
 
-This demo app shows how to use the Detectron2Go model and the native torchvision library with custom ops support to perform object detection. The code is based on a previous PyTorch Android [Object Detection demo app](https://github.com/pytorch/android-demo-app/tree/master/ObjectDetection) that uses a pre-trained Yolov5 model.
+This demo app shows how to use the Detectron2Go (D2Go) model and the native torchvision library with custom ops support to perform object detection. The code is based on a previous PyTorch Android [Object Detection demo app](https://github.com/pytorch/android-demo-app/tree/master/ObjectDetection) that uses a pre-trained Yolov5 model, with modified pre-processing and post-processing code required by the D2Go model.
 
 ## Prerequisites
 
 * PyTorch 1.8 or later
 * Python 3.8
 * Android Pytorch library 1.8.0
+* Android torchvision library 1.8.0
+* torchvision_ops library 0.9.0
 * Android Studio 4.0.1 or later
 
 ## Quick Start
 
 ```
 git clone https://github.com/jeffxtang/android-demo-app
+
+# needed only for building the torchvision-ops library locally (see Use Prebuilt torchvision ops Library for details)
 git clone https://github.com/pytorch/vision
+
 cd android-demo-app
+
+# needed only for building the torchvision-ops library locally (see Use Prebuilt torchvision ops Library for details)
 ln -s ../vision/torchvision torchvision
+
 git checkout d2go
 cd Detectron2Go
 ```
@@ -39,19 +47,22 @@ Build and run on emulator or device.
 
 Some example images and the detection results are at the end.
 
-## Use Prebuilt TorchVision ops Library
+## Use Prebuilt torchvision ops Library
 
 The [Making Native Android Application that Uses PyTorch Prebuilt Libraries](https://pytorch.org/tutorials/recipes/android_native_app_with_custom_op.html) tutorial shows how to use the native OpenCV-based C++ code in an Android app. If you have tried the PyTorch Android YOLOv5-based [Object Detection demo app](https://github.com/pytorch/android-demo-app/tree/master/ObjectDetection), you may have noticed the [Java implementation](https://github.com/pytorch/android-demo-app/blob/master/ObjectDetection/app/src/main/java/org/pytorch/demo/objectdetection/PrePostProcessor.java#L45) of nonMaxSuppression and intersection-over-union to post-process the model inference result.
 
-Facebook AI's [Detectron2](https://github.com/facebookresearch/detectron2) is one of the most widely adopted open source projects and implements state-of-the-art object detection, semantic segmentation, panoptic segmentation, and human pose prediction. The latest prebuilt [torchvision ops](https://pytorch.org/docs/stable/torchvision/ops.html) [library](https://oss.sonatype.org/#nexus-search;quick~torchvision_ops) provides the support for Detectron2 needed to run on mobile. The guide shows how to convert the YOLOv5 demo app to a Detectron2 app that uses the prebuilt torchvision ops library.
+Facebook AI's [Detectron2](https://github.com/facebookresearch/detectron2) is one of the most widely adopted open source projects and implements state-of-the-art object detection, semantic segmentation, panoptic segmentation, and human pose prediction. The latest 0.9.0 prebuilt [torchvision ops](https://pytorch.org/docs/stable/torchvision/ops.html) [library](https://oss.sonatype.org/#nexus-search;quick~torchvision_ops) provides the support for Detectron2 needed to run on mobile. The guide shows how to convert the YOLOv5 demo app to a D2Go app that uses the prebuilt torchvision ops library.
 
-1. Create a folder called `Detectron2Go`, clone the [ObjectDetection repo](https://github.com/pytorch/android-demo-app/tree/master/ObjectDetection) inside `Detectron2Go`, and copy the `ops` and `gradle_scripts` folders to the same level as `ObjectDetection`. Notice the `ops/CMakeLists.txt` file refers to the torchvision ops implementation at `../../torchvision/csrc/ops/`, so to build the torchvision ops library, you need to clone the torchvision repo and create a link to the source as shown in Quick Start.
+1. Create a folder called `Detectron2Go`, clone the [ObjectDetection repo](https://github.com/pytorch/android-demo-app/tree/master/ObjectDetection) inside `Detectron2Go`.
+
+Note that if you decide to build the torchvision-ops library locally instead of using the pre-built library as enabled by adding `implementation 'org.pytorch:torchvision_ops:...` shown in step 4 below, then copy the `ops` and `gradle_scripts` folders to the same level as `ObjectDetection`. The `ops/CMakeLists.txt` file refers to the torchvision ops implementation at `../../torchvision/csrc/ops/`, so to build the torchvision ops library, you need to clone the torchvision repo and create a link to the source as shown in Quick Start.
 
 2. Make the content of `settings.gradle` at the top level as follows:
 ```
-include ':ops', ':ObjectDetection'
+// Uncomment if building the torchvision-ops library locally
+// include ':ops', ':ObjectDetection'
+// project(':ops').projectDir = file('ops')
 
-project(':ops').projectDir = file('ops')
 project(':ObjectDetection').projectDir = file('ObjectDetection/app')
 ```
 
@@ -119,11 +130,15 @@ tasks.all { task ->
 
 dependencies {
     implementation 'com.facebook.soloader:nativeloader:0.8.0'
-    implementation project(':ops')
+
+    // Uncomment if building the torchvision-ops library locally
+    // implementation project(':ops')
 
     implementation 'org.pytorch:pytorch_android:1.8.0-SNAPSHOT'
     implementation 'org.pytorch:pytorch_android_torchvision:1.8.0-SNAPSHOT'
-    implementation 'org.pytorch:torchvision_ops:0.0.1-SNAPSHOT'
+
+    // Comment if building the torchvision-ops library locally
+    implementation 'org.pytorch:torchvision_ops:0.9.0-SNAPSHOT'
 }
 ```
 
@@ -138,7 +153,7 @@ static {
 }
 ```
 
-Now you're ready to build the project that uses the latest Detectron2 model created when running `create_model.py`.
+Now you're ready to build the project that uses the latest D2Go model created when running `create_model.py`.
 
 ## Example Images and Detections
 

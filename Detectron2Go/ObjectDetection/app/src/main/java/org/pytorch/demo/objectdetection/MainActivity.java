@@ -16,6 +16,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
@@ -40,7 +41,9 @@ import org.pytorch.torchvision.TensorImageUtils;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.StringReader;
 import java.nio.FloatBuffer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -171,11 +174,8 @@ static {
         });
 
         try {
-            // the d2go model already wrapped in the correct format for the app
-            //mModule = PyTorchAndroid.loadModuleFromAsset(getAssets(), "frcnn_resnet50_fpn.pt");
-
             // the mobilenetv3 model
-            mModule = PyTorchAndroid.loadModuleFromAsset(getAssets(), "frcnn_mnetv3_03.pt");
+            mModule = PyTorchAndroid.loadModuleFromAsset(getAssets(), "frcnn_mnetv3.pt");
 
             BufferedReader br = new BufferedReader(new InputStreamReader(getAssets().open("classes.txt")));
             String line;
@@ -239,8 +239,10 @@ static {
         TensorImageUtils.bitmapToFloatBuffer(resizedBitmap, 0,0,resizedBitmap.getWidth(),resizedBitmap.getHeight(), PrePostProcessor.NO_MEAN_RGB, PrePostProcessor.NO_STD_RGB, floatBuffer, 0);
         final Tensor inputTensor =  Tensor.fromBlob(floatBuffer, new long[] {3, resizedBitmap.getHeight(), resizedBitmap.getWidth()});
 
-
+        final long startTime = SystemClock.elapsedRealtime();
         IValue[] outputTuple = mModule.forward(IValue.listFrom(inputTensor)).toTuple();
+        final long inferenceTime = SystemClock.elapsedRealtime() - startTime;
+        System.out.println("D2Go inference time(ms): " + inferenceTime);
 
         final Map<String, IValue> map = outputTuple[1].toList()[0].toDictStringKey();
         float[] boxesData = new float[]{};
