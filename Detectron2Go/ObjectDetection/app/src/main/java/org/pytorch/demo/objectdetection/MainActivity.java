@@ -174,8 +174,8 @@ static {
         });
 
         try {
-            // the mobilenetv3 model
-            mModule = PyTorchAndroid.loadModuleFromAsset(getAssets(), "frcnn_mnetv3.pt");
+            mModule = PyTorchAndroid.loadModuleFromAsset(getAssets(), "d2go.pt");
+            //mModule = PyTorchAndroid.loadModuleFromAsset(getAssets(), "frcnn_mnetv3.pt");
 
             BufferedReader br = new BufferedReader(new InputStreamReader(getAssets().open("classes.txt")));
             String line;
@@ -258,15 +258,19 @@ static {
 
             final int n = scoresData.length;
             float[] outputs = new float[n * PrePostProcessor.OUTPUT_COLUMN];
+            int count = 0;
             for (int i = 0; i < n; i++) {
-                outputs[PrePostProcessor.OUTPUT_COLUMN * i + 0] = boxesData[4 * i + 0];
-                outputs[PrePostProcessor.OUTPUT_COLUMN * i + 1] = boxesData[4 * i + 1];
-                outputs[PrePostProcessor.OUTPUT_COLUMN * i + 2] = boxesData[4 * i + 2];
-                outputs[PrePostProcessor.OUTPUT_COLUMN * i + 3] = boxesData[4 * i + 3];
-                outputs[PrePostProcessor.OUTPUT_COLUMN * i + 4] = scoresData[i];
-                outputs[PrePostProcessor.OUTPUT_COLUMN * i + 5] = labelsData[i] - 1;
-            }
+                if (scoresData[i] < 0.4)
+                    continue;
 
+                outputs[PrePostProcessor.OUTPUT_COLUMN * count + 0] = boxesData[4 * i + 0];
+                outputs[PrePostProcessor.OUTPUT_COLUMN * count + 1] = boxesData[4 * i + 1];
+                outputs[PrePostProcessor.OUTPUT_COLUMN * count + 2] = boxesData[4 * i + 2];
+                outputs[PrePostProcessor.OUTPUT_COLUMN * count + 3] = boxesData[4 * i + 3];
+                outputs[PrePostProcessor.OUTPUT_COLUMN * count + 4] = scoresData[i];
+                outputs[PrePostProcessor.OUTPUT_COLUMN * count + 5] = labelsData[i] - 1;
+                count++;
+            }
 
             final ArrayList<Result> results = PrePostProcessor.outputsToPredictions(n, outputs, mImgScaleX, mImgScaleY, mIvScaleX, mIvScaleY, mStartX, mStartY);
 
