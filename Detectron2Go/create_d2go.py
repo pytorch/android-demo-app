@@ -90,7 +90,7 @@ def test_export_torchvision_format():
         # optionally do a forward
         wrapped_model([torch.rand(3, 600, 600)])
         scripted_model = torch.jit.script(wrapped_model)
-        scripted_model.save("./d2go.pt")
+        scripted_model.save("ObjectDetection/app/src/main/assets/d2go.pt")
 
 if __name__ == '__main__':
     test_export_torchvision_format()
