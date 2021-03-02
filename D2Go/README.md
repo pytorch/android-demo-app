@@ -51,7 +51,7 @@ cd D2Go
 python create_d2go.py
 ```
 
-This will create the D2Go model saved at `ObjectDetection/app/src/main/assets/d2go.pt`, which is also saved in the repo. The model size is only 7.5MB, a 75% reduction in size of the 30.5MB YOLOv5s model. For the model inference speed comparison, see the note at the end of the next step.
+This will create the D2Go model saved at `ObjectDetection/app/src/main/assets/d2go.pt`, which is also saved in the repo. The quantized model size is only 2.6MB, 11 times reduction in size of the 30.5MB YOLOv5s model. For the model inference speed comparison, see the note at the end of the next step.
 
 4. Build and run the D2Go Android app.
 
@@ -76,7 +76,7 @@ final long inferenceTime = SystemClock.elapsedRealtime() - startTime;
 System.out.println("D2Go inference time(ms): " + inferenceTime);
 ```
 
-On a Pixel 3 phone, it takes about 350ms to infer an image, more than 1/3 reduction in time from the 550ms taken by the YOLOv5 model in the [Object Detection demo app](https://github.com/pytorch/android-demo-app/tree/master/ObjectDetection).
+On a Pixel 3 phone, it takes about 50ms to infer an image, 11 times reduction in time from the 550ms taken by the YOLOv5 model in the [Object Detection demo app](https://github.com/pytorch/android-demo-app/tree/master/ObjectDetection).
 
 ## Use the Prebuilt or Self-built torchvision ops Library
 

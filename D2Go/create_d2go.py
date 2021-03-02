@@ -80,7 +80,7 @@ def test_export_torchvision_format():
         predictor_path = convert_and_export_predictor(
             model_zoo.get_config(cfg_name),
             copy.deepcopy(pytorch_model),
-            "torchscript@tracing",
+            "torchscript_int8@tracing",
             './',
             data_loader,
         )

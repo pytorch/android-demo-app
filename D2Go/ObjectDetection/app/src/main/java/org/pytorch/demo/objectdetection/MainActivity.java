@@ -175,7 +175,6 @@ static {
 
         try {
             mModule = PyTorchAndroid.loadModuleFromAsset(getAssets(), "d2go.pt");
-            //mModule = PyTorchAndroid.loadModuleFromAsset(getAssets(), "frcnn_mnetv3.pt");
 
             BufferedReader br = new BufferedReader(new InputStreamReader(getAssets().open("classes.txt")));
             String line;
