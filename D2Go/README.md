@@ -8,23 +8,23 @@ This D2Go Android demo app shows how to prepare and use the much lighter and fas
 
 ## Prerequisites
 
-* PyTorch 1.8 or later
-* Python 3.8
-* Android Pytorch library 1.8.0
-* Android torchvision library 1.8.0
-* torchvision_ops library 0.9.0
+* PyTorch 1.8.0 and torchvision 0.9.0
+* Python 3.8 or above
+* Android Pytorch library 1.8.0, torchvision library 1.8.0, torchvision_ops library 0.9.0
 * Android Studio 4.0.1 or later
 
 ## Quick Start
 
-Install the latest PyTorch and torchvision, for example:
+1. Install PyTorch 1.8.0 and torchvision 0.9.0, for example:
+
 ```
 conda create -n d2go python=3.8.5
 conda activate d2go
 pip install torch torchvision
 ```
 
-Then install Detectron2, mobile_cv, and D2Go:
+2. Install Detectron2, mobile_cv, and D2Go:
+
 ```
 python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
 python -m pip install 'git+https://github.com/facebookresearch/mobile-vision.git'
@@ -33,7 +33,8 @@ cd d2go & python -m pip install .
 
 ```
 
-Get the D2Go Android demo app and create the D2Go model:
+3. Get the D2Go Android demo app and create the D2Go model:
+
 ```
 git clone https://github.com/jeffxtang/android-demo-app
 
@@ -43,7 +44,7 @@ git clone https://github.com/jeffxtang/android-demo-app
 cd android-demo-app
 
 # uncomment only for building the torchvision-ops library locally (see Use Prebuilt torchvision ops Library for details)
-#ln -s ../vision/torchvision torchvision
+# ln -s ../vision/torchvision torchvision
 
 cd D2Go
 
@@ -52,15 +53,15 @@ python create_d2go.py
 
 This will create the D2Go model saved at ObjectDetection/app/src/main/assets/d2go.pt, which is also saved in the repo. The model size is only 7.5MB, a 75% reduction in size of the 30.5MB YOLOv5s model.
 
-In Android Studio, open android-demo-app/D2Go. If an error "Gradle’s dependency may be corrupt" occurs, go to Android Studio - File - Project Structure... , change Gradle Version to 4.10.1.
+4. Build and run the D2Go Android app.
 
-Build and run on emulator or device.
+In Android Studio, open android-demo-app/D2Go. If an error "Gradle’s dependency may be corrupt" occurs, go to Android Studio - File - Project Structure... , change Gradle Version to 4.10.1.
 
 Some example images and the detection results are at the end.
 
-## Use Prebuilt torchvision ops Library
+## Use the Prebuilt or Self-built torchvision ops Library
 
-The [Making Native Android Application that Uses PyTorch Prebuilt Libraries](https://pytorch.org/tutorials/recipes/android_native_app_with_custom_op.html) tutorial shows how to use the native OpenCV-based C++ code in an Android app. If you have tried the PyTorch Android YOLOv5-based [Object Detection demo app](https://github.com/pytorch/android-demo-app/tree/master/ObjectDetection), you may have noticed the [Java implementation](https://github.com/pytorch/android-demo-app/blob/master/ObjectDetection/app/src/main/java/org/pytorch/demo/objectdetection/PrePostProcessor.java#L45) of nonMaxSuppression and intersection-over-union to post-process the model inference result. The guide shows how to convert the YOLOv5 demo app to a D2Go app that uses the prebuilt torchvision ops library.
+The [Making Native Android Application that Uses PyTorch Prebuilt Libraries](https://pytorch.org/tutorials/recipes/android_native_app_with_custom_op.html) tutorial shows how to use the native OpenCV-based C++ code in an Android app. If you have tried the PyTorch Android YOLOv5-based [Object Detection demo app](https://github.com/pytorch/android-demo-app/tree/master/ObjectDetection), you may have noticed the [Java implementation](https://github.com/pytorch/android-demo-app/blob/master/ObjectDetection/app/src/main/java/org/pytorch/demo/objectdetection/PrePostProcessor.java#L45) of nonMaxSuppression and intersection-over-union to post-process the model inference result. The guide shows how to convert the YOLOv5 demo app to a D2Go app that uses the prebuilt torchvision ops library, which will be used by most Android developers. For those who may need to build the torchvision ops library themselves from the latest torchvision source, the Android project is also set up for that, with comments shown below demonstrating how.
 
 1. Create a folder called `D2Go`, clone the [ObjectDetection repo](https://github.com/pytorch/android-demo-app/tree/master/ObjectDetection) inside `D2Go`.
 
