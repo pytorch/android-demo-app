@@ -39,6 +39,12 @@
     <string name="vision_card_face_recognition_remote_title">远程识别</string>
     <string name="vision_card_face_recognition_remote_description">将视频rtmp推流到服务器上的远程识别，识别速度快，但是延迟较高</string>
 
+    <string name="vision_card_face_recognition_glass_local_title">使用眼镜的本地识别</string>
+    <string name="vision_card_face_recognition_glass_local_description">使用下载数据包进行的本地人脸检测识别，识别速度较慢，但是延迟低</string>
+
+    <string name="vision_card_face_recognition_glass_remote_title">使用眼镜的远程识别</string>
+    <string name="vision_card_face_recognition_glass_remote_description">将视频rtmp推流到服务器上的远程识别，识别速度快，但是延迟较高</string>
+
     <string name="nlp_card_lstm_title">Text Classification.\nLSTM model trained on Reddit comments dataset. </string>
     <string name="nlp_card_lstm_description">Predicts subreddit by given comment.\nInput is uint8 1xN shaped tensor, where N is the length of text\'s bytes representation in utf-8 encoding. Output classes are subreddits.</string>
     <string name="clear">Clear</string>

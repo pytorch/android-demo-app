@@ -3,6 +3,7 @@ package org.pytorch.demo.vision;
 import android.content.Intent;
 import android.media.FaceDetector;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import org.pytorch.demo.AbstractListActivity;
 import org.pytorch.demo.FaceDetectionActivity;
@@ -26,9 +27,20 @@ public class VisionListActivity extends AbstractListActivity {
     });
     //TODO: make a new activity for face detection
     findViewById(R.id.vision_card_face_recognition_remote_click_area).setOnClickListener(v -> {
+      Toast.makeText(this, "remote face", Toast.LENGTH_SHORT).show();
+      final Intent intent = new Intent(VisionListActivity.this, RemoteFaceDetectActivity.class);
+      startActivity(intent);
+    });
+
+    findViewById(R.id.vision_card_face_recognition_glass_local_click_area).setOnClickListener(v -> {
       final Intent intent = new Intent(VisionListActivity.this, GlassLocalActivity.class);
       startActivity(intent);
     });
+
+//    findViewById(R.id.vision_card_face_recognition_remote_click_area).setOnClickListener(v -> {
+////      final Intent intent = new Intent(VisionListActivity.this, GlassLocalActivity.class);
+////      startActivity(intent);
+//    });
   }
 
   @Override

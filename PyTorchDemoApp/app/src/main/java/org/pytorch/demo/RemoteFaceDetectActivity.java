@@ -300,6 +300,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
             @Override
             public void onClick(View v) {
                 mPublisher.switchCameraFace((mPublisher.getCameraId() + 1) % Camera.getNumberOfCameras());
+                Toast.makeText(RemoteFaceDetectActivity.this, "cameras : " + Camera.getNumberOfCameras(), Toast.LENGTH_SHORT).show();
             }
         });
 

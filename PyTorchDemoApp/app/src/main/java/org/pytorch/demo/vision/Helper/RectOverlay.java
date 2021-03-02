@@ -5,14 +5,18 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.graphics.Typeface;
 
 import org.json.*;
 
 public class RectOverlay extends GraphicOverlay.Graphic {
     private int mRectColor = Color.RED;
-    private float mStrokeWidth = 2.0f;
+    private float mStrokeWidth = 4.0f;
     private Paint mRectPaint;
+    private Paint mBackPaint;
+    private Paint mTextPaint;
     private GraphicOverlay graphicOverlay;
+    private final int text_size = 50;
     private Rect rect;
     private String info;
     public RectOverlay(GraphicOverlay graphicOverlay, Rect rect, String info, int color) {
@@ -21,7 +25,16 @@ public class RectOverlay extends GraphicOverlay.Graphic {
         mRectPaint.setColor(color);
         mRectPaint.setStyle(Paint.Style.STROKE);
         mRectPaint.setStrokeWidth(mStrokeWidth);
-        mRectPaint.setTextSize(30);
+
+        mTextPaint = new Paint();
+        mTextPaint.setColor(Color.BLACK);
+        mTextPaint.setTextSize(text_size);
+        mTextPaint.setStyle(Paint.Style.FILL);
+        mTextPaint.setTypeface(Typeface.MONOSPACE);
+
+        mBackPaint = new Paint();
+        mBackPaint.setColor(Color.WHITE);
+        mBackPaint.setStyle(Paint.Style.FILL);
 
         this.graphicOverlay = graphicOverlay;
         this.rect = rect;
@@ -49,7 +62,10 @@ public class RectOverlay extends GraphicOverlay.Graphic {
 //            }
             String name = info;
             System.out.println("in draw of rect name is "+name);
-            canvas.drawText(name,rectF.left,rectF.top, mRectPaint);
+            int height = text_size;
+            int width = name.length() * text_size;
+            canvas.drawRect(rectF.left, rectF.top - height, rectF.left + width, rectF.top + 0.2f * height, mBackPaint);
+            canvas.drawText(name,rectF.left,rectF.top, mTextPaint);
         }
 
 

@@ -53,4 +53,26 @@
         app:descriptionRes="@string/vision_card_face_recognition_remote_description"
         app:imageRes="@drawable/ic_image_classification_s"
         app:titleRes="@string/vision_card_face_recognition_remote_title" />
+
+    <org.pytorch.demo.ListCardView
+        android:id="@+id/vision_card_face_recognition_glass_local_click_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/list_content_margin"
+        android:elevation="1dp"
+        app:descriptionRes="@string/vision_card_face_recognition_glass_local_description"
+        app:imageRes="@drawable/ic_image_classification_s"
+        app:titleRes="@string/vision_card_face_recognition_glass_local_title" />
+
+    <org.pytorch.demo.ListCardView
+        android:id="@+id/vision_card_face_recognition_glass_remote_click_area"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/list_content_margin"
+        android:elevation="1dp"
+        app:descriptionRes="@string/vision_card_face_recognition_glass_remote_description"
+        app:imageRes="@drawable/ic_image_classification_s"
+        app:titleRes="@string/vision_card_face_recognition_glass_remote_title" />
+
+
 </LinearLayout>

@@ -61,7 +61,7 @@ import android.speech.tts.TextToSpeech.OnInitListener;
 public class GlassLocalActivity extends AppCompatActivity {
 
     public static final String SCORES_FORMAT = "%.2f";
-    private static final int TOP_K = 3 ;
+    private static final int TOP_K = 3  ;
     SplitCameraView mSplitCameraView;
     ImageView imageView;
     private Module mModule;
@@ -109,8 +109,9 @@ public class GlassLocalActivity extends AppCompatActivity {
                         Log.e("lanageTag", "not use");
                     } else {
 //                        btn.setEnabled(true);
-                        mSpeech.speak("good day today", TextToSpeech.QUEUE_FLUSH,
-                                null);
+//                        mSpeech.speak("good day today", TextToSpeech.QUEUE_FLUSH,
+//                                null);
+                        mSpeech.speak("Hello there", TextToSpeech.QUEUE_FLUSH, null, "0");
                     }
                 }
             }
@@ -167,13 +168,13 @@ public class GlassLocalActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 switch(view.getId()){
-                    case R.id.cameraOnOffBtn:
-                        toggleCameraOnOffBtn();
-                        break;
-                    case R.id.takePictureBtn:
-                        findViewById(R.id.takePictureBtn).setEnabled(false);
-                        takePicture();
-                        break;
+//                    case R.id.cameraOnOffBtn:
+//                        toggleCameraOnOffBtn();
+//                        break;
+//                    case R.id.takePictureBtn:
+//                        findViewById(R.id.takePictureBtn).setEnabled(false);
+//                        takePicture();
+//                        break;
                     case R.id.videoBtn:
                         findViewById(R.id.videoBtn).setEnabled(false);
                         toogleVideoBtn();
@@ -182,11 +183,11 @@ public class GlassLocalActivity extends AppCompatActivity {
             }
         };
 
-        (findViewById(R.id.cameraOnOffBtn)).setOnClickListener(listener);
-        (findViewById(R.id.takePictureBtn)).setOnClickListener(listener);
+//        (findViewById(R.id.cameraOnOffBtn)).setOnClickListener(listener);
+//        (findViewById(R.id.takePictureBtn)).setOnClickListener(listener);
         (findViewById(R.id.videoBtn)).setOnClickListener(listener);
 
-        (findViewById(R.id.takePictureBtn)).setEnabled(false);
+//        (findViewById(R.id.takePictureBtn)).setEnabled(false);
         (findViewById(R.id.videoBtn)).setEnabled(false);
     }
 
@@ -323,12 +324,28 @@ public class GlassLocalActivity extends AppCompatActivity {
         }
     }
 
+    private String last_word = null;
+    private int say(String str)
+    {
+        if(str.equals(last_word))
+            return 0;
+        else
+            last_word = str;
+            return mSpeech.speak(str, TextToSpeech.QUEUE_FLUSH, null, "1");
+
+
+    }
     private void updateUI(Utils.NamedBox namedBox, Bitmap bitmap){
         if (namedBox != null){
 
 //            imageView.setImageBitmap(result.bitmap_c);
-            mSpeech.speak(namedBox.info, TextToSpeech.QUEUE_FLUSH,
-                    null);
+//            mSpeech.speak(namedBox.info, TextToSpeech.QUEUE_FLUSH, null);
+//            int ret = mSpeech.speak(namedBox.id, TextToSpeech.QUEUE_FLUSH, null, "1");
+            int ret = say(namedBox.id);
+            if(ret == TextToSpeech.ERROR)
+            {
+                Toast.makeText(this, "speak error " + namedBox.id, Toast.LENGTH_SHORT).show();
+            }
             Bitmap bitmap_c = null;
             bitmap_c = cropBitmap(bitmap, namedBox.rect);
             imageView.setImageBitmap(bitmap_c);
@@ -379,7 +396,7 @@ public class GlassLocalActivity extends AppCompatActivity {
 //        File Directory = getFilesDir();
         File[] files = new Util(this).GetLocalDatagramFiles();
         String embedding_str = "";
-        if(files.length == 0)
+        if(files == null)
             return "";
         for (File f: files){
             try{
@@ -646,8 +663,8 @@ public class GlassLocalActivity extends AppCompatActivity {
                     namedBox.is_valid = true;
 
                     if (i == least_index) {
+//                        ret_named_box = namedBox.copy();
                         ret_named_box = namedBox;
-
                     }
 
                     break;
@@ -745,7 +762,6 @@ public class GlassLocalActivity extends AppCompatActivity {
 
 
         }
-
         return nms_boxes;
     }
 
@@ -909,35 +925,35 @@ public class GlassLocalActivity extends AppCompatActivity {
         }
     }
 
-    public void takePicture() {
-        if (!permissionReady()) return;
-        MySplitCamera.getInstance(this).takePicture(new TakePictureCallback() {
-            @Override
-            public void onImageSaved(String path) {
-                MDToast.makeText(GlassLocalActivity.this, "Image saved success in (" + path + "), and count is "+count, MDToast.LENGTH_SHORT, MDToast.TYPE_SUCCESS).show();
-                ((findViewById(R.id.takePictureBtn))).setEnabled(true);
-            }
-
-            @Override
-            public void onError(int code) {
-                MDToast.makeText(GlassLocalActivity.this, "Image saved failure (Error="+code+")", MDToast.LENGTH_SHORT, MDToast.TYPE_SUCCESS).show();
-                ((findViewById(R.id.takePictureBtn))).setEnabled(true);
-            }
-        });
-    }
+//    public void takePicture() {
+//        if (!permissionReady()) return;
+//        MySplitCamera.getInstance(this).takePicture(new TakePictureCallback() {
+//            @Override
+//            public void onImageSaved(String path) {
+//                MDToast.makeText(GlassLocalActivity.this, "Image saved success in (" + path + "), and count is "+count, MDToast.LENGTH_SHORT, MDToast.TYPE_SUCCESS).show();
+//                ((findViewById(R.id.takePictureBtn))).setEnabled(true);
+//            }
+//
+//            @Override
+//            public void onError(int code) {
+//                MDToast.makeText(GlassLocalActivity.this, "Image saved failure (Error="+code+")", MDToast.LENGTH_SHORT, MDToast.TYPE_SUCCESS).show();
+//                ((findViewById(R.id.takePictureBtn))).setEnabled(true);
+//            }
+//        });
+//    }
 
     public void updateUI(boolean on){
         if (on){
-            (findViewById(R.id.cameraOnOffBtn)).setEnabled(true);
-            ((Button)findViewById(R.id.cameraOnOffBtn)).setText("STOP");
+//            (findViewById(R.id.cameraOnOffBtn)).setEnabled(true);
+//            ((Button)findViewById(R.id.cameraOnOffBtn)).setText("STOP");
             (findViewById(R.id.videoBtn)).setEnabled(true);
-            (findViewById(R.id.takePictureBtn)).setEnabled(true);
+//            (findViewById(R.id.takePictureBtn)).setEnabled(true);
 
         } else {
-            (findViewById(R.id.cameraOnOffBtn)).setEnabled(true);
-            ((Button)findViewById(R.id.cameraOnOffBtn)).setText("START");
+//            (findViewById(R.id.cameraOnOffBtn)).setEnabled(true);
+//            ((Button)findViewById(R.id.cameraOnOffBtn)).setText("START");
             (findViewById(R.id.videoBtn)).setEnabled(false);
-            (findViewById(R.id.takePictureBtn)).setEnabled(false);
+//            (findViewById(R.id.takePictureBtn)).setEnabled(false);
         }
     }
 

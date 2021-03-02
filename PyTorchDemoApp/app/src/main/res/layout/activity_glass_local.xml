@@ -97,6 +97,12 @@
             app:progressBarPaddingRes="@dimen/result_row_progress_bar_padding"
             app:textAppearance="@style/TextAppearanceImageClassificationResultTop1" />
 
+        <Button
+            android:id="@+id/videoBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Start Video" />
+
     </LinearLayout>
 
     <org.pytorch.demo.vision.Helper.GraphicOverlay
@@ -117,23 +123,17 @@
         android:orientation="horizontal"
         android:padding="15dp">
 
-        <Button
-            android:id="@+id/cameraOnOffBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Start" />
+<!--        <Button-->
+<!--            android:id="@+id/cameraOnOffBtn"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Start" />-->
 
-        <Button
-            android:id="@+id/takePictureBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Take Picture" />
-
-        <Button
-            android:id="@+id/videoBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Start Video" />
+<!--        <Button-->
+<!--            android:id="@+id/takePictureBtn"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="Take Picture" />-->
 
     </LinearLayout>
 

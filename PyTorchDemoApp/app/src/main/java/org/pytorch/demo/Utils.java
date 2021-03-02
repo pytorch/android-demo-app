@@ -108,6 +108,16 @@ public class Utils {
       this.rect = box;
       this.info = info;
     }
+
+    NamedBox copy(){
+      NamedBox newNamedBox = new NamedBox();
+      newNamedBox.id = this.id;
+      newNamedBox.id_k = this.id_k;
+      newNamedBox.prob_k = this.prob_k;
+      newNamedBox.rect = this.rect;
+      newNamedBox.info = this.info;
+      return newNamedBox;
+    }
   }
 
   public static class NamedEmbedding{
