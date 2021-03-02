@@ -51,13 +51,32 @@ cd D2Go
 python create_d2go.py
 ```
 
-This will create the D2Go model saved at ObjectDetection/app/src/main/assets/d2go.pt, which is also saved in the repo. The model size is only 7.5MB, a 75% reduction in size of the 30.5MB YOLOv5s model.
+This will create the D2Go model saved at `ObjectDetection/app/src/main/assets/d2go.pt`, which is also saved in the repo. The model size is only 7.5MB, a 75% reduction in size of the 30.5MB YOLOv5s model. For the model inference speed comparison, see the note at the end of the next step.
 
 4. Build and run the D2Go Android app.
 
 In Android Studio, open android-demo-app/D2Go. If an error "Gradle’s dependency may be corrupt" occurs, go to Android Studio - File - Project Structure... , change Gradle Version to 4.10.1.
 
-Some example images and the detection results are at the end.
+Select an Android emulator or device to run the app. You can go through the included example test images to see the detection results. You can also select a picture from your Android device's Photos library, take a picture with the device camera, or even use live camera to do object detection - see this [video](https://drive.google.com/file/d/17TNzYiIkQGBLZrapqmxADvlUIdgM313k/view?usp=sharing) for a screencast of the app running.
+
+Some example images and the detection results are as follows:
+
+![](screenshot1.png)
+![](screenshot2.png)
+
+![](screenshot3.png)
+![](screenshot4.png)
+
+One quick note about the model performance. In the `MainActivity.java`, the following code snippet shows how fast the D2Go model runs:
+
+```
+final long startTime = SystemClock.elapsedRealtime();
+IValue[] outputTuple = mModule.forward(IValue.listFrom(inputTensor)).toTuple();
+final long inferenceTime = SystemClock.elapsedRealtime() - startTime;
+System.out.println("D2Go inference time(ms): " + inferenceTime);
+```
+
+On a Pixel 3 phone, it takes about 350ms to infer an image, more than 1/3 reduction in time from the 550ms taken by the YOLOv5 model in the [Object Detection demo app](https://github.com/pytorch/android-demo-app/tree/master/ObjectDetection).
 
 ## Use the Prebuilt or Self-built torchvision ops Library
 
@@ -164,11 +183,3 @@ static {
 ```
 
 Now you're ready to build the project that uses the latest D2Go model created when running `create_d2go.py`.
-
-## Example Images and Detections
-
-![](screenshot1.png)
-![](screenshot2.png)
-
-![](screenshot3.png)
-![](screenshot4.png)

@@ -86,15 +86,11 @@ public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetec
     protected AnalysisResult analyzeImage(ImageProxy image, int rotationDegrees) {
         if (mModule == null) {
             mModule = PyTorchAndroid.loadModuleFromAsset(getAssets(), "d2go.pt");
-            //mModule = PyTorchAndroid.loadModuleFromAsset(getAssets(), "frcnn_mnetv3.pt");
         }
         Bitmap bitmap = imgToBitmap(image.getImage());
         Matrix matrix = new Matrix();
         matrix.postRotate(90.0f);
         bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
-        Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, PrePostProcessor.INPUT_WIDTH, PrePostProcessor.INPUT_HEIGHT, true);
-
-        //final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(resizedBitmap, PrePostProcessor.NO_MEAN_RGB, PrePostProcessor.NO_STD_RGB);
 
         final FloatBuffer floatBuffer = Tensor.allocateFloatBuffer(3 * bitmap.getWidth() * bitmap.getHeight());
         TensorImageUtils.bitmapToFloatBuffer(bitmap, 0,0,bitmap.getWidth(),bitmap.getHeight(), PrePostProcessor.NO_MEAN_RGB, PrePostProcessor.NO_STD_RGB, floatBuffer, 0);
@@ -135,7 +131,7 @@ public class ObjectDetectionActivity extends AbstractCameraXActivity<ObjectDetec
             float ivScaleX = (float) mResultView.getWidth() / bitmap.getWidth();
             float ivScaleY = (float) mResultView.getHeight() / bitmap.getHeight();
 
-            final ArrayList<Result> results = PrePostProcessor.outputsToPredictions(n, outputs, imgScaleX, imgScaleY, ivScaleX, ivScaleY, 0, 0);
+            final ArrayList<Result> results = PrePostProcessor.outputsToPredictions(count, outputs, imgScaleX, imgScaleY, ivScaleX, ivScaleY, 0, 0);
             return new AnalysisResult(results);
         }
         return null;
