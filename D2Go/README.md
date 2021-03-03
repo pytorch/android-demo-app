@@ -2,20 +2,22 @@
 
 ## Introduction
 
-[Detectron2](https://github.com/facebookresearch/detectron2) is one of the most widely adopted open source projects and implements state-of-the-art object detection, semantic segmentation, panoptic segmentation, and human pose prediction. [D2Go](https://github.com/facebookresearch/d2go) is powered by PyTorch 1.8, torchvision 0.9, and Detectron2 with built-in SOTA networks for mobile.
+[Detectron2](https://github.com/facebookresearch/detectron2) is one of the most widely adopted open source projects and implements state-of-the-art object detection, semantic segmentation, panoptic segmentation, and human pose prediction. [D2Go](https://github.com/facebookresearch/d2go) is powered by PyTorch 1.8, torchvision 0.9, and Detectron2 with built-in SOTA networks for mobile - the D2Go model is much smaller (2.7MB) and runs much faster on Android (~50ms per inference, partially due to the use of the native torchvision-ops library) than the YOLOv5 small model (30.6MB and ~550ms). 
 
-This D2Go Android demo app shows how to prepare and use the much lighter and faster D2Go model on Android. The code is based on a previous PyTorch Android [Object Detection demo app](https://github.com/pytorch/android-demo-app/tree/master/ObjectDetection) that uses a pre-trained Yolov5 model, with modified pre-processing and post-processing code required by the D2Go model.
+This D2Go Android demo app shows how to prepare and use the much lighter and faster D2Go model on Android. The code is based on a previous PyTorch Android [Object Detection demo app](https://github.com/pytorch/android-demo-app/tree/master/ObjectDetection) that uses a pre-trained YOLOv5 model, with modified pre-processing and post-processing code required by the D2Go model.
 
 ## Prerequisites
 
-* PyTorch 1.8.0 and torchvision 0.9.0
-* Python 3.8 or above
+* PyTorch 1.8.0 and torchvision 0.9.0 (Optional for Quick Start)
+* Python 3.8 or above (Optional for Quick Start)
 * Android Pytorch library 1.8.0, torchvision library 1.8.0, torchvision_ops library 0.9.0
 * Android Studio 4.0.1 or later
 
 ## Quick Start
 
-This section shows how to create and use the D2Go model and the torchvision-ops library in a completed Android app. If you are interested in more details of how the Android app gets created and how to use the prebuilt torchvision-ops library or build it locally, you can continue with the next section after this.
+This section shows how to create and use the D2Go model and the pre-built torchvision-ops library in a completed Android app. If you are interested in more details of how to build the torchvision-ops library locally and use it with the D2Go model on Android, you can continue with the next section after this.
+
+To just build and run the app without creating the D2Go model yourself, go directly to Step 4.
 
 1. Install PyTorch 1.8.0 and torchvision 0.9.0, for example:
 
@@ -25,7 +27,7 @@ conda activate d2go
 pip install torch torchvision
 ```
 
-2. Install Detectron2, mobile_cv, and D2Go:
+2. Install Detectron2, mobile_cv, and D2Go
 
 ```
 python -m pip install 'git+https://github.com/facebookresearch/detectron2.git'
@@ -35,35 +37,28 @@ cd d2go & python -m pip install .
 
 ```
 
-3. Get the D2Go Android demo app and (optionally) create the D2Go model:
+3. Create the D2Go model
 
 ```
-git clone https://github.com/jeffxtang/android-demo-app
-
-# uncomment only for building the torchvision-ops library locally (see Use Prebuilt torchvision ops Library for details)
-# git clone https://github.com/pytorch/vision
-
-cd android-demo-app
-
-# uncomment only for building the torchvision-ops library locally (see Use Prebuilt torchvision ops Library for details)
-# ln -s ../vision/torchvision torchvision
-
-cd D2Go
-
-# The quantized version of the D2Go model is already saved in the repo. uncomment to create the D2Go model saved at `ObjectDetection/app/src/main/assets/d2go.pt`
-# python create_d2go.py
+git clone https://github.com/pytorch/android-demo-app
+cd android-demo-app/D2Go
+python create_d2go.py
 ```
+This will create the quantized D2Go model and save it at `android-demo-app/D2Go/ObjectDetection/app/src/main/assets/d2go.pt`.  
 
-**The size of the quantized D2Go model is only 2.6MB, 11 times reduction in size of the 30.5MB YOLOv5s model.** For the model inference speed comparison, see the note at the end of the next step.
+**The size of the quantized D2Go model is only 2.6MB, 11 times reduction in size of the 30.5MB YOLOv5s model.** For the model inference speed comparison, see the note at the end of Step 4.
 
-4. Build and run the D2Go Android app.
+4. Build and run the D2Go Android app
+
+If you have not gone through Step 3, simply run `git clone https://github.com/pytorch/android-demo-app` first.
 
 In Android Studio, open android-demo-app/D2Go. If an error "Gradle’s dependency may be corrupt" occurs, go to Android Studio - File - Project Structure... , change Gradle Version to 4.10.1.
 
-The main changes needed to use the D2Go model and the required torchvision-ops library are adding
+The main changes needed to use the D2Go model and the required and pre-built torchvision-ops library are adding
 ```
-implementation 'org.pytorch:pytorch_android_torchvision:1.8.0-SNAPSHOT'
-implementation 'org.pytorch:torchvision_ops:0.9.0-SNAPSHOT'
+implementation 'org.pytorch:pytorch_android:1.8.0'
+implementation 'org.pytorch:pytorch_android_torchvision:1.8.0'
+implementation 'org.pytorch:torchvision_ops:0.9.0'
 ```
 in the build.gradle file and
 ```
@@ -98,19 +93,27 @@ System.out.println("D2Go inference time(ms): " + inferenceTime);
 
 On a Pixel 3 phone, it **takes about 50ms to infer an image, 11 times reduction in time from the 550ms taken by the YOLOv5 model** in the [Object Detection demo app](https://github.com/pytorch/android-demo-app/tree/master/ObjectDetection).
 
-## Use the Prebuilt or Self-built torchvision ops Library
+## [Advanced] Build torchvision ops Library Locally to Use D2Go on Android
 
-This section shows how to convert the YOLOv5 demo app to the D2Go demo app shown in the previous section, so you can see how to use the prebuilt torchvision ops library, which will be used by most Android developers. For those who may need to build the torchvision ops library themselves from the latest torchvision source, the Android project is also set up for that, with comments shown below demonstrating how.
+Using the pre-built torchvision ops library will be typical for most Android developers. But occasionally one may need to build the torchvision ops library locally from the latest torchvision source, possibly due to a bug fix that has not been merged to the master branch or an enhancement to the source code. This section shows how to build the library locally, by converting the YOLOv5 Object Detection demo app in a step-by-step fashion.
 
-1. Create a folder called `D2Go`, clone the [ObjectDetection repo](https://github.com/pytorch/android-demo-app/tree/master/ObjectDetection) inside `D2Go`.
+First, make sure you have installed the required packages by following Steps 1 and 2 in the Quick Start section. Then follow the steps below.
 
-Note that if you decide to build the torchvision-ops library locally instead of using the pre-built library as enabled by adding `implementation 'org.pytorch:torchvision_ops:...` shown in step 4 below, then copy the `ops` and `gradle_scripts` folders to the same level as `ObjectDetection`. The `ops/CMakeLists.txt` file refers to the torchvision ops implementation at `../../torchvision/csrc/ops/`, so to build the torchvision ops library, you need to clone the torchvision repo and create a link to the source as shown in Quick Start.
+1. Set up Android demo app and torchvision repos:
+
+```
+git clone https://github.com/pytorch/android-demo-app
+git clone https://github.com/pytorch/vision
+cd android-demo-app
+ln -s ../vision/torchvision torchvision
+```
+
+Copy the `ops` and `gradle_scripts` folders from `android-demo-app\D2Go` to `android-demo-app\ObjectDetection`. The `ops/CMakeLists.txt` file refers to the torchvision ops implementation at `../../torchvision/csrc/ops/`, so to build the torchvision ops library locally, you need to clone the torchvision repo and create a link to the source.
 
 2. Make the content of `settings.gradle` at the top level as follows:
 ```
-// Uncomment if building the torchvision-ops library locally
-// include ':ops', ':ObjectDetection'
-// project(':ops').projectDir = file('ops')
+include ':ops', ':ObjectDetection'
+project(':ops').projectDir = file('ops')
 
 project(':ObjectDetection').projectDir = file('ObjectDetection/app')
 ```
@@ -160,13 +163,6 @@ ext.deps = [
 
 4. Change the `build.gradle` in `ObjectDetection` to contain:
 ```
-repositories {
-    jcenter()
-    maven {
-        url "https://oss.sonatype.org/content/repositories/snapshots"
-    }
-}
-
 tasks.all { task ->
     if (task.name.startsWith('externalNativeBuild')
             && !task.name.contains('NativeBuild')) {
@@ -176,15 +172,11 @@ tasks.all { task ->
 
 dependencies {
     implementation 'com.facebook.soloader:nativeloader:0.8.0'
+    implementation project(':ops')
 
-    // Uncomment if building the torchvision-ops library locally
-    // implementation project(':ops')
-
-    implementation 'org.pytorch:pytorch_android:1.8.0-SNAPSHOT'
-    implementation 'org.pytorch:pytorch_android_torchvision:1.8.0-SNAPSHOT'
-
-    // Comment if building the torchvision-ops library locally
-    implementation 'org.pytorch:torchvision_ops:0.9.0-SNAPSHOT'
+    implementation 'org.pytorch:pytorch_android:1.8.0'
+    implementation 'org.pytorch:pytorch_android_torchvision:1.8.0'
+    implementation 'org.pytorch:torchvision_ops:0.9.0'
 }
 ```
 
@@ -199,4 +191,4 @@ static {
 }
 ```
 
-Now you're ready to build the project that uses the latest D2Go model created when running `create_d2go.py`.
+6. Copy the D2Go model file from `android-demo-app/D2Go/ObjectDetection/app/src/main/assets/d2go.pt` to `android-demo-app/ObjectDetection/app/src/main/assets/d2go.pt` and build and run the `android-demo-app\ObjectDetection` project uses the locally built torchvision-ops library. Voilà! You get to see the app running the same way as in the previous section, using the pre-built torchvision-ops library, with the benefit that you know when needed, you can build the library yourself.
