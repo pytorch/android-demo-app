@@ -2,9 +2,9 @@
 
 ## Introduction
 
-[Detectron2](https://github.com/facebookresearch/detectron2) is one of the most widely adopted open source projects and implements state-of-the-art object detection, semantic segmentation, panoptic segmentation, and human pose prediction. [D2Go](https://github.com/facebookresearch/d2go) is powered by PyTorch 1.8, torchvision 0.9, and Detectron2 with built-in SOTA networks for mobile - the D2Go model is much smaller (2.7MB) and runs much faster on Android (~50ms per inference, partially due to the use of the native torchvision-ops library) than the YOLOv5 small model (30.6MB and ~550ms). 
+[Detectron2](https://github.com/facebookresearch/detectron2) is one of the most widely adopted open source projects and implements state-of-the-art object detection, semantic segmentation, panoptic segmentation, and human pose prediction. [D2Go](https://github.com/facebookresearch/d2go) is powered by PyTorch 1.8, torchvision 0.9, and Detectron2 with built-in SOTA networks for mobile - the D2Go model is very small (only 2.7MB) and runs very fast on Android (~50ms per inference on Pixel 3, also due to the use of the native torchvision-ops library).
 
-This D2Go Android demo app shows how to prepare and use the much lighter and faster D2Go model on Android. The code is based on a previous PyTorch Android [Object Detection demo app](https://github.com/pytorch/android-demo-app/tree/master/ObjectDetection) that uses a pre-trained YOLOv5 model, with modified pre-processing and post-processing code required by the D2Go model.
+This D2Go Android demo app shows how to prepare and use the D2Go model on Android. The code is based on a previous PyTorch Android [Object Detection demo app](https://github.com/pytorch/android-demo-app/tree/master/ObjectDetection) that uses a pre-trained YOLOv5 model, with modified pre-processing and post-processing code required by the D2Go model.
 
 ## Prerequisites
 
@@ -46,7 +46,7 @@ python create_d2go.py
 ```
 This will create the quantized D2Go model and save it at `android-demo-app/D2Go/ObjectDetection/app/src/main/assets/d2go.pt`.  
 
-**The size of the quantized D2Go model is only 2.6MB, 11 times reduction in size of the 30.5MB YOLOv5s model.** For the model inference speed comparison, see the note at the end of Step 4.
+The size of the quantized D2Go model is only 2.6MB.
 
 4. Build and run the D2Go Android app
 
@@ -91,7 +91,7 @@ final long inferenceTime = SystemClock.elapsedRealtime() - startTime;
 System.out.println("D2Go inference time(ms): " + inferenceTime);
 ```
 
-On a Pixel 3 phone, it **takes about 50ms to infer an image, 11 times reduction in time from the 550ms taken by the YOLOv5 model** in the [Object Detection demo app](https://github.com/pytorch/android-demo-app/tree/master/ObjectDetection).
+On a Pixel 3 phone, it takes about 50ms to infer an image, compared with the 550ms taken by the YOLOv5 model in the [Object Detection demo app](https://github.com/pytorch/android-demo-app/tree/master/ObjectDetection).
 
 ## [Advanced] Build torchvision ops Library Locally to Use D2Go on Android
 
