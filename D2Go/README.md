@@ -70,7 +70,7 @@ static {
 ```
 in the MainActivity.java.
 
-Select an Android emulator or device to run the app. You can go through the included example test images to see the detection results. You can also select a picture from your Android device's Photos library, take a picture with the device camera, or even use live camera to do object detection - see this [video](https://drive.google.com/file/d/17TNzYiIkQGBLZrapqmxADvlUIdgM313k/view?usp=sharing) for a screencast of the app running.
+Select an Android emulator or device to run the app. You can go through the included example test images to see the detection results. You can also select a picture from your Android device's Photos library, take a picture with the device camera, or even use live camera to do object detection - see this [video](https://drive.google.com/file/d/18-2hLc-7JAKtd1q00X-5pHQCAdyJg7dZ/view?usp=sharing) for a screencast of the app running.
 
 One quick note about the model performance. In the `MainActivity.java`, the following code snippet shows how fast the D2Go model runs:
 
