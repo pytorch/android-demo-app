@@ -258,7 +258,7 @@ static {
             float[] outputs = new float[n * PrePostProcessor.OUTPUT_COLUMN];
             int count = 0;
             for (int i = 0; i < n; i++) {
-                if (scoresData[i] < 0.4)
+                if (scoresData[i] < 0.5)
                     continue;
 
                 outputs[PrePostProcessor.OUTPUT_COLUMN * count + 0] = boxesData[4 * i + 0];
