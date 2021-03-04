@@ -37,6 +37,7 @@ import java.io.OutputStream;
 import java.nio.FloatBuffer;
 import java.util.Map;
 
+
 class ListeningActivity extends AppCompatActivity implements Runnable {
     public final static int AUDIO_LEN_LIMIT = 6;
     private Button mButton;
@@ -46,25 +47,17 @@ class ListeningActivity extends AppCompatActivity implements Runnable {
     }
 
     public void run() {
-
         for (int i = 1; i < AUDIO_LEN_LIMIT; i++) {
             try {
                 Thread.sleep(1000);
-
                 final int finalI = i;
                 runOnUiThread(() -> { mButton.setText(String.format("Listening - %ds left", AUDIO_LEN_LIMIT - finalI)); } );
-
-
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
-
-
     }
-
 }
-
 
 
 public class MainActivity extends AppCompatActivity implements Runnable {
@@ -74,12 +67,12 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private TextView mTextView;
     private Button mButton;
 
-    private final static String[] tokens= {"<s>", "<pad>", "</s>", "<unk>", "|", "E", "T", "A", "O", "N", "I", "H", "S", "R", "D", "L", "U", "M", "W", "C", "F", "G", "Y", "P", "B", "V", "K", "'", "X", "J", "Q", "Z"};
+    private final static String[] tokens = {"<s>", "<pad>", "</s>", "<unk>", "|", "E", "T", "A", "O", "N", "I", "H", "S", "R", "D", "L", "U", "M", "W", "C", "F", "G", "Y", "P", "B", "V", "K", "'", "X", "J", "Q", "Z"};
     private final static int INPUT_SIZE = 65024;
 
     private final static int REQUEST_RECORD_AUDIO = 13;
     private final static int SAMPLE_RATE = 16000;
-    private final static int RECORDING_LENGTH = SAMPLE_RATE * 5;
+    private final static int RECORDING_LENGTH = SAMPLE_RATE * ListeningActivity.AUDIO_LEN_LIMIT;
 
     private final static String LOG_TAG = MainActivity.class.getSimpleName();
 
@@ -93,19 +86,16 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         mButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-
                 mButton.setText(String.format("Listening - %ds left", ListeningActivity.AUDIO_LEN_LIMIT));
-
                 mButton.setEnabled(false);
+
                 Thread thread = new Thread(MainActivity.this);
                 thread.start();
 
                 Thread threadListening = new Thread(new ListeningActivity(mButton));
                 threadListening.start();
-
             }
         });
-
         requestMicrophonePermission();
     }
 
@@ -115,7 +105,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                     new String[]{android.Manifest.permission.RECORD_AUDIO}, REQUEST_RECORD_AUDIO);
         }
     }
-
 
     private String assetFilePath(Context context, String assetName) {
         File file = new File(context.getFilesDir(), assetName);
@@ -160,12 +149,14 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         int recordingOffset = 0;
         short[] audioBuffer = new short[bufferSize / 2];
         short[] recordingBuffer = new short[RECORDING_LENGTH];
-        while (shortsRead < RECORDING_LENGTH) { // up to 5 seconds of recording
+
+        while (shortsRead < RECORDING_LENGTH) {
             int numberOfShort = record.read(audioBuffer, 0, audioBuffer.length);
             shortsRead += numberOfShort;
             System.arraycopy(audioBuffer, 0, recordingBuffer, recordingOffset, numberOfShort);
             recordingOffset += numberOfShort;
         }
+
         record.stop();
         record.release();
 
@@ -203,8 +194,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         }
 
         double wav2vecinput[] = new double[INPUT_SIZE];
-        for (int n=0; n<INPUT_SIZE; n++)
-            wav2vecinput[n]=floatInputBuffer[n];
+        for (int n = 0; n < INPUT_SIZE; n++)
+            wav2vecinput[n] = floatInputBuffer[n];
 
         FloatBuffer inTensorBuffer = Tensor.allocateFloatBuffer(INPUT_SIZE);
         for (double val : wav2vecinput)
@@ -226,7 +217,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 else if (tid == 4) result = String.format("%s ", result);
             }
         }
-
         return result;
     }
 
@@ -241,5 +231,4 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         }
         return maxIdx;
     }
-
 }
