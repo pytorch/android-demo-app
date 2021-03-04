@@ -38,6 +38,7 @@ android {
         }
     }
     buildToolsVersion '28.0.3'
+    ndkVersion '21.1.6352462'
 }
 
 dependencies {
@@ -50,6 +51,7 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.2.2'
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
     implementation 'androidx.navigation:navigation-fragment:2.2.2'
+    implementation fileTree(dir: 'E:\\hanjiaxiangmu\\android-demo-app\\PyTorchDemoApp\\app\\src\\libs', include: ['*.aar', '*.jar'], exclude: [])
 
     def camerax_version = "1.0.0-alpha05"
     implementation "androidx.camera:camera-core:$camerax_version"

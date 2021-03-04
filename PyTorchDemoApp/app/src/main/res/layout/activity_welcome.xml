@@ -52,7 +52,7 @@
         android:layout_marginTop="20dp">
 
         <Button
-            android:id="@+id/btn_onlinelogin"
+            android:id="@+id/btn_OnlineLogin"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -60,12 +60,12 @@
             android:text="在线登录" />
 
         <Button
-            android:id="@+id/btn_offlinelogin"
+            android:id="@+id/btn_AccountLogin"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="离线登录"
-            android:onClick="get_sidebar"
+            android:onClick="AccountLogin"
             android:layout_gravity="center"
             tools:ignore="OnClick"
             />
