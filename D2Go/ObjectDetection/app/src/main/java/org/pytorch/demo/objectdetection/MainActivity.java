@@ -240,7 +240,7 @@ static {
         final long startTime = SystemClock.elapsedRealtime();
         IValue[] outputTuple = mModule.forward(IValue.listFrom(inputTensor)).toTuple();
         final long inferenceTime = SystemClock.elapsedRealtime() - startTime;
-        System.out.println("D2Go inference time(ms): " + inferenceTime);
+        Log.d("D2Go",  "inference time (ms): " + inferenceTime);
 
         final Map<String, IValue> map = outputTuple[1].toList()[0].toDictStringKey();
         float[] boxesData = new float[]{};

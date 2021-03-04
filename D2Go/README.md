@@ -78,7 +78,7 @@ One quick note about the model performance. In the `MainActivity.java`, the foll
 final long startTime = SystemClock.elapsedRealtime();
 IValue[] outputTuple = mModule.forward(IValue.listFrom(inputTensor)).toTuple();
 final long inferenceTime = SystemClock.elapsedRealtime() - startTime;
-System.out.println("D2Go inference time(ms): " + inferenceTime);
+Log.d("D2Go",  "inference time (ms): " + inferenceTime);
 ```
 
 On a Pixel 3 phone, it takes about 50ms to infer an image, compared with the 550ms taken by the YOLOv5 model in the [Object Detection demo app](https://github.com/pytorch/android-demo-app/tree/master/ObjectDetection).
