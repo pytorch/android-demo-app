@@ -72,9 +72,9 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
     private Button btnPause;
     private Button record;
     private SharedPreferences sp;
-    private String rtmpUrl = "rtmp://"+new Util().server_uri+"/" + getRandomAlphaString(3) + '/' + getRandomAlphaDigitString(5);
-    private String recPath = Environment.getExternalStorageDirectory().getPath() + "/test.mp4";
-    final private String serverUri = new Util(RemoteFaceDetectActivity.this).ws;
+    private String rtmpUrl;
+    private String recPath;
+    private String serverUri;
     private WebSocket webSocket;
     private SrsPublisher mPublisher;
     private ArrayList<NamedBox> namedboxpool;
@@ -147,10 +147,16 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
         // response screen rotation event
 //        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 
-        requestPermission();
+        //init parameters
+        Util util = new Util(RemoteFaceDetectActivity.this);
+        rtmpUrl = util.getRTMPURL();
+        recPath = Environment.getExternalStorageDirectory().getPath() + "/test.mp4";
+        serverUri = util.ws;
+
+        requestPermission_rfda();
     }
 
-    private void requestPermission() {
+    private void requestPermission_rfda() {
         //1. 检查是否已经有该权限
         if (Build.VERSION.SDK_INT >= 23 && (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
@@ -660,27 +666,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
         mPublisher.startCamera();
     }
 
-    private static String getRandomAlphaString(int length) {
-        String base = "abcdefghijklmnopqrstuvwxyz";
-        Random random = new Random();
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < length; i++) {
-            int number = random.nextInt(base.length());
-            sb.append(base.charAt(number));
-        }
-        return sb.toString();
-    }
 
-    private static String getRandomAlphaDigitString(int length) {
-        String base = "abcdefghijklmnopqrstuvwxyz0123456789";
-        Random random = new Random();
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < length; i++) {
-            int number = random.nextInt(base.length());
-            sb.append(base.charAt(number));
-        }
-        return sb.toString();
-    }
 
     private void handleException(Exception e) {
         try {

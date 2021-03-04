@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.pytorch.demo.BitmapToVideoEncoder;
 import org.pytorch.demo.FaceDetectionActivity;
+import org.pytorch.demo.Utils;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -35,7 +36,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-
+import java.util.Random;
 
 
 public class Util {
@@ -64,12 +65,16 @@ public class Util {
 //        default_server = server_uri;
 //        default_ws = ws;
         JSONObject jsonObject = GetLocalJson();
-        try{
-            ws = jsonObject.getString("rtmp_uri");
-            server_uri = jsonObject.getString("server_uri");
-        }catch (JSONException | NullPointerException jsonException){
-            jsonException.printStackTrace();
+        if (jsonObject != null)
+        {
+            try{
+                ws = jsonObject.getString("rtmp_uri");
+                server_uri = jsonObject.getString("server_uri");
+            }catch (JSONException | NullPointerException jsonException){
+                jsonException.printStackTrace();
+            }
         }
+
         if (ws == null){
             ws = default_ws;
         }
@@ -105,8 +110,6 @@ public class Util {
     }
 
     public String deliminator = "\\${10,}";
-
-
 
     public String UploadVideoByName(String s){
         upload_progress = 0;
@@ -313,8 +316,6 @@ public class Util {
         }
     }
 
-
-
     public JSONObject GetLocalJson(){
 //        File Directory = Environment.getExternalStorageDirectory();
 //        File project_dir = new File(Directory, "FaceRecogAppConfig");
@@ -385,6 +386,46 @@ public class Util {
         return files;
     }
 
+    public boolean save_embedding_local_file(Utils.NamedEmbedding embedding){
+
+        String json_str = "{\"embedding\": [";
+        for (float f: embedding.embedding){
+            json_str += Float.toString(f) + ", ";
+        }
+        json_str = json_str.substring(0, json_str.length()-2);
+        json_str += "], \"name\": \"" + embedding.id + "\"}";
+        json_str += "$$$$$$$$$$";
+        System.out.println(json_str);
+
+
+        File project_dir = new File(datagram_path);
+        if (!project_dir.exists()){
+            project_dir.mkdir();
+        }
+        File jsonfile = new File(project_dir, "local_temp_datagram.json");
+        if (!jsonfile.exists()){
+            try{
+                jsonfile.createNewFile();
+            }catch (IOException exception){
+                exception.printStackTrace();
+            }
+        }
+        try{
+
+            FileOutputStream fileOutputStream = new FileOutputStream(jsonfile, true);
+            fileOutputStream.write(json_str.getBytes());
+            fileOutputStream.close();
+            return true;
+
+        }catch (FileNotFoundException fileNotFoundException){
+            fileNotFoundException.printStackTrace();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+
+        return false;
+    }
+
     private void upload_video_by_name(String s){
         webSocket.sendText("{\"message\": \"upload video by name\", \"name\": \""+s+"\"}");
     }
@@ -445,8 +486,6 @@ public class Util {
     public void showToast(Context ctx, String msg) {
         Toast.makeText(ctx, msg, Toast.LENGTH_LONG).show();
     }
-
-
 
     public String GetAvailableDatagrams(String id){
         available_datagrams = null;
@@ -517,5 +556,32 @@ public class Util {
         webSocket.disconnect();
         return available_datagrams;
 
+    }
+
+    public String getRTMPURL(){
+//        return "rtmp://"+server_uri+"/" + getRandomAlphaString(3) + '/' + getRandomAlphaDigitString(5);
+        return "rtmp://" + server_uri + "/live/livestream";
+    }
+
+    public String getRandomAlphaString(int length) {
+        String base = "abcdefghijklmnopqrstuvwxyz";
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            int number = random.nextInt(base.length());
+            sb.append(base.charAt(number));
+        }
+        return sb.toString();
+    }
+
+    public String getRandomAlphaDigitString(int length) {
+        String base = "abcdefghijklmnopqrstuvwxyz0123456789";
+        Random random = new Random();
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < length; i++) {
+            int number = random.nextInt(base.length());
+            sb.append(base.charAt(number));
+        }
+        return sb.toString();
     }
 }

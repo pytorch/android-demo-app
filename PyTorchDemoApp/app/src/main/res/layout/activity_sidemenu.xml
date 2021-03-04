@@ -58,7 +58,7 @@
                     android:layout_gravity="center"
                     android:drawableTop="@drawable/ic_language_s"
                     android:drawablePadding="16dp"
-                    android:text="@string/main_nlp_button"
+                    android:text="@string/main_glass_button"
                     android:textAppearance="@style/TextAppearanceMainVisionNlp" />
 
             </FrameLayout>
@@ -231,6 +231,18 @@
                     android:layout_width="344dp"
                     android:layout_height="wrap_content"
                     android:text="选择视频" />
+
+                <Button
+                    android:id="@+id/add_new_sailor"
+                    android:layout_width="344dp"
+                    android:layout_height="wrap_content"
+                    android:text="添加新船员" />
+
+                <Button
+                    android:id="@+id/set_face_login"
+                    android:layout_width="344dp"
+                    android:layout_height="wrap_content"
+                    android:text="设置人脸登入" />
 
             </LinearLayout>
 

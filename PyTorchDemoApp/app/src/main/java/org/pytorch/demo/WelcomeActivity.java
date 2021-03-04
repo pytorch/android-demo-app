@@ -78,7 +78,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         });
 
 
-//        findViewById(R.id.skip_button).setOnClickListener(v -> startActivity(new Intent(WelcomeActivity.this, MainActivity.class)));
+//        findViewById(R.id.skip_button).setOnClickListener(v -> startActivity(new Intent(WelcomeActivity.this, GlassRemoteActivity.class)));
 //
 //        mViewPager = findViewById(R.id.welcome_view_pager);
 //        mViewPagerAdapter = new WelcomeViewPagerAdapter();

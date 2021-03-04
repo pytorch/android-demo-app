@@ -8,6 +8,7 @@ import android.widget.Toast;
 import org.pytorch.demo.AbstractListActivity;
 import org.pytorch.demo.FaceDetectionActivity;
 import org.pytorch.demo.GlassLocalActivity;
+import org.pytorch.demo.GlassRemoteActivity;
 import org.pytorch.demo.InfoViewFactory;
 import org.pytorch.demo.R;
 import org.pytorch.demo.RemoteFaceDetectActivity;
@@ -32,14 +33,14 @@ public class VisionListActivity extends AbstractListActivity {
       startActivity(intent);
     });
 
-    findViewById(R.id.vision_card_face_recognition_glass_local_click_area).setOnClickListener(v -> {
-      final Intent intent = new Intent(VisionListActivity.this, GlassLocalActivity.class);
-      startActivity(intent);
-    });
-
-//    findViewById(R.id.vision_card_face_recognition_remote_click_area).setOnClickListener(v -> {
-////      final Intent intent = new Intent(VisionListActivity.this, GlassLocalActivity.class);
-////      startActivity(intent);
+//    findViewById(R.id.vision_card_face_recognition_glass_local_click_area).setOnClickListener(v -> {
+//      final Intent intent = new Intent(VisionListActivity.this, GlassLocalActivity.class);
+//      startActivity(intent);
+//    });
+//
+//    findViewById(R.id.vision_card_face_recognition_glass_remote_click_area).setOnClickListener(v -> {
+//      final Intent intent = new Intent(VisionListActivity.this, GlassRemoteActivity.class);
+//      startActivity(intent);
 //    });
   }
 

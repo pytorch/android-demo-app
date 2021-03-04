@@ -86,7 +86,7 @@ public class DatagramSelectAdapter extends RecyclerView.Adapter<DatagramSelectAd
 
         if(position == 0){
             TextView textView = holder.itemView.findViewById(R.id.textView);
-            textView.setText(String.format("***********************set to %d", position));
+//            textView.setText(String.format("***********************set to %d", position));
 
             System.out.println("in onbindviewholder position is "+position);
             listView = holder.itemView.findViewById(R.id.listview);

@@ -26,6 +26,8 @@ import androidx.drawerlayout.widget.DrawerLayout;
 import com.google.android.material.navigation.NavigationView;
 
 import org.pytorch.demo.nlp.NLPListActivity;
+import org.pytorch.demo.vision.GlassListActivity;
+import org.pytorch.demo.vision.SetFaceLogin;
 import org.pytorch.demo.vision.VisionListActivity;
 
 public class SideBarActivity extends AppCompatActivity {
@@ -87,7 +89,7 @@ public class SideBarActivity extends AppCompatActivity {
         });
 
         findViewById(R.id.main_vision_click_view).setOnClickListener(v -> startActivity(new Intent(SideBarActivity.this, VisionListActivity.class)));
-        findViewById(R.id.main_nlp_click_view).setOnClickListener(v -> startActivity(new Intent(SideBarActivity.this, NLPListActivity.class)));
+        findViewById(R.id.main_nlp_click_view).setOnClickListener(v -> startActivity(new Intent(SideBarActivity.this, GlassListActivity.class)));
     }
 
     public void init_function_button(){
@@ -104,6 +106,22 @@ public class SideBarActivity extends AppCompatActivity {
                 startActivity(new Intent(SideBarActivity.this, SelectVideos.class));
             }
         });
+
+        findViewById(R.id.set_face_login).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SideBarActivity.this, SetFaceLogin.class));
+            }
+        });
+
+        findViewById(R.id.add_new_sailor).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SideBarActivity.this, AddNewCrew.class));
+            }
+        });
+
+
     }
     //进入设置页面
     public void SetupMenu(View view) {

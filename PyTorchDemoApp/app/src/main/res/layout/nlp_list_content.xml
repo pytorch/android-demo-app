@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/list_title_margin_top"
-        android:text="@string/main_nlp_button"
+        android:text="@string/main_glass_button"
         android:textAppearance="@style/TextAppearanceMainVisionNlp" />
 
     <org.pytorch.demo.ListCardView

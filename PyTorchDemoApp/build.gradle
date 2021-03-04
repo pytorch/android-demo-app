@@ -4,6 +4,10 @@ buildscript {
         google()
         jcenter()
         maven { url 'https://dl.bintray.com/kotlin/kotlin-eap' }
+//        maven { url 'http://raw.github.com/saki4510t/libcommon/master/repository/' }
+        //for github library com.github.pedroSG94
+        maven { url 'https://jitpack.io' }
+
 
     }
     dependencies {
@@ -17,6 +21,9 @@ allprojects {
         google()
         jcenter()
         maven { url 'https://gitee.com/liuchaoya/libcommon/raw/master/repository/' }//necessary for X5S SDK
+//        maven { url 'http://raw.github.com/saki4510t/libcommon/master/repository/' }
+        //for github library com.github.pedroSG94
+        maven { url 'https://jitpack.io' }
     }
 }
 

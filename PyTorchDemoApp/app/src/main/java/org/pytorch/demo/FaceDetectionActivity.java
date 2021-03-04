@@ -202,6 +202,7 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
         if(files.length == 0)
             return "";
         for (File f: files){
+            System.out.println("in fda reading file " + f.getName());
             try{
                 FileInputStream fileInputStream = new FileInputStream(f);
                 int length = fileInputStream.available();
@@ -210,6 +211,7 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
                 fileInputStream.close();
                 String str =new String(bytes, StandardCharsets.UTF_8);
                 embedding_str += str;
+                System.out.println("str len is "+str.length()+" and total embedding len is "+ embedding_str.length());
 
             }catch (FileNotFoundException fileNotFoundException){
                 fileNotFoundException.printStackTrace();
