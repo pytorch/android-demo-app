@@ -1,7 +1,6 @@
 package com.github.faucamp.simplertmp.packets;
 
 //import android.support.annotation.Nullable;
-import androidx.annotation.Nullable;
 
 import java.io.IOException;
 import java.io.InputStream;

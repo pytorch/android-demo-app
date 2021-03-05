@@ -1,18 +1,15 @@
 package org.pytorch.demo;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
+
 import android.content.Intent;
-import android.content.SharedPreferences;
+
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-import android.view.LayoutInflater;
+
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,7 +19,10 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 import org.pytorch.demo.nlp.NLPListActivity;
@@ -86,10 +86,42 @@ public class SideBarActivity extends AppCompatActivity {
             return false;
         });
 
-        findViewById(R.id.main_vision_click_view).setOnClickListener(v -> startActivity(new Intent(SideBarActivity.this, VisionListActivity.class)));
-        findViewById(R.id.main_nlp_click_view).setOnClickListener(v -> startActivity(new Intent(SideBarActivity.this, NLPListActivity.class)));
+//        findViewById(R.id.main_vision_click_view).setOnClickListener(v -> startActivity(new Intent(SideBarActivity.this, VisionListActivity.class)));
+//        findViewById(R.id.main_nlp_click_view).setOnClickListener(v -> startActivity(new Intent(SideBarActivity.this, NLPListActivity.class)));
+        BottomNavigationView navigation = findViewById(R.id.navigation);
+        navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
+        navigation.setSelectedItemId(R.id.navigation_func);
     }
+    private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
+            = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
+        @SuppressLint({"ResourceType", "NonConstantResourceId"})
+        @Override
+        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+            FragmentManager fragmentManager = getSupportFragmentManager();  //使用fragmentmanager和transaction来实现切换效果
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+
+            switch (item.getItemId()) {
+                case R.id.navigation_func:
+                    transaction.replace(R.id.content,new ContentfuncActivity());  //对应的java class
+                    transaction.commit();  //一定不要忘记commit，否则不会显示
+                    return true;
+                case R.id.navigation_file:
+                    transaction.replace(R.id.content,new ContentfileActivity());  //对应的java class
+                    transaction.commit();  //一定不要忘记commit，否则不会显示
+                    return true;
+
+                case R.id.navigation_sett:
+                    transaction.replace(R.id.content,new SetupMenuActivity());
+                    transaction.commit();
+//                    transaction.replace(R.id.content,new ContentfileActivity());
+//                    transaction.commit();
+                    return true;
+
+            }
+            return false;
+        }
+    };
     public void init_function_button(){
         findViewById(R.id.button_datagram).setOnClickListener(new View.OnClickListener() {
             @Override

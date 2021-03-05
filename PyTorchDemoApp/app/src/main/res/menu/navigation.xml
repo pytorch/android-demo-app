@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/navigation_file"
+        android:icon="@drawable/file"
+        android:title="@string/title_file" />
+
+    <item
+        android:id="@+id/navigation_func"
+        android:icon="@drawable/func"
+        android:title="@string/title_func" />
+    <item
+        android:id="@+id/navigation_sett"
+        android:icon="@drawable/sett"
+        android:title="@string/title_sett" />
+
+</menu>

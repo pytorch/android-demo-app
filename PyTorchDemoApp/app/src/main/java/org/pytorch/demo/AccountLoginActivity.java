@@ -205,7 +205,7 @@ public class AccountLoginActivity extends Activity
 
                 //睡眠3秒
                 try {
-                    Thread.sleep(3000);
+                    Thread.sleep(1);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
