@@ -1,0 +1,3 @@
+include ':ObjectDetection'
+
+project(':ObjectDetection').projectDir = file('ObjectDetection/app')
