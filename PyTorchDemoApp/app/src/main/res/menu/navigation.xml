@@ -11,7 +11,7 @@
         android:title="@string/title_func" />
     <item
         android:id="@+id/navigation_mime"
-        android:icon="@mipmap/account"
+        android:icon="@mipmap/account_btm"
         android:title="@string/title_mime" />
 
 </menu>

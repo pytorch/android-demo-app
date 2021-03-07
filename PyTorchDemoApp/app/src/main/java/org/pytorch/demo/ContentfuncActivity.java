@@ -39,6 +39,19 @@ public class ContentfuncActivity extends Fragment {
         Button remote_button = baseActivity.findViewById(R.id.remote_recog);
         local_button.setOnClickListener(v -> startActivity(new Intent(ContentfuncActivity.this.getActivity(),FaceDetectionActivity.class)));
         remote_button.setOnClickListener(v -> startActivity(new Intent(ContentfuncActivity.this.getActivity(),RemoteFaceDetectActivity.class)));
+        baseActivity.findViewById(R.id.glass_local_recog).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ContentfuncActivity.this.getActivity(), GlassLocalActivity.class));
+            }
+        });
+        baseActivity.findViewById(R.id.glass_remote_recog).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ContentfuncActivity.this.getActivity(), GlassRemoteActivity.class));
+            }
+        });
+
     }
 
 
