@@ -34,17 +34,83 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/main_vision_click_view"
         tools:ignore="MissingConstraints">
+        <LinearLayout
 
-        <TextView
-            android:id="@+id/extend"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/title_file"
+            android:layout_margin="10dp"
+            android:background="@drawable/linearlayout_rount"
+            android:layout_marginTop="10dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="30dp">
 
-            android:textAlignment="center"
-            android:textSize="50dp"
-            app:layout_constraintTop_toBottomOf="@+id/main_vision_click_view"
-            tools:ignore="MissingConstraints" />
+
+            <LinearLayout
+                android:id="@+id/local_data"
+                android:layout_width="300dp"
+                android:layout_height="74dp"
+                android:layout_gravity="center_vertical|center"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/data_package"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="15dp"
+                    android:text="查看本地数据包文件"
+                    android:textSize="10pt"
+                    android:textAlignment="center"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/local_video"
+                android:layout_width="match_parent"
+                android:layout_height="74dp"
+                android:layout_gravity="center_vertical|center"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/video_package"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="15dp"
+                    android:text="查看本地视频文件"
+                    android:textSize="10pt"
+                    android:textAlignment="center"/>
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/checkandupdate_person"
+                android:layout_width="match_parent"
+                android:layout_height="74dp"
+                android:layout_gravity="center_vertical|center"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:id="@+id/checkandupdate_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_margin="15dp"
+
+                    android:text="查看和更改船员"
+                    android:textSize="10pt"
+                    android:textAlignment="center"/>
+
+
+            </LinearLayout>
+        </LinearLayout>
+
+
     </FrameLayout>
 
 

@@ -10,7 +10,7 @@
         android:id="@+id/LinearRP"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimaryDark"
+        android:background="@color/textColor"
         android:gravity="center_vertical"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
@@ -28,10 +28,10 @@
             android:layout_marginTop="15dp"
             android:layout_marginBottom="15dp"
             android:text="设置菜单"
-            android:textSize="25sp" />
+            android:textSize="10pt" />
     </LinearLayout>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
         android:layout_height="408dp"
@@ -43,108 +43,188 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.578"
         app:layout_constraintVertical_chainStyle="packed"
-        tools:ignore="MissingConstraints">
+        tools:ignore="MissingConstraints"
+        android:orientation="vertical">
 
 
-        <!--            tools:layout_editor_absoluteY="69dp" />-->
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="RTMP推流地址:"
-            android:textSize="24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.094"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="-4dp" />
 
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/Input1"
-            android:layout_width="220dp"
-            android:layout_height="50dp"
-            android:layout_marginLeft="4dp"
-            android:layout_marginTop="30dp"
-            android:textSize="12dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/textView2"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.06">
-            <!--            tools:layout_editor_absoluteY="69dp"-->
+            >
 
-
-        </androidx.appcompat.widget.AppCompatEditText>
-
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="56dp"
-            android:text="服务器地址:"
-            android:textSize="24dp"
-            app:layout_constraintTop_toBottomOf="@+id/textView2"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="0dp" />
-
-        <androidx.appcompat.widget.AppCompatEditText
-            android:id="@+id/Input2"
-            android:layout_width="220dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="30dp"
-            android:textSize="12dp"
-            app:layout_constraintLeft_toRightOf="@+id/textView3"
-            app:layout_constraintTop_toBottomOf="@+id/Input1"
-            tools:layout_editor_absoluteY="100dp"
-            android:layout_marginStart="30dp">
-
-        </androidx.appcompat.widget.AppCompatEditText>
-
-        <CheckBox
-            android:id="@+id/checkBox"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="是否开启本地录像保存"
-            android:textSize="24dp"
-            app:layout_constraintTop_toBottomOf="@+id/textView3"
-            tools:ignore="MissingConstraints"
-            tools:layout_editor_absoluteX="0dp" />
-
-        <TextView
-            android:id="@+id/textView4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="30dp"
-            android:text="视频编码解码方式"
-            android:textSize="24dp"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox"
-             />
-        <RadioGroup
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/encode_method"
-            android:orientation="horizontal"
-            android:layout_marginTop="30dp"
-
-            app:layout_constraintLeft_toRightOf="@id/textView4"
-            app:layout_constraintTop_toBottomOf="@+id/checkBox">
-            <RadioButton
+            <TextView
+                android:id="@+id/textView2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="方式一"
-                android:layout_marginStart="30dp"
-                android:id="@+id/method1"/>
-            <RadioButton
+                android:layout_marginTop="20dp"
+                android:text="rtmp推流地址:"
+                android:textSize="10pt"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.094"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="-4dp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/Input1"
+                android:layout_width="220dp"
+                android:layout_height="50dp"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="20dp"
+                android:textSize="12dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toRightOf="@+id/textView2"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.06">
+                <!--            tools:layout_editor_absoluteY="69dp"-->
+
+
+            </androidx.appcompat.widget.AppCompatEditText>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textView3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="方式二"
-                android:id="@+id/method2"/>
+                android:layout_marginTop="36dp"
+                android:text="服务器地址:"
+                android:textSize="24dp"
+                app:layout_constraintTop_toBottomOf="@+id/textView2"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="0dp" />
 
-        </RadioGroup>
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/Input2"
+                android:layout_width="220dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="25dp"
+                android:textSize="12dp"
+                app:layout_constraintLeft_toRightOf="@+id/textView3"
+                app:layout_constraintTop_toBottomOf="@+id/Input1"
+                tools:layout_editor_absoluteY="100dp"
+                android:layout_marginStart="30dp">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            </androidx.appcompat.widget.AppCompatEditText>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <CheckBox
+                android:id="@+id/checkBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="是否开启本地录像保存"
+                android:textSize="10pt"
+                app:layout_constraintTop_toBottomOf="@+id/textView3"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="0dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textView4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:text="视频编码解码方式"
+                android:textSize="10pt"
+                app:layout_constraintTop_toBottomOf="@+id/checkBox"
+                />
+            <RadioGroup
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/encode_method"
+                android:orientation="horizontal"
+                android:layout_marginTop="30dp"
+
+                app:layout_constraintLeft_toRightOf="@id/textView4"
+                app:layout_constraintTop_toBottomOf="@+id/checkBox">
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="硬解"
+                    android:layout_marginStart="30dp"
+                    android:id="@+id/method1"/>
+                <RadioButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="软解"
+                    android:id="@+id/method2"/>
+
+            </RadioGroup>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="推流分辨率:"
+                android:textSize="10pt"
+                app:layout_constraintTop_toBottomOf="@+id/textView2"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="0dp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/Input3"
+                android:layout_width="220dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="13dp"
+                android:textSize="10pt"
+                app:layout_constraintLeft_toRightOf="@+id/textView3"
+                app:layout_constraintTop_toBottomOf="@+id/Input1"
+                tools:layout_editor_absoluteY="100dp"
+                android:layout_marginStart="30dp">
+
+            </androidx.appcompat.widget.AppCompatEditText>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/textView6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="26dp"
+                android:text="推流帧数:"
+                android:textSize="10pt"
+                app:layout_constraintTop_toBottomOf="@+id/textView2"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteX="0dp" />
+
+            <androidx.appcompat.widget.AppCompatEditText
+                android:id="@+id/Input4"
+                android:layout_width="220dp"
+                android:layout_height="50dp"
+                android:layout_marginTop="12dp"
+                android:textSize="10pt"
+                app:layout_constraintLeft_toRightOf="@+id/textView3"
+                app:layout_constraintTop_toBottomOf="@+id/Input1"
+                tools:layout_editor_absoluteY="100dp"
+                android:layout_marginStart="30dp">
+
+            </androidx.appcompat.widget.AppCompatEditText>
+        </LinearLayout>
+    </LinearLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/constraintLayout2"
