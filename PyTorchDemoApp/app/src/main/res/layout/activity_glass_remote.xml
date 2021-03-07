@@ -2,14 +2,113 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relativeLayout"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".GlassRemoteActivity">
 
+    <LinearLayout
+        android:layout_width="272dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentEnd="true"
+        android:layout_toEndOf="@+id/splitCameraView"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/openglview"
+        tools:layout_editor_absoluteY="14dp">
+
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="match_parent"
+            android:layout_height="108dp"
+            android:layout_marginStart="0dp"
+            android:layout_marginLeft="0dp"
+            android:layout_marginTop="0dp"
+            android:layout_marginEnd="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="0dp"
+            android:padding="10dp"
+            android:visibility="visible"
+            tools:srcCompat="@tools:sample/avatars"
+            tools:visibility="visible" />
+
+        <org.pytorch.demo.vision.view.ResultRowView
+            android:id="@+id/image_classification_result_header_row"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="0dp"
+            android:padding="@dimen/image_classification_result_row_padding"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@id/image_classification_top1_result_row"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/graphic_overlay"
+            app:layout_constraintVertical_bias="1.0"
+            app:textAppearance="@style/TextAppearanceImageClassificationResultHeader"
+            tools:visibility="visible" />
+
+        <org.pytorch.demo.vision.view.ResultRowView
+            android:id="@+id/image_classification_top3_result_row"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:padding="@dimen/image_classification_result_row_padding"
+            android:paddingStart="10dp"
+            android:paddingEnd="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintHorizontal_bias="0.916"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:progressBarDrawableProgressStateRes="@drawable/result_row_progress_bar_progress_state"
+            app:progressBarDrawableRes="@drawable/result_row_progress_bar_top3"
+            app:progressBarHeightRes="@dimen/result_row_progress_bar_height_top2plus"
+            app:progressBarPaddingRes="@dimen/result_row_progress_bar_padding"
+            app:textAppearance="@style/TextAppearanceImageClassificationResultTop2Plus" />
+
+        <org.pytorch.demo.vision.view.ResultRowView
+            android:id="@+id/image_classification_top2_result_row"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="20dp"
+            app:layout_constraintBottom_toTopOf="@id/image_classification_top3_result_row"
+            app:layout_constraintHorizontal_bias="0.916"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:progressBarDrawableProgressStateRes="@drawable/result_row_progress_bar_progress_state"
+            app:progressBarDrawableRes="@drawable/result_row_progress_bar_top2"
+            app:progressBarHeightRes="@dimen/result_row_progress_bar_height_top2plus"
+            app:progressBarPaddingRes="@dimen/result_row_progress_bar_padding"
+            app:textAppearance="@style/TextAppearanceImageClassificationResultTop2Plus" />
+
+        <org.pytorch.demo.vision.view.ResultRowView
+            android:id="@+id/image_classification_top1_result_row"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:paddingStart="10dp"
+            android:paddingEnd="20dp"
+            app:layout_constraintBottom_toTopOf="@id/image_classification_top2_result_row"
+            app:layout_constraintHorizontal_bias="0.916"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:progressBarDrawableProgressStateRes="@drawable/result_row_progress_bar_progress_state"
+            app:progressBarDrawableRes="@drawable/result_row_progress_bar_top1"
+            app:progressBarHeightRes="@dimen/result_row_progress_bar_height_top1"
+            app:progressBarPaddingRes="@dimen/result_row_progress_bar_padding"
+            app:textAppearance="@style/TextAppearanceImageClassificationResultTop1" />
+
+    </LinearLayout>
+
+    <org.pytorch.demo.vision.Helper.GraphicOverlay
+        android:id="@+id/graphicOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible" />
+
     <com.pedro.rtplibrary.view.OpenGlView
         android:id="@+id/openglview"
-        android:layout_width="match_parent"
+        android:layout_width="500dp"
         android:layout_height="match_parent"
 
         app:layout_constraintStart_toStartOf="parent"
@@ -20,7 +119,7 @@
         android:layout_width="376dp"
         android:layout_height="44dp"
         android:layout_marginBottom="8dp"
-        android:hint="endpoint"
+        android:hint="流地址"
         android:textColor="#f00"
         android:textColorHint="#f00"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -33,9 +132,9 @@
         android:id="@+id/start_stop"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginBottom="8dp"
-        android:text="Start Stream"
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="4dp"
+        android:text="推流"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 

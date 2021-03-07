@@ -70,6 +70,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
     private Button btnRecord;
     private Button btnSwitchEncoder;
     private Button btnPause;
+    private Button btnDetect;
     private Button record;
     private SharedPreferences sp;
     private String rtmpUrl;
@@ -82,7 +83,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 
     private int mWidth = 1080;
     private int mHeight = 2220;
-    private int TOP_K = 3;
+    private int TOP_K = Utils.TOP_K;
     private boolean isPermissionGranted = false;
     private ResultRowView[] mResultRowViews = new ResultRowView[TOP_K];
     private ImageView imageView;
@@ -190,7 +191,9 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
             }
         }
     }
+
     private boolean server_state_ready;
+
     private void init() {
         // restore data.
 //        sp = getSharedPreferences("FaceDetection", MODE_PRIVATE);
@@ -200,11 +203,12 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
         final EditText efu = (EditText) findViewById(R.id.url);
         efu.setText(rtmpUrl);
 
+        btnDetect = (Button) findViewById(R.id.detect);
         btnPublish = (Button) findViewById(R.id.publish);
         btnSwitchCamera = (Button) findViewById(R.id.swCam);
-        btnRecord = (Button) findViewById(R.id.record_yasea);
-        btnSwitchEncoder = (Button) findViewById(R.id.swEnc);
-        btnPause = (Button) findViewById(R.id.pause);
+//        btnRecord = (Button) findViewById(R.id.record_yasea);
+//        btnSwitchEncoder = (Button) findViewById(R.id.swEnc);
+//        btnPause = (Button) findViewById(R.id.pause);
         btnPause.setEnabled(false);
 
         graphicOverlay = findViewById(R.id.graphicOverlay);
@@ -278,18 +282,21 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
                         Toast.makeText(getApplicationContext(), "使用软件编码", Toast.LENGTH_SHORT).show();
                     }
                     btnPublish.setText("停止");
+                    btnDetect.setEnabled(true);
                     btnSwitchEncoder.setEnabled(false);
-                    btnPause.setEnabled(true);
+//                    btnPause.setEnabled(true);
                 } else if (btnPublish.getText().toString().contentEquals("停止")) {
                     mPublisher.stopPublish();
                     mPublisher.stopRecord();
+                    btnDetect.setEnabled(false);
                     btnPublish.setText("推流");
-                    btnRecord.setText("保存");
+//                    btnRecord.setText("录像");
                     btnSwitchEncoder.setEnabled(true);
-                    btnPause.setEnabled(false);
+//                    btnPause.setEnabled(false);
                 }
             }
         });
+
         Button btnRecog = (Button) findViewById(R.id.btn_recog);
         btnRecog.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -305,18 +312,31 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
                 }
             }
         });
-        btnPause.setOnClickListener(new View.OnClickListener() {
+//        btnPause.setOnClickListener(new View.OnClickListener() {
+
+
+        btnDetect.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View view) {
-                if(btnPause.getText().toString().equals("暂停")){
-                    mPublisher.pausePublish();
-                    btnPause.setText("继续");
-                }else{
-                    mPublisher.resumePublish();
-                    btnPause.setText("暂停");
-                }
+            public void onClick(View v) {
+                // 1. send okhttp to server
+                // 2. get detect result
+                // 3. pass result to nbp
+                Toast.makeText(RemoteFaceDetectActivity.this, "检测中", Toast.LENGTH_SHORT).show();
             }
         });
+//        btnPause.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if(btnPause.getText().toString().equals("暂停")){
+//                    mPublisher.pausePublish();
+//                    btnPause.setText("继续");
+//                }else{
+//                    mPublisher.resumePublish();
+//                    btnPause.setText("暂停");
+//                }
+//            }
+//        });
 
         btnSwitchCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -326,35 +346,35 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
             }
         });
 
-        btnRecord.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (btnRecord.getText().toString().contentEquals("保存")) {
-                    if (mPublisher.startRecord(recPath)) {
-                        btnRecord.setText("暂停");
-                    }
-                } else if (btnRecord.getText().toString().contentEquals("暂停")) {
-                    mPublisher.pauseRecord();
-                    btnRecord.setText("继续");
-                } else if (btnRecord.getText().toString().contentEquals("继续")) {
-                    mPublisher.resumeRecord();
-                    btnRecord.setText("暂停");
-                }
-            }
-        });
+//        btnRecord.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (btnRecord.getText().toString().contentEquals("录像")) {
+//                    if (mPublisher.startRecord(recPath)) {
+//                        btnRecord.setText("暂停");
+//                    }
+//                } else if (btnRecord.getText().toString().contentEquals("暂停")) {
+//                    mPublisher.pauseRecord();
+//                    btnRecord.setText("继续");
+//                } else if (btnRecord.getText().toString().contentEquals("继续")) {
+//                    mPublisher.resumeRecord();
+//                    btnRecord.setText("暂停");
+//                }
+//            }
+//        });
 
-        btnSwitchEncoder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (btnSwitchEncoder.getText().toString().contentEquals("软解")) {
-                    mPublisher.switchToSoftEncoder();
-                    btnSwitchEncoder.setText("硬解");
-                } else if (btnSwitchEncoder.getText().toString().contentEquals("硬解")) {
-                    mPublisher.switchToHardEncoder();
-                    btnSwitchEncoder.setText("软解");
-                }
-            }
-        });
+//        btnSwitchEncoder.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (btnSwitchEncoder.getText().toString().contentEquals("软解")) {
+//                    mPublisher.switchToSoftEncoder();
+//                    btnSwitchEncoder.setText("硬解");
+//                } else if (btnSwitchEncoder.getText().toString().contentEquals("硬解")) {
+//                    mPublisher.switchToHardEncoder();
+//                    btnSwitchEncoder.setText("软解");
+//                }
+//            }
+//        });
 
 
         namedboxpool = new ArrayList<>();
@@ -692,7 +712,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
         }
         mPublisher.stopEncode();
         mPublisher.stopRecord();
-        btnRecord.setText("record");
+        btnRecord.setText("录像");
         mPublisher.setScreenOrientation(newConfig.orientation);
         if (btnPublish.getText().toString().contentEquals("stop")) {
             mPublisher.startEncode();
@@ -707,8 +727,8 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             mPublisher.stopPublish();
             mPublisher.stopRecord();
-            btnPublish.setText("publish");
-            btnRecord.setText("record");
+            btnPublish.setText("推流");
+            btnRecord.setText("录像");
             btnSwitchEncoder.setEnabled(true);
         } catch (Exception e1) {
             //

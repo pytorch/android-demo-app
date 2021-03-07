@@ -101,7 +101,7 @@
             android:id="@+id/videoBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Start Video" />
+            android:text="录像" />
 
     </LinearLayout>
 
@@ -112,8 +112,8 @@
 
     <com.madgaze.smartglass.view.SplitCameraView
         android:id="@+id/splitCameraView"
-        android:layout_width="478dp"
-        android:layout_height="337dp" />
+        android:layout_width="500dp"
+        android:layout_height="match_parent" />
 
     <LinearLayout
         android:layout_width="478dp"

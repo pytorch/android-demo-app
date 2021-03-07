@@ -1,76 +1,29 @@
 package org.pytorch.demo
 
-import android.Manifest
 import android.app.Activity
-import android.content.pm.PackageManager
-import android.hardware.usb.UsbConstants.*
+import android.graphics.Color
+import android.graphics.Rect
+import android.hardware.usb.UsbConstants.USB_CLASS_MISC
 import android.hardware.usb.UsbDevice
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.SurfaceHolder
 import android.widget.Toast
-import androidx.core.app.ActivityCompat
 import com.serenegiant.usb.USBMonitor
 import com.serenegiant.usb.UVCCamera
 import kotlinx.android.synthetic.main.activity_glass_remote.*
+import kotlinx.android.synthetic.main.activity_glass_remote.graphicOverlay
+import kotlinx.android.synthetic.main.activity_remote_face_detect.*
 import net.ossrs.rtmp.ConnectCheckerRtmp
 import org.pytorch.demo.streamlib.RtmpUSB
 import org.pytorch.demo.util.Util
+import org.pytorch.demo.vision.Helper.RectOverlay
+import org.pytorch.demo.vision.view.ResultRowView
+import java.util.*
 
 
 class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRtmp {
 
-//  private val RCCAMERA = 2002;
-//
-//  private fun requestPermission() {
-//    //1. 检查是否已经有该权限
-//    if (Build.VERSION.SDK_INT >= 23 && ((ActivityCompat.checkSelfPermission(
-//        this,
-//        Manifest.permission.CAMERA
-//      )
-//              !== PackageManager.PERMISSION_GRANTED) || (ActivityCompat.checkSelfPermission(
-//        this,
-//        Manifest.permission.RECORD_AUDIO
-//      )
-//              !== PackageManager.PERMISSION_GRANTED) || (ActivityCompat.checkSelfPermission(
-//        this,
-//        Manifest.permission.WRITE_EXTERNAL_STORAGE
-//      )
-//              !== PackageManager.PERMISSION_GRANTED))
-//    ) {
-//      //2. 权限没有开启，请求权限
-//      ActivityCompat.requestPermissions(
-//        this,
-//        arrayOf(
-//          Manifest.permission.CAMERA,
-//          Manifest.permission.RECORD_AUDIO,
-//          Manifest.permission.WRITE_EXTERNAL_STORAGE
-//        ),
-//        RCCAMERA
-//      )
-//    } else {
-//      //权限已经开启，做相应事情
-//      println("in request permission before init")
-//    }
-//  }
-//
-//  //3. 接收申请成功或者失败回调
-//  override fun onRequestPermissionsResult(
-//    requestCode: Int,
-//    permissions: Array<String?>?,
-//    grantResults: IntArray
-//  ) {
-//    super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-//    if (requestCode == RCCAMERA) {
-//      if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-//        //权限被用户同意,做相应的事情
-//      } else {
-//        //权限被用户拒绝，做相应的事情
-//        finish()
-//      }
-//    }
-//  }
   override fun onAuthSuccessRtmp() {
     Log.e("Pedro", "auth success")
   }
@@ -85,6 +38,10 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
     }
   }
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
   override fun onConnectionFailedRtmp(reason: String) {
     runOnUiThread {
       Toast.makeText(this, "Failed $reason", Toast.LENGTH_SHORT).show()
@@ -112,7 +69,7 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
   override fun surfaceCreated(p0: SurfaceHolder?) {
 
   }
-
+  private val namedboxpool: ArrayList<Utils.NamedBox>? = null
   private lateinit var usbMonitor: USBMonitor
   private var uvcCamera: UVCCamera? = null
   private var isUsbOpen = true
@@ -121,10 +78,19 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
   private var defished = false
   private lateinit var rtmpUSB: RtmpUSB
   private var ctrlBlock: USBMonitor.UsbControlBlock? = null
+  private val mResultRowViews = arrayOfNulls<ResultRowView>(Utils.TOP_K)
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_glass_remote)
 //    requestPermission()
+    graphicOverlay.bringToFront()
+    imageView.bringToFront()
+    mResultRowViews[0] = findViewById(R.id.image_classification_top1_result_row)
+    mResultRowViews[0]?.bringToFront()
+    mResultRowViews[1] = findViewById(R.id.image_classification_top2_result_row)
+    mResultRowViews[1]?.bringToFront()
+    mResultRowViews[2] = findViewById(R.id.image_classification_top3_result_row)
+    mResultRowViews[2]?.bringToFront()
     rtmpUSB = RtmpUSB(openglview, this)
 //    Toast.makeText(this, "rtmp usb done", Toast.LENGTH_SHORT).show()
     usbMonitor = USBMonitor(this, onDeviceConnectListener)
@@ -148,48 +114,60 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
         }
       }
     }
-//    camera.setOnClickListener {
-//      if (uvcCamera == null) {
-//        val camera = UVCCamera()
-//        var deviceCount = usbMonitor.deviceCount
-//        if (deviceCount > 0)
-//        {
-//          Toast.makeText(this@GlassRemoteActivity, "usb has $deviceCount devices ", Toast.LENGTH_SHORT).show()
-//          var usbDevice = usbMonitor.deviceList.get(0)
-//          ctrlBlock = usbMonitor.openDevice(usbDevice)
-//
-//        }else{
-//          Toast.makeText(this@GlassRemoteActivity, "usb detected no devices", Toast.LENGTH_SHORT).show()
-//        }
-//
-//
-//        if (ctrlBlock != null){
-//          camera.open(ctrlBlock, false)
-//          Toast.makeText(this@GlassRemoteActivity, "uvc camera done", Toast.LENGTH_SHORT).show()
-//          try {
-//            camera.setPreviewSize(width, height, UVCCamera.FRAME_FORMAT_MJPEG)
-//          } catch (e: IllegalArgumentException) {
-//            camera.destroy()
-//            try {
-//              camera.setPreviewSize(width, height, UVCCamera.DEFAULT_PREVIEW_MODE)
-//            } catch (e1: IllegalArgumentException) {
-//
-//            }
-//          }
-//          uvcCamera = camera
-//          rtmpUSB.startPreview(uvcCamera, width, height)
-//          Toast.makeText(this@GlassRemoteActivity, "uvc camera start previewing", Toast.LENGTH_SHORT).show()
-//
-//        }
-//        else{
-//          Toast.makeText(this@GlassRemoteActivity, "ctrl block null", Toast.LENGTH_SHORT).show()
-//
-//        }
-//      }
-//      else{
-//        Toast.makeText(this@GlassRemoteActivity, "camera not null", Toast.LENGTH_SHORT).show()
-//      }
-//    }
+
+    detect.setOnClickListener {
+
+      //send http or websocket to get result
+
+      val w: Int = openglview.width
+      val h: Int = openglview.height
+      println("in onTextMessage w:$w, h:$h")
+      var center: Utils.NamedBox? = drawFaceResults_nbp(w, h)
+      runOnUiThread { updateUI(center) }
+    }
+  }
+
+  private fun updateUI(namedBox: Utils.NamedBox?) {
+    if (namedBox != null) {
+
+      for (i in 0 until Utils.TOP_K) {
+        val rowView: ResultRowView? = mResultRowViews.get(i)
+        rowView?.nameTextView?.text = namedBox.id_k[i]
+        rowView?.scoreTextView?.text = String.format(Locale.US, RemoteFaceDetectActivity.SCORES_FORMAT,
+                namedBox.prob_k[i])
+        rowView?.setProgressState(true)
+      }
+    }
+  }
+  private fun drawFaceResults_nbp(width: Int, height: Int): Utils.NamedBox? {
+    graphicOverlay.clear()
+    println("in draw face results NBP")
+    var color: Int
+    var least_dist = 100.0
+    var least_index: Utils.NamedBox? = null
+    if (namedboxpool != null) {
+      for (namedBox in namedboxpool) {
+        val dist: Double = Utils.distance2middle(namedBox.rect)
+        if (dist < least_dist) {
+          least_index = namedBox
+          least_dist = dist
+        }
+      }
+    }
+    if (namedboxpool != null) {
+      for (namedBox in namedboxpool) {
+        color = if (namedBox === least_index) {
+          Color.BLUE
+        } else Color.RED
+        val xyxy = floatArrayOf(namedBox.rect[0] * width, namedBox.rect[1] * height, namedBox.rect[2] * width, namedBox.rect[3] * height)
+        val rect = Rect(xyxy[0].toInt(), xyxy[1].toInt(), xyxy[2].toInt(), xyxy[3].toInt())
+        val rectOverlay = RectOverlay(graphicOverlay, rect, namedBox.id, color)
+        graphicOverlay.add(rectOverlay)
+        graphicOverlay.add(rectOverlay)
+      }
+    }
+    namedboxpool?.clear()
+    return least_index
   }
 
   private fun startStream(url: String) {
