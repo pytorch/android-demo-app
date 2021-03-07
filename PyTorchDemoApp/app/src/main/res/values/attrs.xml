@@ -15,4 +15,16 @@
         <attr name="imageRes" format="reference" />
     </declare-styleable>
 
+<!--    <declare-styleable name="TODO">-->
+<!--        <attr name="fontVariationSettings" format="reference"/>-->
+<!--        <attr name="ttcIndex" format="reference"/>-->
+<!--        <attr name="lineHeight" format="reference"/>-->
+<!--        <attr name="textFontWeight" format="reference"/>-->
+<!--        <attr name="dialogCornerRadius" format="reference"/>-->
+
+
+
+
+<!--    </declare-styleable>-->
+
 </resources>

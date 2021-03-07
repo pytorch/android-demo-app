@@ -12,9 +12,23 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.pytorch.demo.util.Base64Utils;
 import org.pytorch.demo.util.SharedPreferencesUtils;
 import org.pytorch.demo.widget.LoadingDialog;
+
+import java.io.IOException;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+
+import okhttp3.Call;
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 /**
  * 登录界面
@@ -211,7 +225,7 @@ public class AccountLoginActivity extends Activity
                 }
 
                 //判断账号和密码
-                if (getAccount().equals("admin") && getPassword().equals("123456")) {
+                if (check_password(getAccount(), getPassword())) {
                     showToast("登录成功");
                     loadCheckBoxState();//记录下当前用户记住密码和自动登录的状态;
 
@@ -258,6 +272,147 @@ public class AccountLoginActivity extends Activity
         }
 
     }
+
+    public boolean check_password(String u, String p) {
+
+        //获取输入的用户名和密码
+        String username = u;
+        String password = p;
+        Intent intent = null;
+        if (username.equals("") || password.equals("")) {
+            //账户密码不能为空
+            showToast("账号或密码不能为空");
+        }
+        String res = null;
+
+        res = sendByOKHttp("http://10.138.100.154:8080/api/account/login", username, password);
+
+        System.out.println("in onclick res is " + res);
+        if (res!=null){
+            try {
+                JSONObject jsonObject = new JSONObject(res);
+                if(jsonObject.has("detail")){
+                    JSONObject jo =(JSONObject) jsonObject.getJSONObject("detail");
+                    String hint = jo.getString("msg");
+                    Toast.makeText(this, hint, Toast.LENGTH_LONG).show();
+                    return false;
+                }
+                else{
+                    String token = jsonObject.getString("access_token");
+                    Utils.token = token;
+//                    intent = new Intent(AccountLoginActivity.this, SideBarActivity.class);
+//                    startActivity(intent);
+                    return true;
+                }
+            } catch (JSONException jsonException) {
+                jsonException.printStackTrace();
+            }
+
+        }else{
+            Toast.makeText(this, "网络或服务器错误", Toast.LENGTH_LONG).show();
+            return false;
+        }
+
+        return false;
+    }
+
+
+
+    public String whenSendPostRequest_thenCorrect(String url, String u, String p)
+            throws IOException {
+        RequestBody formBody = new FormBody.Builder()
+                .add("username", u)
+                .add("password", p)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
+
+        OkHttpClient client = new OkHttpClient();
+        Call call = client.newCall(request);
+        Response response = call.execute();
+
+//        assertThat(response.code(), equalTo(200));
+        return response.body().string();
+    }
+
+
+
+    public class MyCallBack implements Callable<String> {
+        private String url;
+        private String u, p;
+        public MyCallBack() {
+        }
+        public MyCallBack(String url, String u, String p) {
+            this.url = url;
+            this.u = u;
+            this.p = p;
+        }
+
+        public MyCallBack(String url){
+            this.url = url;
+        }
+
+        public void setUrl(String url) {
+            this.url = url;
+        }
+
+        public void setU(String u) {
+            this.u = u;
+        }
+
+        public void setP(String p) {
+            this.p = p;
+        }
+
+        public String getUrl() {
+            return url;
+        }
+
+        public String getU() {
+            return u;
+        }
+
+        public String getP() {
+            return p;
+        }
+
+        public String call() throws Exception {
+            String result = null;
+            return whenSendPostRequest_thenCorrect(url, u, p);
+        }
+
+    }
+
+    private String sendByOKHttp(String url, String u, String p) {
+        MyCallBack callBack = new MyCallBack(url);
+        callBack.setP(p);
+        callBack.setU(u);
+        FutureTask<String> taskList = new FutureTask<String>(callBack);
+        Thread t = new Thread(taskList);
+        t.start();
+        try {
+            String res = taskList.get();
+            System.out.println(res);
+            return res;
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+
+
+
+
+
+
+
+
 
     /**
      * 获取账号

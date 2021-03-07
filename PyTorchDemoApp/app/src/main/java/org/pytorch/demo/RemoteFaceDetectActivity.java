@@ -206,6 +206,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
         efu.setText(rtmpUrl);
 
         btnDetect = (Button) findViewById(R.id.detect);
+        btnDetect.setText("检测");
         btnPublish = (Button) findViewById(R.id.publish);
         btnSwitchCamera = (Button) findViewById(R.id.swCam);
 //        btnRecord = (Button) findViewById(R.id.record_yasea);
@@ -299,8 +300,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
             }
         });
 
-        Button btnRecog = (Button) findViewById(R.id.btn_recog);
-        btnRecog.setOnClickListener(new View.OnClickListener() {
+        btnDetect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 String msg = "{\"event\": \"detect\"}";
@@ -314,31 +314,6 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
                 }
             }
         });
-//        btnPause.setOnClickListener(new View.OnClickListener() {
-
-
-        btnDetect.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // 1. send okhttp to server
-                // 2. get detect result
-                // 3. pass result to nbp
-                Toast.makeText(RemoteFaceDetectActivity.this, "检测中", Toast.LENGTH_SHORT).show();
-            }
-        });
-//        btnPause.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if(btnPause.getText().toString().equals("暂停")){
-//                    mPublisher.pausePublish();
-//                    btnPause.setText("继续");
-//                }else{
-//                    mPublisher.resumePublish();
-//                    btnPause.setText("暂停");
-//                }
-//            }
-//        });
 
         btnSwitchCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -434,7 +409,8 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
                             Toast.makeText(RemoteFaceDetectActivity.this, "ws连接成功", Toast.LENGTH_SHORT).show();
                         }
 //                        System.out.println("in listener message is " + message);
-                        updateNamedboxpool(message);
+                        if (server_state_ready)
+                            updateNamedboxpool(message);
 //                        namedboxpool.add(namedBox);
                     }
                     else

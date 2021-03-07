@@ -6,19 +6,25 @@ import android.graphics.Rect
 import android.hardware.usb.UsbConstants.USB_CLASS_MISC
 import android.hardware.usb.UsbDevice
 import android.os.Bundle
+import android.os.StrictMode
 import android.util.Log
 import android.view.SurfaceHolder
 import android.widget.Toast
+import com.neovisionaries.ws.client.*
 import com.serenegiant.usb.USBMonitor
 import com.serenegiant.usb.UVCCamera
 import kotlinx.android.synthetic.main.activity_glass_remote.*
 import kotlinx.android.synthetic.main.activity_glass_remote.graphicOverlay
 import kotlinx.android.synthetic.main.activity_remote_face_detect.*
 import net.ossrs.rtmp.ConnectCheckerRtmp
+import org.json.JSONException
+import org.json.JSONObject
+import org.pytorch.demo.Utils.TOP_K
 import org.pytorch.demo.streamlib.RtmpUSB
 import org.pytorch.demo.util.Util
 import org.pytorch.demo.vision.Helper.RectOverlay
 import org.pytorch.demo.vision.view.ResultRowView
+import java.io.IOException
 import java.util.*
 
 
@@ -66,7 +72,7 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
   override fun surfaceCreated(p0: SurfaceHolder?) {
 
   }
-  private val namedboxpool: ArrayList<Utils.NamedBox>? = null
+  private var namedboxpool: ArrayList<Utils.NamedBox>? = null
   private lateinit var usbMonitor: USBMonitor
   private var uvcCamera: UVCCamera? = null
   private var isUsbOpen = true
@@ -76,6 +82,26 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
   private lateinit var rtmpUSB: RtmpUSB
   private var ctrlBlock: USBMonitor.UsbControlBlock? = null
   private val mResultRowViews = arrayOfNulls<ResultRowView>(Utils.TOP_K)
+  private var webSocketFactory: WebSocketFactory? = null
+  private var webSocket: WebSocket? = null
+  private var server_state_ready = false
+
+  //    private Button offline_loginbtn;
+  //    @Override
+  //    public void onPointerCaptureChanged(boolean hasCapture) {
+  //    }
+  //
+  //    private static class PageData {
+  //        private int titleTextResId;
+  //        private int imageResId;
+  //        private int descriptionTextResId;
+  //
+  //        public PageData(int titleTextResId, int imageResId, int descriptionTextResId) {
+  //            this.titleTextResId = titleTextResId;
+  //            this.imageResId = imageResId;
+  //            this.descriptionTextResId = descriptionTextResId;
+  //        }
+  //    }
   override fun onCreate(savedInstanceState: Bundle?) {
     super.onCreate(savedInstanceState)
     setContentView(R.layout.activity_glass_remote)
@@ -115,20 +141,114 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
     detect.setOnClickListener {
 
       //send http or websocket to get result
+      val msg = "{\"event\": \"detect\"}"
+      if (server_state_ready) {
+        webSocket!!.sendText(msg)
+        println("detect sent")
+      } else {
+        Toast.makeText(this@GlassRemoteActivity, "server还没有准备好", Toast.LENGTH_SHORT).show()
+      }
+    }
 
-      val w: Int = openglview.width
-      val h: Int = openglview.height
-      println("in onTextMessage w:$w, h:$h")
-      var center: Utils.NamedBox? = drawFaceResults_nbp(w, h)
-      runOnUiThread { updateUI(center) }
+
+
+    namedboxpool = ArrayList<Utils.NamedBox>()
+    webSocketFactory = WebSocketFactory()
+    var serverUri = Util().ws;
+    try {
+
+      if (Utils.token != null)
+        serverUri = serverUri.replace("{TOKEN}", Utils.token)
+      serverUri = serverUri.replace("{RTMP}", "livestream")
+      println("in rfda, serveruri $serverUri")
+      webSocket = webSocketFactory!!.createSocket(serverUri)
+      val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()
+      StrictMode.setThreadPolicy(policy)
+      webSocket!!.connect()
+      webSocket!!.addListener(object : WebSocketAdapter() {
+        override fun onTextMessage(websocket: WebSocket, message: String) {
+          // Received a text message.
+          println("in listener, text message received $message")
+
+          //TODO info can be retrived here
+          // need further operation
+          // put box and info into boxpool
+
+          if (message != null) {
+            if (message.contains("ready")) {
+              server_state_ready = true
+              Toast.makeText(this@GlassRemoteActivity, "ws连接成功", Toast.LENGTH_SHORT).show()
+            }
+            if(server_state_ready)
+              updateNamedboxpool(message)
+          } else println("in onTextMessage message is null")
+          val w: Int = openglview.width
+          val h: Int = openglview.height
+          println("in onTextMessage w:$w, h:$h")
+          var center: Utils.NamedBox? = drawFaceResults_nbp(w, h)
+          runOnUiThread { updateUI(center) }
+        }
+      })
+      webSocket!!.addListener(object : WebSocketAdapter() {
+        override fun onBinaryMessage(webSocket: WebSocket, bytes: ByteArray) {
+          println("in binary message listener received bytes of size " + bytes.size)
+        }
+      })
+    } catch (ioe: IOException) {
+      println(ioe.toString())
+    } catch (e: OpeningHandshakeException) {
+      // A violation against the WebSocket protocol was detected
+      // during the opening handshake.
+    } catch (e: HostnameUnverifiedException) {
+      // The certificate of the peer does not match the expected hostname.
+    } catch (e: WebSocketException) {
+      // Failed to establish a WebSocket connection.
+    } catch (re: RuntimeException) {
+      Toast.makeText(this@GlassRemoteActivity, "远程服务器错误", Toast.LENGTH_LONG).show()
+      finishActivity(11)
+    }
+
+  }
+  private fun updateNamedboxpool(jsonString: String) {
+    try {
+      val jsonObject = JSONObject(jsonString)
+      val count = jsonObject.getInt("count")
+      //            int count = jsonObject.length();
+      val id_array = jsonObject.getJSONArray("id")
+      val id_k_array = jsonObject.getJSONArray("id_k")
+      val prob_array = jsonObject.getJSONArray("prob")
+      val box_array = jsonObject.getJSONArray("box")
+      //TODO change career to contain more info ALSO: format of career not right.
+      val info = jsonObject.getString("career")
+      for (i in 0 until count) {
+        val id_k = arrayOfNulls<String>(TOP_K)
+        val prob = FloatArray(TOP_K)
+        val box = FloatArray(4)
+        for (j in 0 until TOP_K) {
+          id_k[j] = id_k_array.getJSONArray(i).getString(j)
+          prob[j] = prob_array.getJSONArray(i).getDouble(j).toFloat()
+        }
+        for (j in 0..3) {
+          box[j] = box_array.getJSONArray(i).getDouble(j).toFloat()
+        }
+        val namedBox: Utils.NamedBox = Utils.NamedBox(
+                id_array.getString(i),
+                id_k,
+                prob,
+                box,
+                info
+        )
+        namedboxpool!!.add(namedBox)
+      }
+    } catch (jsonException: JSONException) {
+      jsonException.printStackTrace()
     }
   }
-
   private fun updateUI(namedBox: Utils.NamedBox?) {
     if (namedBox != null) {
 
       for (i in 0 until Utils.TOP_K) {
-        val rowView: ResultRowView? = mResultRowViews.get(i)
+        val rowView: ResultRowView? = mResultRowViews[i]
         rowView?.nameTextView?.text = namedBox.id_k[i]
         rowView?.scoreTextView?.text = String.format(Locale.US, RemoteFaceDetectActivity.SCORES_FORMAT,
                 namedBox.prob_k[i])
@@ -143,7 +263,7 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
     var least_dist = 100.0
     var least_index: Utils.NamedBox? = null
     if (namedboxpool != null) {
-      for (namedBox in namedboxpool) {
+      for (namedBox in namedboxpool!!) {
         val dist: Double = Utils.distance2middle(namedBox.rect)
         if (dist < least_dist) {
           least_index = namedBox
@@ -152,7 +272,7 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
       }
     }
     if (namedboxpool != null) {
-      for (namedBox in namedboxpool) {
+      for (namedBox in namedboxpool!!) {
         color = if (namedBox === least_index) {
           Color.BLUE
         } else Color.RED

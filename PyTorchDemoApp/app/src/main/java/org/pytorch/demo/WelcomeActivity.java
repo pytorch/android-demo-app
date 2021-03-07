@@ -47,7 +47,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class WelcomeActivity extends AppCompatActivity implements View.OnClickListener {
+public class WelcomeActivity extends AppCompatActivity{
 
     //声明控件
     private SharedPreferences sp;//声明SharedPreferences
@@ -74,7 +74,6 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
 //            this.descriptionTextResId = descriptionTextResId;
 //        }
 //    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,6 +111,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         online_loginbtn.setOnClickListener(v -> {
             //显示Toast信息
             Toast.makeText(getApplicationContext(), "你点击了按钮", Toast.LENGTH_SHORT).show();
+//            check_password();
             Intent intent = new Intent(WelcomeActivity.this, SideBarActivity.class);
             startActivity(intent);
         });
@@ -167,83 +167,8 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         }
     }
 
-    public void onClick(View v) {
-
-        //获取输入的用户名和密码
-        String username = mEtUser.getText().toString();
-        String password = mEtPassword.getText().toString();
-        Intent intent = null;
-        if (username.equals("") || password.equals("")) {
-            //账户密码不能为空
-            showToast("账号或密码不能为空");
-        }
-        String res = null;
-
-        res = sendByOKHttp("http://10.138.100.154:8080/api/account/login", username, password);
-
-        System.out.println("in onclick res is " + res);
-        if (res!=null){
-            try {
-                JSONObject jsonObject = new JSONObject(res);
-                if(jsonObject.has("detail")){
-                    JSONObject jo =(JSONObject) jsonObject.getJSONObject("detail");
-                    String hint = jo.getString("msg");
-                    Toast.makeText(this, hint, Toast.LENGTH_LONG).show();
-                }
-                else{
-                    String token = jsonObject.getString("access_token");
-                    Utils.token = token;
-                    intent = new Intent(WelcomeActivity.this, SideBarActivity.class);
-//                intent.putExtra("info", res);
-//                showToast("你好！ "+res);
-                    startActivity(intent);
-                }
-            } catch (JSONException jsonException) {
-                jsonException.printStackTrace();
-            }
-
-        }else{
-            Toast.makeText(this, "网络或服务器错误", Toast.LENGTH_LONG).show();
-        }
-
-//        String savedUsername = sp.getString("username", "");
-//        String savedPassword = sp.getString("password", "");
-//        if (username.equals(savedUsername) && password.equals(savedPassword)) {
-////             if new Util().sss === success
-//            intent = new Intent(WelcomeActivity.this, SideBarActivity.class);
-//            String res = sp.getString("username","none");
-//            intent.putExtra("info", res);
-//            showToast("你好！"+res);
-//            startActivity(intent);
-//
-////            intent = new Intent(WelcomeActivity.this, SelectVideos.class);
-////            startActivity(intent);
-//        } else {
-//            showToast("用户名或密码错误，请重新登录");
-//
-//        }
 
 
-    }
-    public String whenSendPostRequest_thenCorrect(String url, String u, String p)
-            throws IOException {
-        RequestBody formBody = new FormBody.Builder()
-                .add("username", u)
-                .add("password", p)
-                .build();
-
-        Request request = new Request.Builder()
-                .url(url)
-                .post(formBody)
-                .build();
-
-        OkHttpClient client = new OkHttpClient();
-        Call call = client.newCall(request);
-        Response response = call.execute();
-
-//        assertThat(response.code(), equalTo(200));
-        return response.body().string();
-    }
 
 
 //    private String sendByOKHttp() {
@@ -269,71 +194,6 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
 //            }
 //    }
 
-
-    public class MyCallBack implements Callable<String>{
-        private String url;
-        private String u, p;
-        public MyCallBack() {
-        }
-        public MyCallBack(String url, String u, String p) {
-            this.url = url;
-            this.u = u;
-            this.p = p;
-        }
-
-        public MyCallBack(String url){
-            this.url = url;
-        }
-
-        public void setUrl(String url) {
-            this.url = url;
-        }
-
-        public void setU(String u) {
-            this.u = u;
-        }
-
-        public void setP(String p) {
-            this.p = p;
-        }
-
-        public String getUrl() {
-            return url;
-        }
-
-        public String getU() {
-            return u;
-        }
-
-        public String getP() {
-            return p;
-        }
-
-        public String call() throws Exception {
-            String result = null;
-            return whenSendPostRequest_thenCorrect(url, u, p);
-        }
-
-    }
-
-    private String sendByOKHttp(String url, String u, String p) {
-        MyCallBack callBack = new MyCallBack(url);
-        callBack.setP(p);
-        callBack.setU(u);
-        FutureTask<String> taskList = new FutureTask<String>(callBack);
-        Thread t = new Thread(taskList);
-        t.start();
-        try {
-            String res = taskList.get();
-            System.out.println(res);
-            return res;
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
     private void showToast(String msg) {
         mtoast = Toast.makeText(WelcomeActivity.this, msg, Toast.LENGTH_SHORT);
