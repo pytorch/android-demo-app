@@ -87,11 +87,11 @@
             tools:ignore="Instantiatable" />
 
         <activity android:name=".vision.VisionListActivity" />
-<<<<<<< HEAD
 
-=======
+
+
         <activity android:name=".vision.GlassListActivity" />
->>>>>>> cdcf6c92d3911e2f28d7b1c8ba996e14a331344b
+
         <activity
             android:name=".vision.ImageClassificationActivity"
             android:label="@string/image_classification_title" />

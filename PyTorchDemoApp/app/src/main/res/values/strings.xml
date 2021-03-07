@@ -2,15 +2,12 @@
     <string name="app_name">PyTorchDemo</string>
     <string name="action_settings">Settings</string>
     <string name="welcome_skip_button">Skip</string>
-<<<<<<< HEAD
-    <string name="main_vision_button">视觉</string>
-    <string name="main_nlp_button">语音</string>
+
     <string name="core_func">核心功能</string>
-=======
+
     <string name="main_vision_button">手机、平板</string>
     <string name="main_glass_button">外置眼镜</string>
 
->>>>>>> cdcf6c92d3911e2f28d7b1c8ba996e14a331344b
     <string name="vision_list_image_classification_button">Image Classification</string>
     <string name="image_classification_title">Image Classification</string>
     <string name="image_classification_results_header_row_name">Classification</string>

@@ -3,16 +3,15 @@
 
     <item
         android:id="@+id/navigation_file"
-        android:icon="@drawable/file"
+        android:icon="@mipmap/file"
         android:title="@string/title_file" />
-
     <item
         android:id="@+id/navigation_func"
-        android:icon="@drawable/func"
+        android:icon="@mipmap/func"
         android:title="@string/title_func" />
     <item
         android:id="@+id/navigation_mime"
-        android:icon="@drawable/account"
+        android:icon="@mipmap/account"
         android:title="@string/title_mime" />
 
 </menu>

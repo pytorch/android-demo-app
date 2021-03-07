@@ -55,7 +55,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
     private EditText mEtUser;
     private EditText mEtPassword;
     private Toast mtoast;
-
+    private Button AccountLogin;
     private Button online_loginbtn;
 //    private Button offline_loginbtn;
 
@@ -82,29 +82,38 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_welcome);
 
         //找到控件
-<<<<<<< HEAD
+
         AccountLogin = findViewById(R.id.btn_AccountLogin);
+        AccountLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(WelcomeActivity.this, AccountLoginActivity.class);
+                startActivity(intent);
+            }
+        });
 //        mEtUser = findViewById(R.id.et_1);
 //        mEtUser.setText("admin");
 //        mEtPassword = findViewById(R.id.et_2);
 //        mEtPassword.setText("123456");
 //        AccountLogin.setOnClickListener(this);
-=======
-        offLogin = findViewById(R.id.btn_offlinelogin);
-        mEtUser = findViewById(R.id.et_1);
-        mEtUser.setText("002");
-        mEtPassword = findViewById(R.id.et_2);
-        mEtPassword.setText("002");
-        offLogin.setOnClickListener(this);
->>>>>>> cdcf6c92d3911e2f28d7b1c8ba996e14a331344b
+
+//        offLogin = findViewById(R.id.btn_OnlineLogin);
+//        mEtUser = findViewById(R.id.et_1);
+//        mEtUser.setText("002");
+//        mEtPassword = findViewById(R.id.et_2);
+//        mEtPassword.setText("002");
+//        offLogin.setOnClickListener(this);
+
 //        saveUser();
 
 
-        online_loginbtn = findViewById(R.id.btn_onlinelogin);
+        online_loginbtn = findViewById(R.id.btn_OnlineLogin);
         //重写点击事件的处理方法onClick()
         online_loginbtn.setOnClickListener(v -> {
             //显示Toast信息
             Toast.makeText(getApplicationContext(), "你点击了按钮", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(WelcomeActivity.this, SideBarActivity.class);
+            startActivity(intent);
         });
 
         requestPermission_rfda();
@@ -159,8 +168,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void onClick(View v) {
-<<<<<<< HEAD
-=======
+
         //获取输入的用户名和密码
         String username = mEtUser.getText().toString();
         String password = mEtPassword.getText().toString();
@@ -214,7 +222,7 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
 //            showToast("用户名或密码错误，请重新登录");
 //
 //        }
->>>>>>> cdcf6c92d3911e2f28d7b1c8ba996e14a331344b
+
 
     }
     public String whenSendPostRequest_thenCorrect(String url, String u, String p)

@@ -736,7 +736,7 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
 
             if (detect_mode == LOCAL)
             {
-                if (mModule == null) {
+                if (mModule == null || encoder == null) {
                     try {
                         final String moduleFileAbsoluteFilePath = new File(
                                 Utils.assetFilePath(this, "mobile_model2.pt")).getAbsolutePath();
@@ -745,7 +745,10 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
                                 Utils.assetFilePath(this, "encoder1.pt")).getAbsolutePath();
                         encoder = Module.load(encoderFileAbsoluteFilePath);
                     }catch (Exception e)
-                    {e.printStackTrace();}
+                    {
+                        Toast.makeText(this, "读取模型时出错", Toast.LENGTH_LONG).show();
+                        e.printStackTrace();
+                    }
                 }
 
                 bitmap2show = bitmap;

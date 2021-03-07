@@ -38,10 +38,7 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
     }
   }
 
-<<<<<<< Updated upstream
-=======
 
->>>>>>> Stashed changes
   override fun onConnectionFailedRtmp(reason: String) {
     runOnUiThread {
       Toast.makeText(this, "Failed $reason", Toast.LENGTH_SHORT).show()

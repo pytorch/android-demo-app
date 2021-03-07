@@ -54,8 +54,8 @@ dependencies {
     implementation 'androidx.navigation:navigation-ui:2.2.2'
     implementation 'androidx.viewpager2:viewpager2:1.0.0'
     implementation 'androidx.navigation:navigation-fragment:2.2.2'
-    implementation fileTree(dir: 'E:\\hanjiaxiangmu\\android-demo-app\\PyTorchDemoApp\\app\\src\\libs', include: ['*.aar', '*.jar'], exclude: [])
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
+    implementation fileTree(dir: 'D:\\GitHub\\android-demo-app\\PyTorchDemoApp\\app\\src\\libs', include: ['*.aar', '*.jar'], exclude: [])
     def camerax_version = "1.0.0-alpha05"
     implementation "androidx.camera:camera-core:$camerax_version"
     implementation "androidx.camera:camera-camera2:$camerax_version"

@@ -57,6 +57,8 @@ import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
 
+import static org.pytorch.demo.Utils.token;
+
 
 public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpHandler.RtmpListener,
         SrsRecordHandler.SrsRecordListener, SrsEncodeHandler.SrsEncodeListener {
@@ -209,7 +211,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 //        btnRecord = (Button) findViewById(R.id.record_yasea);
 //        btnSwitchEncoder = (Button) findViewById(R.id.swEnc);
 //        btnPause = (Button) findViewById(R.id.pause);
-        btnPause.setEnabled(false);
+//        btnPause.setEnabled(false);
 
         graphicOverlay = findViewById(R.id.graphicOverlay);
         graphicOverlay.bringToFront();
@@ -384,7 +386,8 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 //            serverUri.replace("{RTMP}", rtmpUrl);
 
 //            System.out.println("in util ws is " + ws);
-            serverUri=serverUri.replace("{TOKEN}", Utils.token);
+            if (token != null)
+                serverUri=serverUri.replace("{TOKEN}", token);
             serverUri = serverUri.replace("{RTMP}", "livestream");
             System.out.println("in rfda, serveruri " + serverUri);
             webSocket=webSocketFactory.createSocket(serverUri);
@@ -474,6 +477,9 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
         catch (WebSocketException e)
         {
             // Failed to establish a WebSocket connection.
+        }catch (RuntimeException re){
+            Toast.makeText(RemoteFaceDetectActivity.this, "远程服务器错误", Toast.LENGTH_LONG).show();
+            finishActivity(11);
         }
 
     }
@@ -712,7 +718,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
         }
         mPublisher.stopEncode();
         mPublisher.stopRecord();
-        btnRecord.setText("录像");
+//        btnRecord.setText("录像");
         mPublisher.setScreenOrientation(newConfig.orientation);
         if (btnPublish.getText().toString().contentEquals("stop")) {
             mPublisher.startEncode();
@@ -728,7 +734,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
             mPublisher.stopPublish();
             mPublisher.stopRecord();
             btnPublish.setText("推流");
-            btnRecord.setText("录像");
+//            btnRecord.setText("录像");
             btnSwitchEncoder.setEnabled(true);
         } catch (Exception e1) {
             //

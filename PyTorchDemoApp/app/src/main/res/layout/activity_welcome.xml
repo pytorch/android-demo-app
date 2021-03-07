@@ -24,7 +24,7 @@
         android:layout_width="200dp"
         android:layout_height="200dp"
         android:id="@+id/camera"
-        android:src="@drawable/face_login"
+        android:src="@mipmap/face_login"
         android:layout_marginTop="80dp"
         android:layout_gravity="center"
         />
@@ -48,15 +48,14 @@
         <Button
             android:id="@+id/btn_AccountLogin"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="离线登录"
-            android:layout_margin="20dp"
-            android:onClick="AccountLogin"
             android:layout_gravity="center"
+            android:layout_margin="20dp"
+            android:layout_weight="1"
             android:background="#87CEEB"
-            tools:ignore="OnClick"
-            />
+            android:onClick="AccountLogin"
+            android:text="账户登录"
+            tools:ignore="OnClick" />
     </LinearLayout>
 
 </LinearLayout>

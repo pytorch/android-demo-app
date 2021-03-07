@@ -15,11 +15,10 @@ import java.io.OutputStream;
 import java.util.Arrays;
 
 public class Utils {
-<<<<<<< Updated upstream
+
   public static String token = null;
-=======
   public static int TOP_K = 3;
->>>>>>> Stashed changes
+
   public static String assetFilePath(Context context, String assetName) {
     File file = new File(context.getFilesDir(), assetName);
     if (file.exists() && file.length() > 0) {

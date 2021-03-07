@@ -17,13 +17,13 @@
 <!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
     <!--侧边栏内容-->
-    <androidx.drawerlayout.widget.DrawerLayout
-        android:id="@+id/drawer_layout"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:openDrawer="start">
+<!--    <androidx.drawerlayout.widget.DrawerLayout-->
+<!--        android:id="@+id/drawer_layout"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        tools:openDrawer="start">-->
 
-<<<<<<< HEAD
+
 
         <FrameLayout
             android:id="@+id/content"
@@ -32,296 +32,296 @@
             android:layout_weight="1"
             app:layout_constraintBottom_toTopOf="@+id/navigation"
             tools:ignore="MissingConstraints">
-=======
-        <!--主页内容-->
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/main_context"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
-            <FrameLayout
-                android:id="@+id/main_vision_click_view"
-                style="@style/Clickable"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintHeight_percent=".5"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+<!--        &lt;!&ndash;主页内容&ndash;&gt;-->
+<!--&lt;!&ndash;        <androidx.constraintlayout.widget.ConstraintLayout&ndash;&gt;-->
+<!--&lt;!&ndash;            android:id="@+id/main_context"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;            android:layout_height="match_parent">&ndash;&gt;-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:drawableTop="@drawable/ic_vision_s"
-                    android:drawablePadding="16dp"
-                    android:text="@string/main_vision_button"
-                    android:textAppearance="@style/TextAppearanceMainVisionNlp" />
+<!--&lt;!&ndash;            <FrameLayout&ndash;&gt;-->
+<!--&lt;!&ndash;                android:id="@+id/main_vision_click_view"&ndash;&gt;-->
+<!--&lt;!&ndash;                style="@style/Clickable"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintHeight_percent=".5"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintLeft_toLeftOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintRight_toRightOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintTop_toTopOf="parent">&ndash;&gt;-->
 
-            </FrameLayout>
+<!--&lt;!&ndash;                <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_gravity="center"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:drawableTop="@drawable/ic_vision_s"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:drawablePadding="16dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:text="@string/main_vision_button"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:textAppearance="@style/TextAppearanceMainVisionNlp" />&ndash;&gt;-->
 
-            <FrameLayout
-                android:id="@+id/main_nlp_click_view"
-                style="@style/Clickable"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintHeight_percent=".5"
-                app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toRightOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/main_vision_click_view">
+<!--&lt;!&ndash;            </FrameLayout>&ndash;&gt;-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:drawableTop="@drawable/ic_language_s"
-                    android:drawablePadding="16dp"
-                    android:text="@string/main_glass_button"
-                    android:textAppearance="@style/TextAppearanceMainVisionNlp" />
+<!--&lt;!&ndash;            <FrameLayout&ndash;&gt;-->
+<!--&lt;!&ndash;                android:id="@+id/main_nlp_click_view"&ndash;&gt;-->
+<!--&lt;!&ndash;                style="@style/Clickable"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintBottom_toBottomOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintHeight_percent=".5"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintLeft_toLeftOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintRight_toRightOf="parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                app:layout_constraintTop_toBottomOf="@id/main_vision_click_view">&ndash;&gt;-->
 
-            </FrameLayout>
->>>>>>> cdcf6c92d3911e2f28d7b1c8ba996e14a331344b
+<!--&lt;!&ndash;                <TextView&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_width="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_gravity="center"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:drawableTop="@drawable/ic_language_s"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:drawablePadding="16dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:text="@string/main_glass_button"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:textAppearance="@style/TextAppearanceMainVisionNlp" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;            </FrameLayout>&ndash;&gt;-->
+<!--&lt;!&ndash;        </androidx.constraintlayout.widget.ConstraintLayout>&ndash;&gt;-->
 
         </FrameLayout>
 
-<<<<<<< HEAD
-        <!--侧边导航栏-->
-=======
->>>>>>> cdcf6c92d3911e2f28d7b1c8ba996e14a331344b
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navigation_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="start">
+
+
+<!--        &lt;!&ndash;侧边导航栏&ndash;&gt;-->
+
+<!--        <com.google.android.material.navigation.NavigationView-->
+<!--            android:id="@+id/navigation_view"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            android:layout_gravity="start">-->
 
 
 
-            <androidx.constraintlayout.widget.ConstraintLayout android:orientation="vertical"
-                android:layout_height="match_parent"
-                android:layout_width="match_parent">
+<!--            <androidx.constraintlayout.widget.ConstraintLayout android:orientation="vertical"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:layout_width="match_parent">-->
 
 
-                <androidx.appcompat.widget.AppCompatImageView
-                    android:id="@+id/iv_head"
-                    android:layout_width="match_parent"
-                    android:layout_height="60dp"
-                    android:src="@drawable/ic_head"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
+<!--                <androidx.appcompat.widget.AppCompatImageView-->
+<!--                    android:id="@+id/iv_head"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="60dp"-->
+<!--                    android:src="@drawable/ic_head"-->
+<!--                    app:layout_constraintEnd_toEndOf="parent"-->
+<!--                    app:layout_constraintHorizontal_bias="1.0"-->
+<!--                    app:layout_constraintStart_toStartOf="parent"-->
+<!--                    app:layout_constraintTop_toTopOf="parent" />-->
 
-                <TextView
-                    android:id="@+id/crew_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginTop="30dp"
-                    android:text="执法队员"
-                    android:textColor="@android:color/black"
-                    android:textSize="6pt"
-                    app:layout_constraintTop_toBottomOf="@+id/iv_head"
-                    tools:ignore="MissingConstraints" />
+<!--                <TextView-->
+<!--                    android:id="@+id/crew_name"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:layout_marginTop="30dp"-->
+<!--                    android:text="执法队员"-->
+<!--                    android:textColor="@android:color/black"-->
+<!--                    android:textSize="6pt"-->
+<!--                    app:layout_constraintTop_toBottomOf="@+id/iv_head"-->
+<!--                    tools:ignore="MissingConstraints" />-->
 
-                <TextView
-                        android:id="@+id/cname"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginTop="30dp"
-                        android:layout_marginStart="50dp"
-                        android:layout_marginBottom="10dp"
-                        android:text="张三"
-                        android:textSize="6pt"
-                        android:textColor="@android:color/black"
-                        app:layout_constraintLeft_toRightOf="@+id/crew_name"
-                        app:layout_constraintTop_toBottomOf="@+id/iv_head"
-                        tools:ignore="MissingConstraints" />
+<!--                <TextView-->
+<!--                        android:id="@+id/cname"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_gravity="center"-->
+<!--                        android:layout_marginTop="30dp"-->
+<!--                        android:layout_marginStart="50dp"-->
+<!--                        android:layout_marginBottom="10dp"-->
+<!--                        android:text="张三"-->
+<!--                        android:textSize="6pt"-->
+<!--                        android:textColor="@android:color/black"-->
+<!--                        app:layout_constraintLeft_toRightOf="@+id/crew_name"-->
+<!--                        app:layout_constraintTop_toBottomOf="@+id/iv_head"-->
+<!--                        tools:ignore="MissingConstraints" />-->
 
-                    <TextView
-                        android:id="@+id/crewid"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:background="@drawable/bg_personname"
-                        android:gravity="center"
+<!--                    <TextView-->
+<!--                        android:id="@+id/crewid"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:background="@drawable/bg_personname"-->
+<!--                        android:gravity="center"-->
 
-                        android:text="船员号码"
-                        android:layout_marginTop="20dp"
-                        android:textColor="@android:color/black"
-                        android:textSize="6pt"
-                        app:layout_constraintTop_toBottomOf="@id/cname"
-                        tools:ignore="MissingConstraints" />
+<!--                        android:text="船员号码"-->
+<!--                        android:layout_marginTop="20dp"-->
+<!--                        android:textColor="@android:color/black"-->
+<!--                        android:textSize="6pt"-->
+<!--                        app:layout_constraintTop_toBottomOf="@id/cname"-->
+<!--                        tools:ignore="MissingConstraints" />-->
 
-                    <TextView
-                        android:id="@+id/c_id"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="20dp"
-                        android:background="@drawable/bg_personname"
-                        android:gravity="center"
-                        android:layout_marginStart="50dp"
-                        android:text="9527"
-                        android:textColor="@android:color/black"
-                        android:textSize="6pt"
-                        app:layout_constraintLeft_toRightOf="@+id/crewid"
-                        app:layout_constraintTop_toBottomOf="@id/cname" />
-                <TextView
-                    android:id="@+id/position"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/bg_personname"
-                    android:gravity="center"
-                    android:layout_marginStart="50dp"
-                    android:text="人员职位"
-                    android:textColor="@android:color/black"
-                    android:textSize="6pt"
-                    app:layout_constraintTop_toBottomOf="@id/crewid"
-                    tools:ignore="MissingConstraints" />
-                <TextView
-                    android:id="@+id/c_position"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/bg_personname"
-                    android:gravity="center"
-                    android:layout_marginStart="50dp"
-                    android:text="人员职位"
-                    android:textColor="@android:color/black"
-                    android:textSize="6pt"
-                    app:layout_constraintTop_toBottomOf="@id/crewid"
-                    tools:ignore="MissingConstraints" />
-                <TextView
-                    android:id="@+id/cposition"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/bg_personname"
-                    android:gravity="center"
-                    android:layout_marginStart="50dp"
-                    android:text="领导"
-                    android:textColor="@android:color/black"
-                    android:textSize="6pt"
-                    app:layout_constraintTop_toBottomOf="@id/crewid"
-                    app:layout_constraintLeft_toRightOf="@+id/c_position"
-                    tools:ignore="MissingConstraints" />
-                <TextView
-                    android:id="@+id/phone_ID"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/bg_personname"
-                    android:gravity="center"
-                    android:layout_marginStart="50dp"
-                    android:text="手机证号"
-                    android:textColor="@android:color/black"
-                    android:textSize="6pt"
-                    app:layout_constraintTop_toBottomOf="@id/c_position"
-                    tools:ignore="MissingConstraints" />
-                <TextView
-                    android:id="@+id/phoneID"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
-                    android:background="@drawable/bg_personname"
-                    android:gravity="center"
-                    android:layout_marginStart="50dp"
-                    android:text="46513545312123123"
-                    android:textColor="@android:color/black"
-                    android:textSize="6pt"
-                    app:layout_constraintTop_toBottomOf="@id/c_position"
-                    app:layout_constraintLeft_toRightOf="@+id/phone_ID"
-                    tools:ignore="MissingConstraints" />
+<!--                    <TextView-->
+<!--                        android:id="@+id/c_id"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_marginTop="20dp"-->
+<!--                        android:background="@drawable/bg_personname"-->
+<!--                        android:gravity="center"-->
+<!--                        android:layout_marginStart="50dp"-->
+<!--                        android:text="9527"-->
+<!--                        android:textColor="@android:color/black"-->
+<!--                        android:textSize="6pt"-->
+<!--                        app:layout_constraintLeft_toRightOf="@+id/crewid"-->
+<!--                        app:layout_constraintTop_toBottomOf="@id/cname" />-->
+<!--                <TextView-->
+<!--                    android:id="@+id/position"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="20dp"-->
+<!--                    android:background="@drawable/bg_personname"-->
+<!--                    android:gravity="center"-->
+<!--                    android:layout_marginStart="50dp"-->
+<!--                    android:text="人员职位"-->
+<!--                    android:textColor="@android:color/black"-->
+<!--                    android:textSize="6pt"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/crewid"-->
+<!--                    tools:ignore="MissingConstraints" />-->
+<!--                <TextView-->
+<!--                    android:id="@+id/c_position"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="20dp"-->
+<!--                    android:background="@drawable/bg_personname"-->
+<!--                    android:gravity="center"-->
+<!--                    android:layout_marginStart="50dp"-->
+<!--                    android:text="人员职位"-->
+<!--                    android:textColor="@android:color/black"-->
+<!--                    android:textSize="6pt"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/crewid"-->
+<!--                    tools:ignore="MissingConstraints" />-->
+<!--                <TextView-->
+<!--                    android:id="@+id/cposition"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="20dp"-->
+<!--                    android:background="@drawable/bg_personname"-->
+<!--                    android:gravity="center"-->
+<!--                    android:layout_marginStart="50dp"-->
+<!--                    android:text="领导"-->
+<!--                    android:textColor="@android:color/black"-->
+<!--                    android:textSize="6pt"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/crewid"-->
+<!--                    app:layout_constraintLeft_toRightOf="@+id/c_position"-->
+<!--                    tools:ignore="MissingConstraints" />-->
+<!--                <TextView-->
+<!--                    android:id="@+id/phone_ID"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="20dp"-->
+<!--                    android:background="@drawable/bg_personname"-->
+<!--                    android:gravity="center"-->
+<!--                    android:layout_marginStart="50dp"-->
+<!--                    android:text="手机证号"-->
+<!--                    android:textColor="@android:color/black"-->
+<!--                    android:textSize="6pt"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/c_position"-->
+<!--                    tools:ignore="MissingConstraints" />-->
+<!--                <TextView-->
+<!--                    android:id="@+id/phoneID"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_marginTop="20dp"-->
+<!--                    android:background="@drawable/bg_personname"-->
+<!--                    android:gravity="center"-->
+<!--                    android:layout_marginStart="50dp"-->
+<!--                    android:text="46513545312123123"-->
+<!--                    android:textColor="@android:color/black"-->
+<!--                    android:textSize="6pt"-->
+<!--                    app:layout_constraintTop_toBottomOf="@id/c_position"-->
+<!--                    app:layout_constraintLeft_toRightOf="@+id/phone_ID"-->
+<!--                    tools:ignore="MissingConstraints" />-->
 
 
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="447dp"
-                android:layout_gravity="bottom"
-                android:gravity="start"
-                android:orientation="vertical">
-
-                <Button
-                    android:id="@+id/button_datagram"
-                    android:layout_width="344dp"
-                    android:layout_height="wrap_content"
-                    android:text="选择数据包" />
-
-                <Button
-                    android:id="@+id/button_video"
-                    android:layout_width="344dp"
-                    android:layout_height="wrap_content"
-                    android:text="选择视频" />
-
-                <Button
-                    android:id="@+id/add_new_sailor"
-                    android:layout_width="344dp"
-                    android:layout_height="wrap_content"
-                    android:text="添加新船员" />
-                <Button
-                    android:id="@+id/button_crews"
-                    android:layout_width="344dp"
-                    android:layout_height="wrap_content"
-                    android:text="本地人员数据" />
-                <Button
-                    android:id="@+id/set_face_login"
-                    android:layout_width="344dp"
-                    android:layout_height="wrap_content"
-                    android:text="设置人脸登入" />
-
-            </LinearLayout>
+<!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 <!--            <LinearLayout-->
 <!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="48dp"-->
+<!--                android:layout_height="447dp"-->
 <!--                android:layout_gravity="bottom"-->
-<!--                android:gravity="center"-->
-<!--                android:orientation="horizontal">-->
+<!--                android:gravity="start"-->
+<!--                android:orientation="vertical">-->
 
 <!--                <Button-->
-<!--                    android:id="@+id/footer_item_setting"-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:adjustViewBounds="true"-->
-<!--                    android:background="@android:color/transparent"-->
-<!--                    android:drawableStart="@drawable/ic_setting"-->
-<!--                    android:drawableLeft="@drawable/ic_setting"-->
-<!--                    android:drawablePadding="1dp"-->
-<!--                    android:gravity="center"-->
-<!--                    android:paddingLeft="5dp"-->
-<!--                    android:onClick="SetupMenu"-->
-<!--                    android:text="@string/Setup"-->
-<!--                    android:textAlignment="inherit"-->
-<!--                    android:textColor="@color/colorPrimary"-->
-<!--                    tools:ignore="OnClick" />-->
+<!--                    android:id="@+id/button_datagram"-->
+<!--                    android:layout_width="344dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="选择数据包" />-->
 
 <!--                <Button-->
-<!--                    android:id="@+id/footer_item_out"-->
-<!--                    android:layout_width="0dp"-->
-<!--                    android:layout_height="match_parent"-->
-<!--                    android:layout_weight="1"-->
-<!--                    android:background="@android:color/transparent"-->
-<!--                    android:drawableStart="@drawable/ic_out"-->
-<!--                    android:drawablePadding="1dp"-->
-<!--                    android:gravity="center"-->
-<!--                    android:paddingLeft="5dp"-->
-<!--                    android:text="退出"-->
-<!--                    android:onClick="exit"-->
-<!--                    android:textAlignment="center"-->
-<!--                    android:textColor="@color/colorPrimary" />-->
+<!--                    android:id="@+id/button_video"-->
+<!--                    android:layout_width="344dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="选择视频" />-->
+
+<!--                <Button-->
+<!--                    android:id="@+id/add_new_sailor"-->
+<!--                    android:layout_width="344dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="添加新船员" />-->
+<!--                <Button-->
+<!--                    android:id="@+id/button_crews"-->
+<!--                    android:layout_width="344dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="本地人员数据" />-->
+<!--                <Button-->
+<!--                    android:id="@+id/set_face_login"-->
+<!--                    android:layout_width="344dp"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:text="设置人脸登入" />-->
 
 <!--            </LinearLayout>-->
 
-        </com.google.android.material.navigation.NavigationView>
+<!--&lt;!&ndash;            <LinearLayout&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_width="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_height="48dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:layout_gravity="bottom"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:gravity="center"&ndash;&gt;-->
+<!--&lt;!&ndash;                android:orientation="horizontal">&ndash;&gt;-->
 
-    </androidx.drawerlayout.widget.DrawerLayout>
+<!--&lt;!&ndash;                <Button&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:id="@+id/footer_item_setting"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_width="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_height="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_weight="1"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:adjustViewBounds="true"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:background="@android:color/transparent"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:drawableStart="@drawable/ic_setting"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:drawableLeft="@drawable/ic_setting"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:drawablePadding="1dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:gravity="center"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:paddingLeft="5dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:onClick="SetupMenu"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:text="@string/Setup"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:textAlignment="inherit"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:textColor="@color/colorPrimary"&ndash;&gt;-->
+<!--&lt;!&ndash;                    tools:ignore="OnClick" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;                <Button&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:id="@+id/footer_item_out"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_width="0dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_height="match_parent"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:layout_weight="1"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:background="@android:color/transparent"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:drawableStart="@drawable/ic_out"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:drawablePadding="1dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:gravity="center"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:paddingLeft="5dp"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:text="退出"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:onClick="exit"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:textAlignment="center"&ndash;&gt;-->
+<!--&lt;!&ndash;                    android:textColor="@color/colorPrimary" />&ndash;&gt;-->
+
+<!--&lt;!&ndash;            </LinearLayout>&ndash;&gt;-->
+
+<!--        </com.google.android.material.navigation.NavigationView>-->
+
+<!--    </androidx.drawerlayout.widget.DrawerLayout>-->
 
 
-<<<<<<< HEAD
+
     <!--底部导航栏-->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation"
@@ -336,9 +336,8 @@
         app:menu="@menu/navigation" />
 
 
-=======
-        </com.google.android.material.navigation.NavigationView>
-    </androidx.drawerlayout.widget.DrawerLayout>
->>>>>>> cdcf6c92d3911e2f28d7b1c8ba996e14a331344b
+<!--        </com.google.android.material.navigation.NavigationView>-->
+<!--    </androidx.drawerlayout.widget.DrawerLayout>-->
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

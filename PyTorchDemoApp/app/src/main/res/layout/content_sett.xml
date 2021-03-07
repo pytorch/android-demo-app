@@ -35,7 +35,7 @@
                     android:layout_width="89dp"
                     android:layout_height="95dp"
                     android:padding="10dp"
-                    android:src="@drawable/profile" />
+                    android:src="@mipmap/profile" />
 
 
                 <LinearLayout
@@ -99,7 +99,7 @@
                 android:layout_height="41dp"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                android:src="@drawable/account" />
+                android:src="@mipmap/account" />
 
             <TextView
                 android:id="@+id/mypage_cart"
@@ -117,7 +117,7 @@
                 android:layout_margin="101dp"
 
                 android:layout_marginEnd="0dp"
-                android:src="@drawable/enter_logo" />
+                android:src="@mipmap/enter_logo" />
         </LinearLayout>
 
 
@@ -132,7 +132,7 @@
                 android:layout_height="41dp"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                android:src="@drawable/setting" />
+                android:src="@mipmap/setting" />
 
             <TextView
                 android:id="@+id/mypage_sns"
@@ -150,7 +150,7 @@
                 android:layout_margin="158dp"
 
                 android:layout_marginEnd="0dp"
-                android:src="@drawable/enter_logo" />
+                android:src="@mipmap/enter_logo" />
 
         </LinearLayout>
 
@@ -165,7 +165,7 @@
                 android:layout_height="41dp"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                android:src="@drawable/update_password" />
+                android:src="@mipmap/update_password" />
 
             <TextView
                 android:id="@+id/mypage_logout"
@@ -183,7 +183,7 @@
                 android:layout_margin="101dp"
 
                 android:layout_marginEnd="0dp"
-                android:src="@drawable/enter_logo" />
+                android:src="@mipmap/enter_logo" />
         </LinearLayout>
 
         <LinearLayout
@@ -197,7 +197,7 @@
                 android:layout_height="41dp"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                android:src="@drawable/help" />
+                android:src="@mipmap/help" />
 
             <TextView
                 android:id="@+id/mypage_notice"
@@ -215,7 +215,7 @@
                 android:layout_margin="101dp"
 
                 android:layout_marginEnd="0dp"
-                android:src="@drawable/enter_logo" />
+                android:src="@mipmap/enter_logo" />
         </LinearLayout>
 
         <LinearLayout
@@ -229,7 +229,7 @@
                 android:layout_height="41dp"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                android:src="@drawable/account" />
+                android:src="@mipmap/account" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -246,7 +246,7 @@
                 android:layout_margin="153dp"
 
                 android:layout_marginEnd="0dp"
-                android:src="@drawable/enter_logo" />
+                android:src="@mipmap/enter_logo" />
 
         </LinearLayout>
 
@@ -261,7 +261,7 @@
                 android:layout_height="41dp"
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
-                android:src="@drawable/account" />
+                android:src="@mipmap/account" />
 
             <TextView
                 android:layout_width="wrap_content"
@@ -278,7 +278,7 @@
                 android:layout_margin="153dp"
 
                 android:layout_marginEnd="0dp"
-                android:src="@drawable/enter_logo" />
+                android:src="@mipmap/enter_logo" />
 
         </LinearLayout>
 
