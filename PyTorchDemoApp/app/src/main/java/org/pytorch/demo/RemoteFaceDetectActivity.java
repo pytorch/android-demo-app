@@ -279,14 +279,14 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 //
 
 
-                    if (btnSwitchEncoder.getText().toString().contentEquals("软解")) {
-                        Toast.makeText(getApplicationContext(), "使用硬件编码", Toast.LENGTH_SHORT).show();
-                    } else {
-                        Toast.makeText(getApplicationContext(), "使用软件编码", Toast.LENGTH_SHORT).show();
-                    }
+//                    if (btnSwitchEncoder.getText().toString().contentEquals("软解")) {
+//                        Toast.makeText(getApplicationContext(), "使用硬件编码", Toast.LENGTH_SHORT).show();
+//                    } else {
+//                        Toast.makeText(getApplicationContext(), "使用软件编码", Toast.LENGTH_SHORT).show();
+//                    }
                     btnPublish.setText("停止");
                     btnDetect.setEnabled(true);
-                    btnSwitchEncoder.setEnabled(false);
+//                    btnSwitchEncoder.setEnabled(false);
 //                    btnPause.setEnabled(true);
                 } else if (btnPublish.getText().toString().contentEquals("停止")) {
                     mPublisher.stopPublish();
@@ -294,7 +294,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
                     btnDetect.setEnabled(false);
                     btnPublish.setText("推流");
 //                    btnRecord.setText("录像");
-                    btnSwitchEncoder.setEnabled(true);
+//                    btnSwitchEncoder.setEnabled(true);
 //                    btnPause.setEnabled(false);
                 }
             }
@@ -711,7 +711,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
             mPublisher.stopRecord();
             btnPublish.setText("推流");
 //            btnRecord.setText("录像");
-            btnSwitchEncoder.setEnabled(true);
+//            btnSwitchEncoder.setEnabled(true);
         } catch (Exception e1) {
             //
         }

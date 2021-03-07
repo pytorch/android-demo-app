@@ -1,4 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <item name="detect" type="id" />
+    <item name="url" type="id" />
+    <item name="swCam" type="id" />
+    <item name="publish" type="id" />
+    <item name="glsurfaceview_camera" type="id" />
 </resources>

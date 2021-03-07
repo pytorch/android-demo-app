@@ -161,38 +161,6 @@
         app:layout_constraintVertical_bias="0.5"
         tools:srcCompat="@tools:sample/avatars" />
 
-<!--    <Button-->
-<!--        android:id="@+id/swEnc"-->
-<!--        android:layout_width="84dp"-->
-<!--        android:layout_height="46dp"-->
-<!--        android:layout_marginBottom="2dp"-->
-<!--        android:text="软解"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/image_classification_result_header_row"-->
-<!--        app:layout_constraintEnd_toEndOf="parent" />-->
-
-<!--    <Button-->
-<!--        android:id="@+id/record_yasea"-->
-<!--        android:layout_width="66dp"-->
-<!--        android:layout_height="48dp"-->
-<!--        android:layout_marginEnd="16dp"-->
-<!--        android:text="保存"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/image_classification_result_header_row"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/swEnc" />-->
-
-
-
-
-    <!--    <Button-->
-<!--        android:id="@+id/pause"-->
-<!--        android:layout_width="74dp"-->
-<!--        android:layout_height="46dp"-->
-<!--        android:layout_marginEnd="42dp"-->
-<!--        android:text="暂停"-->
-<!--        app:layout_constraintBottom_toTopOf="@+id/image_classification_result_header_row"-->
-<!--        app:layout_constraintEnd_toStartOf="@+id/swCam"-->
-<!--        app:layout_constraintHorizontal_bias="0.0"-->
-<!--        app:layout_constraintStart_toStartOf="parent" />-->
-
 
     <EditText
         android:id="@+id/url"

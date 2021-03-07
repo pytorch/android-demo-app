@@ -3,6 +3,7 @@ package org.pytorch.demo;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.text.InputType;
 import android.view.View;
 import android.widget.Button;
@@ -19,6 +20,7 @@ import org.pytorch.demo.util.SharedPreferencesUtils;
 import org.pytorch.demo.widget.LoadingDialog;
 
 import java.io.IOException;
+import java.security.Policy;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.FutureTask;
@@ -225,6 +227,8 @@ public class AccountLoginActivity extends Activity
                 }
 
                 //判断账号和密码
+//                StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+//                StrictMode.setThreadPolicy(policy);
                 if (check_password(getAccount(), getPassword())) {
                     showToast("登录成功");
                     loadCheckBoxState();//记录下当前用户记住密码和自动登录的状态;
@@ -294,7 +298,7 @@ public class AccountLoginActivity extends Activity
                 if(jsonObject.has("detail")){
                     JSONObject jo =(JSONObject) jsonObject.getJSONObject("detail");
                     String hint = jo.getString("msg");
-                    Toast.makeText(this, hint, Toast.LENGTH_LONG).show();
+//                    Toast.makeText(this, hint, Toast.LENGTH_LONG).show();
                     return false;
                 }
                 else{
@@ -309,7 +313,7 @@ public class AccountLoginActivity extends Activity
             }
 
         }else{
-            Toast.makeText(this, "网络或服务器错误", Toast.LENGTH_LONG).show();
+//            Toast.makeText(this, "网络或服务器错误", Toast.LENGTH_LONG).show();
             return false;
         }
 
@@ -482,7 +486,7 @@ public class AccountLoginActivity extends Activity
      */
     public void showLoading() {
         if (mLoadingDialog == null) {
-            mLoadingDialog = new LoadingDialog(this, getString(R.string.loading), false);
+            mLoadingDialog = new LoadingDialog(this, "登录中", false);
         }
         mLoadingDialog.show();
     }
