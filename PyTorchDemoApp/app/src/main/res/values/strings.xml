@@ -77,4 +77,16 @@
     <string name="title_activity_add_new_crew">AddNewCrew</string>
     <string name="title_activity_set_face_login">SetFaceLogin</string>
 
+    <string name="account">请输入登录的账号</string>
+    <string name="password">请输入登录密码</string>
+    <string name="check_password">记住密码</string>
+    <string name="check_login">自动登录</string>
+    <string name="login">登录</string>
+    <string name="loading">正在加载数据</string>
+
+    <string name="title_func">功能</string>
+    <string name="title_data">数据</string>
+    <string name="title_sett">设置</string>
+    <string name="title_file">文件</string>
+
 </resources>

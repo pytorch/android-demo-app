@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <FrameLayout
+        android:id="@+id/main_vision_click_view"
+        style="@style/Clickable"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintHeight_percent=".5"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@mipmap/bg_main">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:drawableTop="@drawable/ic_vision_s"
+            android:drawablePadding="16dp"
+            android:text="@string/main_vision_button"
+            android:textAppearance="@style/TextAppearanceMainVisionNlp" />
+
+    </FrameLayout>
+
+    <TextView
+        android:id="@+id/filecontent"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/title_file"
+
+        app:layout_constraintTop_toBottomOf="@+id/main_vision_click_view"
+        android:textSize="50dp"
+        android:textAlignment="center"
+        tools:ignore="MissingConstraints" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

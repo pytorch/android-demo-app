@@ -5,21 +5,25 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
+import androidx.fragment.app.Fragment;
 
 import org.pytorch.demo.util.Util;
 
 import java.io.IOException;
 
-public class SetupMenuActivity extends AppCompatActivity {
+public class SetupMenuActivity extends Fragment {
     @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                            Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setupmenu);
         Util util = new Util(this);
@@ -53,6 +57,6 @@ public class SetupMenuActivity extends AppCompatActivity {
                 SetupMenuActivity.this.finish();
             }
         });
-
+        return inflater.inflate( R.layout.activity_setupmenu, container, false );  //要加载的layout文件
     }
 }

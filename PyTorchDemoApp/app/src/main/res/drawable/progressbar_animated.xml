@@ -1,0 +1,4 @@
+<animated-rotate xmlns:android="http://schemas.android.com/apk/res/android"
+    android:drawable="@mipmap/icon_dialog_progressbar"
+    android:pivotX="50%"
+    android:pivotY="50%" />

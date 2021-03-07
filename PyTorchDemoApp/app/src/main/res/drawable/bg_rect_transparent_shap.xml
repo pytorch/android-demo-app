@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- 实心填充 -->
+    <solid android:color="@color/transparent_half" />
+
+    <!-- 边角的圆弧半径 -->
+    <corners android:radius="8dip" />
+
+</shape>
