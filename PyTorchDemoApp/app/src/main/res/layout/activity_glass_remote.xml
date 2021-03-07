@@ -1,20 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="@android:color/black"
+    android:id="@+id/constraintLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    tools:context=".GlassRemoteActivity">
 
     <LinearLayout
-        android:layout_width="189dp"
+        android:layout_width="272dp"
         android:layout_height="match_parent"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="0dp"
-        android:layout_marginEnd="0dp"
         android:layout_toEndOf="@+id/splitCameraView"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/openglview"
+        tools:layout_editor_absoluteY="14dp">
+
 
         <ImageView
             android:id="@+id/imageView2"
@@ -30,7 +32,6 @@
             android:visibility="visible"
             tools:srcCompat="@tools:sample/avatars"
             tools:visibility="visible" />
-
 
         <org.pytorch.demo.vision.view.ResultRowView
             android:id="@+id/image_classification_result_header_row"
@@ -97,45 +98,44 @@
             app:progressBarPaddingRes="@dimen/result_row_progress_bar_padding"
             app:textAppearance="@style/TextAppearanceImageClassificationResultTop1" />
 
-        <Button
-            android:id="@+id/videoBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="录像" />
-
     </LinearLayout>
 
     <org.pytorch.demo.vision.Helper.GraphicOverlay
-        android:id="@+id/graphicOverlay2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:id="@+id/graphicOverlay"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="visible" />
 
-    <com.madgaze.smartglass.view.SplitCameraView
-        android:id="@+id/splitCameraView"
+    <com.pedro.rtplibrary.view.OpenGlView
+        android:id="@+id/openglview"
         android:layout_width="500dp"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
 
-    <LinearLayout
-        android:layout_width="478dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/et_url"
+        android:layout_width="376dp"
+        android:layout_height="44dp"
+        android:layout_marginBottom="8dp"
+        android:hint="流地址"
+        android:textColor="#f00"
+        android:textColorHint="#f00"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHorizontal_bias="0.366"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/start_stop" />
+
+    <Button
+        android:id="@+id/start_stop"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:padding="15dp">
+        android:layout_marginStart="24dp"
+        android:layout_marginBottom="4dp"
+        android:text="推流"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
-<!--        <Button-->
-<!--            android:id="@+id/cameraOnOffBtn"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Start" />-->
-
-<!--        <Button-->
-<!--            android:id="@+id/takePictureBtn"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="Take Picture" />-->
-
-    </LinearLayout>
-
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,6 +15,11 @@ import java.io.OutputStream;
 import java.util.Arrays;
 
 public class Utils {
+<<<<<<< Updated upstream
+  public static String token = null;
+=======
+  public static int TOP_K = 3;
+>>>>>>> Stashed changes
   public static String assetFilePath(Context context, String assetName) {
     File file = new File(context.getFilesDir(), assetName);
     if (file.exists() && file.length() > 0) {
@@ -35,6 +40,15 @@ public class Utils {
       Log.e(Constants.TAG, "Error process asset " + assetName + " to file path");
     }
     return null;
+  }
+
+  public static double distance2middle(float[] box)
+  {
+    float midx = (box[0] + box[2]) / 2;
+    float midy = (box[1] + box[3]) / 2;
+
+    double dist = Math.pow((midx - 0.5), 2) + Math.pow((midy - 0.5), 2);
+    return dist;
   }
 
   public static int[] topK(float[] a, final int topk) {

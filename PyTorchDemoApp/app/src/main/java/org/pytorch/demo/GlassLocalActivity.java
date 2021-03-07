@@ -103,7 +103,7 @@ public class GlassLocalActivity extends AppCompatActivity {
             public void onInit(int status) {
                 // TODO Auto-generated method stub
                 if (status == TextToSpeech.SUCCESS) {
-                    int result = mSpeech.setLanguage(Locale.ENGLISH);
+                    int result = mSpeech.setLanguage(Locale.CHINESE);
                     if (result == TextToSpeech.LANG_MISSING_DATA
                             || result == TextToSpeech.LANG_NOT_SUPPORTED) {
                         Log.e("lanageTag", "not use");
@@ -111,7 +111,7 @@ public class GlassLocalActivity extends AppCompatActivity {
 //                        btn.setEnabled(true);
 //                        mSpeech.speak("good day today", TextToSpeech.QUEUE_FLUSH,
 //                                null);
-                        mSpeech.speak("Hello there", TextToSpeech.QUEUE_FLUSH, null, "0");
+                        mSpeech.speak("你好", TextToSpeech.QUEUE_FLUSH, null, "0");
                     }
                 }
             }
@@ -867,7 +867,7 @@ public class GlassLocalActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ((Button)findViewById(R.id.videoBtn)).setText("START");
+                        ((Button)findViewById(R.id.videoBtn)).setText("录像");
                         ((findViewById(R.id.videoBtn))).setEnabled(true);
                     }
                 });
@@ -879,7 +879,7 @@ public class GlassLocalActivity extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        ((Button)findViewById(R.id.videoBtn)).setText("START");
+                        ((Button)findViewById(R.id.videoBtn)).setText("录像");
                         ((findViewById(R.id.videoBtn))).setEnabled(true);
                     }
                 });
@@ -919,7 +919,7 @@ public class GlassLocalActivity extends AppCompatActivity {
         } else {
             MDToast.makeText(this, "Start Recording", MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show();
             MySplitCamera.getInstance(this).startRecording();
-            ((Button)(findViewById(R.id.videoBtn))).setText("STOP VIDEO");
+            ((Button)(findViewById(R.id.videoBtn))).setText("停止录像");
             ((findViewById(R.id.videoBtn))).setEnabled(true);
 
         }

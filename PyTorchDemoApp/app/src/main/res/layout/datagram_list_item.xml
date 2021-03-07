@@ -7,27 +7,27 @@
     <LinearLayout
         android:id="@+id/linearlayout"
         android:layout_width="500dp"
-        android:layout_height="100dp"
+        android:layout_height="60dp"
         android:layout_margin="5dp"
-        android:layout_marginLeft="10dp"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/text1"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="start"
             android:layout_margin="10dp"
-            android:textSize="25sp"
-            android:textColor="@color/cardview_light_background"
-            />
+            android:textColor="@android:color/black"
+            android:textSize="18sp" />
+
         <TextView
             android:id="@+id/text2"
-            android:layout_width="wrap_content"
+            android:layout_width="200dp"
             android:layout_height="wrap_content"
+            android:layout_gravity="bottom"
             android:layout_margin="10dp"
-            android:textSize="15sp"
-            android:textColor="@color/cardview_light_background"
-            />
+            android:textColor="@android:color/black"
+            android:textSize="12sp" />
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -2,6 +2,7 @@ package org.pytorch.demo;
 
 
 import android.content.Context;
+import android.hardware.usb.UsbDevice;
 import android.os.Environment;
 
 import com.madgaze.smartglass.otg.BaseCamera;

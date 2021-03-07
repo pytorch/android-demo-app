@@ -23,6 +23,7 @@
         android:layout_height="match_parent"
         tools:openDrawer="start">
 
+<<<<<<< HEAD
 
         <FrameLayout
             android:id="@+id/content"
@@ -31,10 +32,63 @@
             android:layout_weight="1"
             app:layout_constraintBottom_toTopOf="@+id/navigation"
             tools:ignore="MissingConstraints">
+=======
+        <!--主页内容-->
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main_context"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <FrameLayout
+                android:id="@+id/main_vision_click_view"
+                style="@style/Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintHeight_percent=".5"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableTop="@drawable/ic_vision_s"
+                    android:drawablePadding="16dp"
+                    android:text="@string/main_vision_button"
+                    android:textAppearance="@style/TextAppearanceMainVisionNlp" />
+
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/main_nlp_click_view"
+                style="@style/Clickable"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintHeight_percent=".5"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/main_vision_click_view">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:drawableTop="@drawable/ic_language_s"
+                    android:drawablePadding="16dp"
+                    android:text="@string/main_glass_button"
+                    android:textAppearance="@style/TextAppearanceMainVisionNlp" />
+
+            </FrameLayout>
+>>>>>>> cdcf6c92d3911e2f28d7b1c8ba996e14a331344b
 
         </FrameLayout>
 
+<<<<<<< HEAD
         <!--侧边导航栏-->
+=======
+>>>>>>> cdcf6c92d3911e2f28d7b1c8ba996e14a331344b
         <com.google.android.material.navigation.NavigationView
             android:id="@+id/navigation_view"
             android:layout_width="match_parent"
@@ -202,6 +256,22 @@
                     android:layout_height="wrap_content"
                     android:text="选择视频" />
 
+                <Button
+                    android:id="@+id/add_new_sailor"
+                    android:layout_width="344dp"
+                    android:layout_height="wrap_content"
+                    android:text="添加新船员" />
+                <Button
+                    android:id="@+id/button_crews"
+                    android:layout_width="344dp"
+                    android:layout_height="wrap_content"
+                    android:text="本地人员数据" />
+                <Button
+                    android:id="@+id/set_face_login"
+                    android:layout_width="344dp"
+                    android:layout_height="wrap_content"
+                    android:text="设置人脸登入" />
+
             </LinearLayout>
 
 <!--            <LinearLayout-->
@@ -251,6 +321,7 @@
     </androidx.drawerlayout.widget.DrawerLayout>
 
 
+<<<<<<< HEAD
     <!--底部导航栏-->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/navigation"
@@ -265,5 +336,9 @@
         app:menu="@menu/navigation" />
 
 
+=======
+        </com.google.android.material.navigation.NavigationView>
+    </androidx.drawerlayout.widget.DrawerLayout>
+>>>>>>> cdcf6c92d3911e2f28d7b1c8ba996e14a331344b
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -70,11 +70,12 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
     private Button btnRecord;
     private Button btnSwitchEncoder;
     private Button btnPause;
+    private Button btnDetect;
     private Button record;
     private SharedPreferences sp;
-    private String rtmpUrl = "rtmp://"+new Util().server_uri+"/" + getRandomAlphaString(3) + '/' + getRandomAlphaDigitString(5);
-    private String recPath = Environment.getExternalStorageDirectory().getPath() + "/test.mp4";
-    final private String serverUri = new Util(RemoteFaceDetectActivity.this).ws;
+    private String rtmpUrl;
+    private String recPath;
+    private String serverUri;
     private WebSocket webSocket;
     private SrsPublisher mPublisher;
     private ArrayList<NamedBox> namedboxpool;
@@ -82,7 +83,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 
     private int mWidth = 1080;
     private int mHeight = 2220;
-    private int TOP_K = 3;
+    private int TOP_K = Utils.TOP_K;
     private boolean isPermissionGranted = false;
     private ResultRowView[] mResultRowViews = new ResultRowView[TOP_K];
     private ImageView imageView;
@@ -141,16 +142,24 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         System.out.println("in on create");
+        server_state_ready = false;
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_remote_face_detect);
 
         // response screen rotation event
 //        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 
-        requestPermission();
+        //init parameters
+        Util util = new Util();
+//        rtmpUrl = util.getRTMPURL();
+        rtmpUrl = "rtmp://10.138.116.66/live/livestream";
+        recPath = Environment.getExternalStorageDirectory().getPath() + "/test.mp4";
+        serverUri = util.ws;
+
+        requestPermission_rfda();
     }
 
-    private void requestPermission() {
+    private void requestPermission_rfda() {
         //1. 检查是否已经有该权限
         if (Build.VERSION.SDK_INT >= 23 && (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
@@ -183,6 +192,8 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
         }
     }
 
+    private boolean server_state_ready;
+
     private void init() {
         // restore data.
 //        sp = getSharedPreferences("FaceDetection", MODE_PRIVATE);
@@ -192,11 +203,12 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
         final EditText efu = (EditText) findViewById(R.id.url);
         efu.setText(rtmpUrl);
 
+        btnDetect = (Button) findViewById(R.id.detect);
         btnPublish = (Button) findViewById(R.id.publish);
         btnSwitchCamera = (Button) findViewById(R.id.swCam);
-        btnRecord = (Button) findViewById(R.id.record_yasea);
-        btnSwitchEncoder = (Button) findViewById(R.id.swEnc);
-        btnPause = (Button) findViewById(R.id.pause);
+//        btnRecord = (Button) findViewById(R.id.record_yasea);
+//        btnSwitchEncoder = (Button) findViewById(R.id.swEnc);
+//        btnPause = (Button) findViewById(R.id.pause);
         btnPause.setEnabled(false);
 
         graphicOverlay = findViewById(R.id.graphicOverlay);
@@ -261,9 +273,8 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 
                     mPublisher.startPublish(rtmpUrl);
                     mPublisher.startCamera();
+//
 
-                    String msg = "{\"message\": \"rtmp stream\", \"rtmp\": \""+rtmpUrl+"\"}";
-                    webSocket.sendText(msg);
 
                     if (btnSwitchEncoder.getText().toString().contentEquals("软解")) {
                         Toast.makeText(getApplicationContext(), "使用硬件编码", Toast.LENGTH_SHORT).show();
@@ -271,30 +282,61 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
                         Toast.makeText(getApplicationContext(), "使用软件编码", Toast.LENGTH_SHORT).show();
                     }
                     btnPublish.setText("停止");
+                    btnDetect.setEnabled(true);
                     btnSwitchEncoder.setEnabled(false);
-                    btnPause.setEnabled(true);
+//                    btnPause.setEnabled(true);
                 } else if (btnPublish.getText().toString().contentEquals("停止")) {
                     mPublisher.stopPublish();
                     mPublisher.stopRecord();
+                    btnDetect.setEnabled(false);
                     btnPublish.setText("推流");
-                    btnRecord.setText("保存");
+//                    btnRecord.setText("录像");
                     btnSwitchEncoder.setEnabled(true);
-                    btnPause.setEnabled(false);
+//                    btnPause.setEnabled(false);
                 }
             }
         });
-        btnPause.setOnClickListener(new View.OnClickListener() {
+
+        Button btnRecog = (Button) findViewById(R.id.btn_recog);
+        btnRecog.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
-                if(btnPause.getText().toString().equals("暂停")){
-                    mPublisher.pausePublish();
-                    btnPause.setText("继续");
-                }else{
-                    mPublisher.resumePublish();
-                    btnPause.setText("暂停");
+            public void onClick(View v) {
+                String msg = "{\"event\": \"detect\"}";
+//                    webSocket.sendText(msg);
+                if (server_state_ready){
+                    webSocket.sendText(msg);
+                    System.out.println("detect sent");
+                }
+                else{
+                    Toast.makeText(RemoteFaceDetectActivity.this, "server还没有准备好", Toast.LENGTH_SHORT).show();
                 }
             }
         });
+//        btnPause.setOnClickListener(new View.OnClickListener() {
+
+
+        btnDetect.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                // 1. send okhttp to server
+                // 2. get detect result
+                // 3. pass result to nbp
+                Toast.makeText(RemoteFaceDetectActivity.this, "检测中", Toast.LENGTH_SHORT).show();
+            }
+        });
+//        btnPause.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                if(btnPause.getText().toString().equals("暂停")){
+//                    mPublisher.pausePublish();
+//                    btnPause.setText("继续");
+//                }else{
+//                    mPublisher.resumePublish();
+//                    btnPause.setText("暂停");
+//                }
+//            }
+//        });
 
         btnSwitchCamera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -304,41 +346,47 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
             }
         });
 
-        btnRecord.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (btnRecord.getText().toString().contentEquals("保存")) {
-                    if (mPublisher.startRecord(recPath)) {
-                        btnRecord.setText("暂停");
-                    }
-                } else if (btnRecord.getText().toString().contentEquals("暂停")) {
-                    mPublisher.pauseRecord();
-                    btnRecord.setText("继续");
-                } else if (btnRecord.getText().toString().contentEquals("继续")) {
-                    mPublisher.resumeRecord();
-                    btnRecord.setText("暂停");
-                }
-            }
-        });
+//        btnRecord.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (btnRecord.getText().toString().contentEquals("录像")) {
+//                    if (mPublisher.startRecord(recPath)) {
+//                        btnRecord.setText("暂停");
+//                    }
+//                } else if (btnRecord.getText().toString().contentEquals("暂停")) {
+//                    mPublisher.pauseRecord();
+//                    btnRecord.setText("继续");
+//                } else if (btnRecord.getText().toString().contentEquals("继续")) {
+//                    mPublisher.resumeRecord();
+//                    btnRecord.setText("暂停");
+//                }
+//            }
+//        });
 
-        btnSwitchEncoder.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (btnSwitchEncoder.getText().toString().contentEquals("软解")) {
-                    mPublisher.switchToSoftEncoder();
-                    btnSwitchEncoder.setText("硬解");
-                } else if (btnSwitchEncoder.getText().toString().contentEquals("硬解")) {
-                    mPublisher.switchToHardEncoder();
-                    btnSwitchEncoder.setText("软解");
-                }
-            }
-        });
+//        btnSwitchEncoder.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (btnSwitchEncoder.getText().toString().contentEquals("软解")) {
+//                    mPublisher.switchToSoftEncoder();
+//                    btnSwitchEncoder.setText("硬解");
+//                } else if (btnSwitchEncoder.getText().toString().contentEquals("硬解")) {
+//                    mPublisher.switchToHardEncoder();
+//                    btnSwitchEncoder.setText("软解");
+//                }
+//            }
+//        });
 
 
         namedboxpool = new ArrayList<>();
         webSocketFactory = new WebSocketFactory();
 //        WebSocket webSocket;
         try{
+//            serverUri.replace("{RTMP}", rtmpUrl);
+
+//            System.out.println("in util ws is " + ws);
+            serverUri=serverUri.replace("{TOKEN}", Utils.token);
+            serverUri = serverUri.replace("{RTMP}", "livestream");
+            System.out.println("in rfda, serveruri " + serverUri);
             webSocket=webSocketFactory.createSocket(serverUri);
             // Android 4.0 之后不能在主线程中请求HTTP请求
 //            new Thread(new Runnable(){
@@ -359,6 +407,8 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 
             webSocket.connect();
             webSocket.addListener(new WebSocketAdapter() {
+
+
                 @Override
                 public void onTextMessage(WebSocket websocket, String message) throws Exception {
                     // Received a text message.
@@ -374,6 +424,13 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 //                    namedboxpool.clear();
                     if (message != null)
                     {
+
+                        if (message.contains("ready"))
+                        {
+                            server_state_ready = true;
+                            Toast.makeText(RemoteFaceDetectActivity.this, "ws连接成功", Toast.LENGTH_SHORT).show();
+                        }
+//                        System.out.println("in listener message is " + message);
                         updateNamedboxpool(message);
 //                        namedboxpool.add(namedBox);
                     }
@@ -420,10 +477,13 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
         }
 
     }
+
+    // [{"topk": ["TN", "DH", "LJJ"], "box": [-24.315364837646484, 207.6920166015625, 189.6284942626953, 450.4494934082031], "distances": [0.2739424407482147, 0.33132535219192505, 0.35604554414749146]}]
     private void updateNamedboxpool(String jsonString){
         try{
             JSONObject jsonObject = new JSONObject(jsonString);
             int count = jsonObject.getInt("count");
+//            int count = jsonObject.length();
             JSONArray id_array = jsonObject.getJSONArray("id");
             JSONArray id_k_array = jsonObject.getJSONArray("id_k");
             JSONArray prob_array = jsonObject.getJSONArray("prob");
@@ -498,7 +558,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 
 
         for (NamedBox namedBox : namedboxpool)
-        {
+        { 
             if (namedBox == least_index) {
                 color = Color.BLUE;
             }
@@ -599,8 +659,8 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
             //if the camera was busy and available again
             mPublisher.startCamera();
         }
-        String msg = "{\"message\": \"rtmp stream\", \"rtmp\": \""+rtmpUrl+"\"}";
-        webSocket.sendText(msg);
+//        String msg = "{\"message\": \"rtmp stream\", \"rtmp\": \""+rtmpUrl+"\"}";
+//        webSocket.sendText(msg);
     }
 
     @Override
@@ -652,7 +712,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
         }
         mPublisher.stopEncode();
         mPublisher.stopRecord();
-        btnRecord.setText("record");
+        btnRecord.setText("录像");
         mPublisher.setScreenOrientation(newConfig.orientation);
         if (btnPublish.getText().toString().contentEquals("stop")) {
             mPublisher.startEncode();
@@ -660,35 +720,15 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
         mPublisher.startCamera();
     }
 
-    private static String getRandomAlphaString(int length) {
-        String base = "abcdefghijklmnopqrstuvwxyz";
-        Random random = new Random();
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < length; i++) {
-            int number = random.nextInt(base.length());
-            sb.append(base.charAt(number));
-        }
-        return sb.toString();
-    }
 
-    private static String getRandomAlphaDigitString(int length) {
-        String base = "abcdefghijklmnopqrstuvwxyz0123456789";
-        Random random = new Random();
-        StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < length; i++) {
-            int number = random.nextInt(base.length());
-            sb.append(base.charAt(number));
-        }
-        return sb.toString();
-    }
 
     private void handleException(Exception e) {
         try {
             Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
             mPublisher.stopPublish();
             mPublisher.stopRecord();
-            btnPublish.setText("publish");
-            btnRecord.setText("record");
+            btnPublish.setText("推流");
+            btnRecord.setText("录像");
             btnSwitchEncoder.setEnabled(true);
         } catch (Exception e1) {
             //

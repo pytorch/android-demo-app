@@ -4,13 +4,11 @@
     package="org.pytorch.demo">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
-
     <uses-permission android:name="android.permission.CAMERA" /> <!-- 允许程序打开网络套接字 -->
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-<!--    <uses-permission android:name="android.permission." />-->
 
     <application
         android:allowBackup="true"
@@ -20,9 +18,32 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
         <activity
+            android:name=".SelectCrew"
+            android:label="@string/title_activity_select_crew"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.mydomain.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
+        <activity
+            android:name=".vision.SetFaceLogin"
+            android:label="@string/title_activity_set_face_login"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
+        <activity
+            android:name=".AddNewCrew"
+            android:label="@string/title_activity_add_new_crew"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
+        <activity
             android:name=".SelectVideos"
             android:label="@string/title_activity_select_videos"
-            android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
 
         <uses-library
             android:name="com.google.android.wearable"
@@ -38,8 +59,11 @@
         <activity
             android:name=".GlassLocalActivity"
             android:label="@string/title_activity_glass_local"
-            android:screenOrientation="landscape">
-        </activity>
+            android:screenOrientation="landscape" />
+        <activity
+            android:name=".GlassRemoteActivity"
+            android:label="@string/title_activity_glass_local"
+            android:screenOrientation="landscape" />
         <activity
             android:name=".SelectFaceDatagram"
             android:label="@string/title_activity_select_face_datagram"
@@ -63,7 +87,11 @@
             tools:ignore="Instantiatable" />
 
         <activity android:name=".vision.VisionListActivity" />
+<<<<<<< HEAD
 
+=======
+        <activity android:name=".vision.GlassListActivity" />
+>>>>>>> cdcf6c92d3911e2f28d7b1c8ba996e14a331344b
         <activity
             android:name=".vision.ImageClassificationActivity"
             android:label="@string/image_classification_title" />

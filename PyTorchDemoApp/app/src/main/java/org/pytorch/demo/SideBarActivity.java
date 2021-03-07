@@ -1,15 +1,18 @@
 package org.pytorch.demo;
 
 import android.annotation.SuppressLint;
-
+import android.content.Context;
 import android.content.Intent;
-
+import android.content.SharedPreferences;
 import android.content.res.ColorStateList;
 import android.os.Bundle;
-
+import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,12 +22,16 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
+<<<<<<< HEAD
+=======
+import org.pytorch.demo.nlp.NLPListActivity;
+import org.pytorch.demo.vision.GlassListActivity;
+import org.pytorch.demo.vision.SetFaceLogin;
+import org.pytorch.demo.vision.VisionListActivity;
+>>>>>>> cdcf6c92d3911e2f28d7b1c8ba996e14a331344b
 
 public class SideBarActivity extends AppCompatActivity {
 
@@ -85,6 +92,7 @@ public class SideBarActivity extends AppCompatActivity {
 
         });
 
+<<<<<<< HEAD
 //        findViewById(R.id.main_vision_click_view).setOnClickListener(v -> startActivity(new Intent(SideBarActivity.this, VisionListActivity.class)));
 //        findViewById(R.id.main_nlp_click_view).setOnClickListener(v -> startActivity(new Intent(SideBarActivity.this, NLPListActivity.class)));
         BottomNavigationView navigation = findViewById(R.id.navigation);
@@ -116,6 +124,13 @@ public class SideBarActivity extends AppCompatActivity {
                 }
                 return false;
             };
+=======
+        findViewById(R.id.main_vision_click_view).setOnClickListener(v -> startActivity(new Intent(SideBarActivity.this, VisionListActivity.class)));
+        findViewById(R.id.main_nlp_click_view).setOnClickListener(v -> startActivity(new Intent(SideBarActivity.this, GlassListActivity.class)));
+        Toast.makeText(this, "in sba, token = "+Utils.token, Toast.LENGTH_LONG).show();
+    }
+
+>>>>>>> cdcf6c92d3911e2f28d7b1c8ba996e14a331344b
     public void init_function_button(){
         findViewById(R.id.button_datagram).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,6 +145,28 @@ public class SideBarActivity extends AppCompatActivity {
                 startActivity(new Intent(SideBarActivity.this, SelectVideos.class));
             }
         });
+
+        findViewById(R.id.set_face_login).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SideBarActivity.this, SetFaceLogin.class));
+            }
+        });
+
+        findViewById(R.id.add_new_sailor).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SideBarActivity.this, AddNewCrew.class));
+            }
+        });
+        findViewById(R.id.button_crews).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SideBarActivity.this, SelectCrew.class));
+            }
+        });
+
+
     }
 
 
