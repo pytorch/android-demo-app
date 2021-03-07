@@ -237,7 +237,11 @@
                     android:layout_width="344dp"
                     android:layout_height="wrap_content"
                     android:text="添加新船员" />
-
+                <Button
+                    android:id="@+id/button_crews"
+                    android:layout_width="344dp"
+                    android:layout_height="wrap_content"
+                    android:text="本地人员数据" />
                 <Button
                     android:id="@+id/set_face_login"
                     android:layout_width="344dp"

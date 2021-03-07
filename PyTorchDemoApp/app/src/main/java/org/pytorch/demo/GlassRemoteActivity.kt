@@ -75,13 +75,17 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
     Log.e("Pedro", "auth success")
   }
 
+  override fun onNewBitrateRtmp(bitrate: Long) {
+    TODO("Not yet implemented")
+  }
+
   override fun onConnectionSuccessRtmp() {
     runOnUiThread {
       Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
     }
   }
 
-  override fun onConnectionFailedRtmp(reason: String?) {
+  override fun onConnectionFailedRtmp(reason: String) {
     runOnUiThread {
       Toast.makeText(this, "Failed $reason", Toast.LENGTH_SHORT).show()
       rtmpUSB.stopStream(uvcCamera)

@@ -86,6 +86,8 @@ public class Util {
         System.out.println("rtmp uri " + ws);
 
     }
+
+
     public Util(){
         File project_dir = new File(project_path);
         if (!project_dir.exists()){
@@ -93,9 +95,14 @@ public class Util {
         }
         JSONObject jsonObject = GetLocalJson();
         try{
-            ws = jsonObject.getString("rtmp_uri");
-            server_uri = jsonObject.getString("server_uri");
-        }catch (JSONException | NullPointerException jsonException){
+//            String rtmp_uri = jsonObject.getString("rtmp_uri");
+
+//            server_uri = jsonObject.getString("server_uri");
+            server_uri = "10.138.100.154";
+            ws = "ws://"+server_uri+":8080/ws?rtmp={RTMP}&token={TOKEN}";
+            System.out.println("in util ws is " + ws);
+
+        }catch (NullPointerException jsonException){
             jsonException.printStackTrace();
         }
         if (ws == null){
@@ -386,6 +393,38 @@ public class Util {
         return files;
     }
 
+    public String get_embedding_from_file(File f) throws IOException {
+        FileInputStream fileInputStream = new FileInputStream(f);
+        int length = fileInputStream.available();
+        byte bytes[] = new byte[length];
+        fileInputStream.read(bytes);
+        fileInputStream.close();
+        String str =new String(bytes, StandardCharsets.UTF_8);
+        return str;
+    }
+    public String get_embeddings_from_files(){
+//        File Directory = getFilesDir();
+        File[] files = GetLocalDatagramFiles();
+        String embedding_str = "";
+        if(files.length == 0)
+            return "";
+        for (File f: files){
+            System.out.println("in fda reading file " + f.getName());
+            try{
+                String str = get_embedding_from_file(f);
+                embedding_str += str;
+                System.out.println("str len is "+str.length()+" and total embedding len is "+ embedding_str.length());
+
+            }catch (FileNotFoundException fileNotFoundException){
+                fileNotFoundException.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+        return embedding_str;
+    }
+
     public boolean save_embedding_local_file(Utils.NamedEmbedding embedding){
 
         String json_str = "{\"embedding\": [";
@@ -583,5 +622,113 @@ public class Util {
             sb.append(base.charAt(number));
         }
         return sb.toString();
+    }
+
+
+
+    public class Crew{
+        String crew_id;
+        File crew_file;
+
+        public String getCrew_id() {
+            return crew_id;
+        }
+
+        public File getCrew_file() {
+            return crew_file;
+        }
+//        Crew(String i, File f){
+//            this.crew_file = f;
+//            this.crew_id = i;
+//        }
+
+        Crew(String jsonString, File file){
+            if (jsonString.length() < 10)
+                return;
+            try{
+                jsonString = jsonString.replace("\\","");
+                if (jsonString.startsWith("\""))
+                    jsonString = jsonString.substring(jsonString.indexOf('{'));
+                if (jsonString.endsWith("\""))
+                    jsonString = jsonString.substring(0, jsonString.indexOf('}')+1);
+                System.out.println("In NamedEmbedding json str is " + jsonString);
+                JSONObject jsonObject = new JSONObject(jsonString);
+                this.crew_id = jsonObject.getString("name");
+                JSONArray jsonArray = jsonObject.getJSONArray("embedding");
+                this.crew_file = file;
+            }catch (JSONException jsonException)
+            {
+                jsonException.printStackTrace();
+                System.out.println("in catch json str is " + jsonString);
+                this.crew_file = null;
+                this.crew_id = null;
+            }
+
+        }
+    }
+    public void write_file_override(String str, File file){
+        FileOutputStream fileOutputStream = null;
+        try {
+            fileOutputStream = new FileOutputStream(file, false);
+            fileOutputStream.write(str.getBytes());
+            fileOutputStream.flush();
+            fileOutputStream.close();
+        } catch (FileNotFoundException fileNotFoundException) {
+            fileNotFoundException.printStackTrace();
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+
+    }
+
+    public void delete_by_name(String name, String filename){
+        File datagram_file  = new File(datagram_path, filename);
+        if (datagram_file.exists()){
+            String str = null;
+            // 读出文件
+            try {
+                str = get_embedding_from_file(datagram_file);
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+
+            int name_pos = str.lastIndexOf(name);
+            String str1 = str.substring(0, name_pos);
+            String str2 = str.substring(name_pos);
+            int str1_end = str1.lastIndexOf("$");
+            int str2_start = str2.indexOf("$");
+            System.out.println("name in str is "+ str.indexOf(name));
+            str = str1.substring(0, str1_end).concat(str2.substring(str2_start));
+            System.out.println("name in str is "+ str.indexOf(name));
+            // 写入文件
+            write_file_override(str, datagram_file);
+        }
+
+    }
+
+    public ArrayList<Crew> get_all_crews(){
+
+        ArrayList<Crew> crewArrayList = new ArrayList<>();
+        File[] files = GetLocalDatagramFiles();
+        String embedding_str = "";
+        if(files.length == 0)
+            return null;
+        for (File f: files){
+            String str = null;
+            try {
+                str = get_embedding_from_file(f);
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+            String[] strings = str.split(deliminator);
+            for (String s : strings){
+                if(s.length() > 100){
+                    crewArrayList.add(new Crew(s, f));
+                }
+            }
+        }
+
+        System.out.println("CrewList.size() "+crewArrayList.size());
+        return crewArrayList;
     }
 }

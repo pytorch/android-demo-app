@@ -15,6 +15,7 @@ import java.io.OutputStream;
 import java.util.Arrays;
 
 public class Utils {
+  public static String token = null;
   public static String assetFilePath(Context context, String assetName) {
     File file = new File(context.getFilesDir(), assetName);
     if (file.exists() && file.length() > 0) {

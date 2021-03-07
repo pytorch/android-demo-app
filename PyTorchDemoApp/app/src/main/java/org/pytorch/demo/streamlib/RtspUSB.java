@@ -5,6 +5,7 @@ import android.media.MediaCodec;
 import android.os.Build;
 import androidx.annotation.RequiresApi;
 
+import com.pedro.encoder.Frame;
 import com.pedro.encoder.utils.CodecUtil;
 import com.pedro.rtplibrary.view.LightOpenGlView;
 import com.pedro.rtplibrary.view.OpenGlView;
@@ -25,7 +26,7 @@ import java.nio.ByteBuffer;
 public class RtspUSB extends USBBase {
 
     private RtspClient rtspClient;
-
+    private String url = null;
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     public RtspUSB(OpenGlView openGlView, ConnectCheckerRtsp connectCheckerRtsp) {
         super(openGlView);
@@ -70,7 +71,9 @@ public class RtspUSB extends USBBase {
 
     @Override
     protected void startStreamRtp(String url) {
-        rtspClient.setUrl(url);
+        this.url = url;
+        rtspClient.connect(url);
+//        rtspClient = new RtspClient(url);
     }
 
     @Override
@@ -89,12 +92,22 @@ public class RtspUSB extends USBBase {
         ByteBuffer newPps = pps.duplicate();
         ByteBuffer newVps = vps != null ? vps.duplicate() : null;
         rtspClient.setSPSandPPS(newSps, newPps, newVps);
-        rtspClient.connect();
+        rtspClient.connect(url);
     }
 
     @Override
     protected void getH264DataRtp(ByteBuffer h264Buffer, MediaCodec.BufferInfo info) {
         rtspClient.sendVideo(h264Buffer, info);
+    }
+
+    @Override
+    public void inputPCMData(Frame frame) {
+
+    }
+
+    @Override
+    public void inputYUVData(Frame frame) {
+
     }
 }
 

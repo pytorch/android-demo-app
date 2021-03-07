@@ -76,6 +76,7 @@
     <string name="title_activity_select_videos">选择视频文件</string>
     <string name="title_activity_add_new_crew">AddNewCrew</string>
     <string name="title_activity_set_face_login">SetFaceLogin</string>
+    <string name="title_activity_select_crew">SelectCrew</string>
 
     <string name="account">请输入登录的账号</string>
     <string name="password">请输入登录密码</string>

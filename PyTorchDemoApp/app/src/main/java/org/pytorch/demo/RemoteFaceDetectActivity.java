@@ -141,6 +141,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         System.out.println("in on create");
+        server_state_ready = false;
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_remote_face_detect);
 
@@ -148,8 +149,9 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 //        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 
         //init parameters
-        Util util = new Util(RemoteFaceDetectActivity.this);
-        rtmpUrl = util.getRTMPURL();
+        Util util = new Util();
+//        rtmpUrl = util.getRTMPURL();
+        rtmpUrl = "rtmp://10.138.116.66/live/livestream";
         recPath = Environment.getExternalStorageDirectory().getPath() + "/test.mp4";
         serverUri = util.ws;
 
@@ -188,7 +190,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
             }
         }
     }
-
+    private boolean server_state_ready;
     private void init() {
         // restore data.
 //        sp = getSharedPreferences("FaceDetection", MODE_PRIVATE);
@@ -267,9 +269,8 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 
                     mPublisher.startPublish(rtmpUrl);
                     mPublisher.startCamera();
+//
 
-                    String msg = "{\"message\": \"rtmp stream\", \"rtmp\": \""+rtmpUrl+"\"}";
-                    webSocket.sendText(msg);
 
                     if (btnSwitchEncoder.getText().toString().contentEquals("软解")) {
                         Toast.makeText(getApplicationContext(), "使用硬件编码", Toast.LENGTH_SHORT).show();
@@ -286,6 +287,21 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
                     btnRecord.setText("保存");
                     btnSwitchEncoder.setEnabled(true);
                     btnPause.setEnabled(false);
+                }
+            }
+        });
+        Button btnRecog = (Button) findViewById(R.id.btn_recog);
+        btnRecog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String msg = "{\"event\": \"detect\"}";
+//                    webSocket.sendText(msg);
+                if (server_state_ready){
+                    webSocket.sendText(msg);
+                    System.out.println("detect sent");
+                }
+                else{
+                    Toast.makeText(RemoteFaceDetectActivity.this, "server还没有准备好", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -345,6 +361,12 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
         webSocketFactory = new WebSocketFactory();
 //        WebSocket webSocket;
         try{
+//            serverUri.replace("{RTMP}", rtmpUrl);
+
+//            System.out.println("in util ws is " + ws);
+            serverUri=serverUri.replace("{TOKEN}", Utils.token);
+            serverUri = serverUri.replace("{RTMP}", "livestream");
+            System.out.println("in rfda, serveruri " + serverUri);
             webSocket=webSocketFactory.createSocket(serverUri);
             // Android 4.0 之后不能在主线程中请求HTTP请求
 //            new Thread(new Runnable(){
@@ -365,6 +387,8 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 
             webSocket.connect();
             webSocket.addListener(new WebSocketAdapter() {
+
+
                 @Override
                 public void onTextMessage(WebSocket websocket, String message) throws Exception {
                     // Received a text message.
@@ -380,6 +404,13 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 //                    namedboxpool.clear();
                     if (message != null)
                     {
+
+                        if (message.contains("ready"))
+                        {
+                            server_state_ready = true;
+                            Toast.makeText(RemoteFaceDetectActivity.this, "ws连接成功", Toast.LENGTH_SHORT).show();
+                        }
+//                        System.out.println("in listener message is " + message);
                         updateNamedboxpool(message);
 //                        namedboxpool.add(namedBox);
                     }
@@ -426,10 +457,13 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
         }
 
     }
+
+    // [{"topk": ["TN", "DH", "LJJ"], "box": [-24.315364837646484, 207.6920166015625, 189.6284942626953, 450.4494934082031], "distances": [0.2739424407482147, 0.33132535219192505, 0.35604554414749146]}]
     private void updateNamedboxpool(String jsonString){
         try{
             JSONObject jsonObject = new JSONObject(jsonString);
             int count = jsonObject.getInt("count");
+//            int count = jsonObject.length();
             JSONArray id_array = jsonObject.getJSONArray("id");
             JSONArray id_k_array = jsonObject.getJSONArray("id_k");
             JSONArray prob_array = jsonObject.getJSONArray("prob");
@@ -504,7 +538,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 
 
         for (NamedBox namedBox : namedboxpool)
-        {
+        { 
             if (namedBox == least_index) {
                 color = Color.BLUE;
             }
@@ -605,8 +639,8 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
             //if the camera was busy and available again
             mPublisher.startCamera();
         }
-        String msg = "{\"message\": \"rtmp stream\", \"rtmp\": \""+rtmpUrl+"\"}";
-        webSocket.sendText(msg);
+//        String msg = "{\"message\": \"rtmp stream\", \"rtmp\": \""+rtmpUrl+"\"}";
+//        webSocket.sendText(msg);
     }
 
     @Override

@@ -90,6 +90,7 @@ public class SideBarActivity extends AppCompatActivity {
 
         findViewById(R.id.main_vision_click_view).setOnClickListener(v -> startActivity(new Intent(SideBarActivity.this, VisionListActivity.class)));
         findViewById(R.id.main_nlp_click_view).setOnClickListener(v -> startActivity(new Intent(SideBarActivity.this, GlassListActivity.class)));
+        Toast.makeText(this, "in sba, token = "+Utils.token, Toast.LENGTH_LONG).show();
     }
 
     public void init_function_button(){
@@ -118,6 +119,12 @@ public class SideBarActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(SideBarActivity.this, AddNewCrew.class));
+            }
+        });
+        findViewById(R.id.button_crews).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(SideBarActivity.this, SelectCrew.class));
             }
         });
 

@@ -167,6 +167,10 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
                 return;
             try{
                 jsonString = jsonString.replace("\\","");
+                if (jsonString.startsWith("\""))
+                    jsonString = jsonString.substring(jsonString.indexOf('{'));
+                if (jsonString.endsWith("\""))
+                    jsonString = jsonString.substring(0, jsonString.indexOf('}')+1);
                 System.out.println("In NamedEmbedding json str is " + jsonString);
                 JSONObject jsonObject = new JSONObject(jsonString);
                 this.id = jsonObject.getString("name");
@@ -179,6 +183,7 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
             }catch (JSONException jsonException)
             {
                 jsonException.printStackTrace();
+                System.out.println("in catch json str is " + jsonString);
                 this.embedding = null;
                 this.id = null;
             }
@@ -195,33 +200,33 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
 //    private void get_embeddings(){
 //        webSocket.sendText("get embeddings");
 //    }
-    private String get_embeddings_from_files(){
-//        File Directory = getFilesDir();
-        File[] files = new Util(this).GetLocalDatagramFiles();
-        String embedding_str = "";
-        if(files.length == 0)
-            return "";
-        for (File f: files){
-            System.out.println("in fda reading file " + f.getName());
-            try{
-                FileInputStream fileInputStream = new FileInputStream(f);
-                int length = fileInputStream.available();
-                byte bytes[] = new byte[length];
-                fileInputStream.read(bytes);
-                fileInputStream.close();
-                String str =new String(bytes, StandardCharsets.UTF_8);
-                embedding_str += str;
-                System.out.println("str len is "+str.length()+" and total embedding len is "+ embedding_str.length());
-
-            }catch (FileNotFoundException fileNotFoundException){
-                fileNotFoundException.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-        return embedding_str;  
-    }
+//    private String get_embeddings_from_files(){
+////        File Directory = getFilesDir();
+//        File[] files = new Util(this).GetLocalDatagramFiles();
+//        String embedding_str = "";
+//        if(files.length == 0)
+//            return "";
+//        for (File f: files){
+//            System.out.println("in fda reading file " + f.getName());
+//            try{
+//                FileInputStream fileInputStream = new FileInputStream(f);
+//                int length = fileInputStream.available();
+//                byte bytes[] = new byte[length];
+//                fileInputStream.read(bytes);
+//                fileInputStream.close();
+//                String str =new String(bytes, StandardCharsets.UTF_8);
+//                embedding_str += str;
+//                System.out.println("str len is "+str.length()+" and total embedding len is "+ embedding_str.length());
+//
+//            }catch (FileNotFoundException fileNotFoundException){
+//                fileNotFoundException.printStackTrace();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//        }
+//        return embedding_str;
+//    }
     private void update_embeddings(String str){
         String[] strings = str.split(new Util(this).deliminator);
         for (String s : strings){
@@ -466,7 +471,8 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
 
         //get_embeddings from server
 //        get_embeddings();
-        update_embeddings(get_embeddings_from_files());
+        String embds = new Util().get_embeddings_from_files();
+        update_embeddings(embds);
         graphicOverlay = findViewById(R.id.graphic_overlay);
         graphicOverlay.bringToFront();
 

@@ -5,11 +5,13 @@ import android.media.MediaCodec;
 import android.os.Build;
 
 import androidx.annotation.RequiresApi;
+
+import com.pedro.encoder.Frame;
 import com.pedro.rtplibrary.view.LightOpenGlView;
 import com.pedro.rtplibrary.view.OpenGlView;
 
 import net.ossrs.rtmp.ConnectCheckerRtmp;
-import net.ossrs.rtmp.SrsFlvMuxer;
+import net.ossrs.rtmp.FaucampSrsFlvMuxer;
 
 import java.nio.ByteBuffer;
 
@@ -22,24 +24,24 @@ import java.nio.ByteBuffer;
 
 public class RtmpUSB extends USBBase {
 
-    private SrsFlvMuxer srsFlvMuxer;
+    private FaucampSrsFlvMuxer srsFlvMuxer;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     public RtmpUSB(OpenGlView openGlView, ConnectCheckerRtmp connectChecker) {
         super(openGlView);
-        srsFlvMuxer = new SrsFlvMuxer(connectChecker);
+        srsFlvMuxer = new FaucampSrsFlvMuxer(connectChecker);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     public RtmpUSB(LightOpenGlView lightOpenGlView, ConnectCheckerRtmp connectChecker) {
         super(lightOpenGlView);
-        srsFlvMuxer = new SrsFlvMuxer(connectChecker);
+        srsFlvMuxer = new FaucampSrsFlvMuxer(connectChecker);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
     public RtmpUSB(Context context, ConnectCheckerRtmp connectChecker) {
         super(context);
-        srsFlvMuxer = new SrsFlvMuxer(connectChecker);
+        srsFlvMuxer = new FaucampSrsFlvMuxer(connectChecker);
     }
 
     /**
@@ -90,6 +92,16 @@ public class RtmpUSB extends USBBase {
     @Override
     protected void getH264DataRtp(ByteBuffer h264Buffer, MediaCodec.BufferInfo info) {
         srsFlvMuxer.sendVideo(h264Buffer, info);
+    }
+
+    @Override
+    public void inputPCMData(Frame frame) {
+
+    }
+
+    @Override
+    public void inputYUVData(Frame frame) {
+
     }
 }
 

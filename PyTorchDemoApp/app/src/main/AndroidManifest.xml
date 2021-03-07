@@ -16,19 +16,25 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+        <activity
+            android:name=".SelectCrew"
+            android:label="@string/title_activity_select_crew"
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+
         <provider
-            android:authorities="com.mydomain.fileprovider"
             android:name="androidx.core.content.FileProvider"
+            android:authorities="com.mydomain.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
-        <meta-data
-            android:name="android.support.FILE_PROVIDER_PATHS"
-            android:resource="@xml/file_paths"/>
-    </provider>
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+
         <activity
             android:name=".vision.SetFaceLogin"
             android:label="@string/title_activity_set_face_login"
-            android:theme="@style/AppTheme.NoActionBar.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar.NoActionBar" />
         <activity
             android:name=".AddNewCrew"
             android:label="@string/title_activity_add_new_crew"

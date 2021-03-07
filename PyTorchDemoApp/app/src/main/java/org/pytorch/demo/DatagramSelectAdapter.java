@@ -85,7 +85,7 @@ public class DatagramSelectAdapter extends RecyclerView.Adapter<DatagramSelectAd
 //        );
 
         if(position == 0){
-            TextView textView = holder.itemView.findViewById(R.id.textView);
+//            TextView textView = holder.itemView.findViewById(R.id.textView);
 //            textView.setText(String.format("***********************set to %d", position));
 
             System.out.println("in onbindviewholder position is "+position);
@@ -145,8 +145,8 @@ public class DatagramSelectAdapter extends RecyclerView.Adapter<DatagramSelectAd
                 });
             }
             else {
-                TextView textView = holder.itemView.findViewById(R.id.textView);
-                textView.setText(String.format("*****************set to %d", position));
+//                TextView textView = holder.itemView.findViewById(R.id.textView);
+//                textView.setText(String.format("*****************set to %d", position));
 
                 System.out.println("in onbindviewholder position is " + position);
                 listView1 = holder.itemView.findViewById(R.id.listview);

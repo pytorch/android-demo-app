@@ -66,10 +66,10 @@ dependencies {
     implementation "androidx.core:core-ktx:+"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     //    网络通信库
-    implementation "com.squareup.okhttp3:okhttp:4.7.2"
+    implementation "com.squareup.okhttp3:okhttp:3.12.2"
     implementation "org.java-websocket:Java-WebSocket:1.4.0"
     implementation 'com.neovisionaries:nv-websocket-client:2.10'
-
+    implementation 'org.conscrypt:conscrypt-android:2.2.1'
 
     //    bitmap to video
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
@@ -82,7 +82,9 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation 'com.valdesekamdem.library:md-toast:0.9.0'
-    implementation 'com.github.pedroSG94.rtmp-rtsp-stream-client-java:rtplibrary:1.5.0'
+//    implementation 'com.github.:rtmp-rtsp-stream-client-java:Tag'
+//    implementation 'com.github.FaceRecogApp.rtmp-rtsp-stream-client-java:2.0.1'
+    implementation 'com.github.FaceRecogApp.rtmp-rtsp-stream-client-java:rtplibrary:3.0.0'
     implementation 'com.squareup.okio:okio:2.1.0'
 
     implementation("com.serenegiant:common:1.5.20")

@@ -13,7 +13,8 @@ import com.pedro.encoder.audio.GetAacData;
 import com.pedro.encoder.input.audio.GetMicrophoneData;
 import com.pedro.encoder.input.audio.MicrophoneManager;
 import com.pedro.encoder.input.video.CameraHelper;
-import com.pedro.encoder.input.video.Frame;
+//import com.pedro.encoder.input.video.Frame;
+import com.pedro.encoder.Frame;
 import com.pedro.encoder.input.video.GetCameraData;
 import com.pedro.encoder.utils.CodecUtil;
 import com.pedro.encoder.video.FormatVideoEncoder;
@@ -127,7 +128,7 @@ public abstract class USBBase
             stopPreview(uvcCamera);
             onPreview = true;
         }
-        return videoEncoder.prepareVideoEncoder(width, height, fps, bitrate, rotation, hardwareRotation,
+        return videoEncoder.prepareVideoEncoder(width, height, fps, bitrate, rotation,
                 iFrameInterval, FormatVideoEncoder.SURFACE);
     }
 
@@ -157,7 +158,7 @@ public abstract class USBBase
                                 boolean noiseSuppressor) {
         microphoneManager.createMicrophone(sampleRate, isStereo, echoCanceler, noiseSuppressor);
         prepareAudioRtp(isStereo, sampleRate);
-        return audioEncoder.prepareAudioEncoder(bitrate, sampleRate, isStereo);
+        return audioEncoder.prepareAudioEncoder(bitrate, sampleRate, isStereo, Integer.MAX_VALUE);
     }
 
     /**
@@ -398,18 +399,18 @@ public abstract class USBBase
      * Disable send camera frames and send a black image with low bitrate(to reduce bandwith used)
      * instance it.
      */
-    public void disableVideo() {
-        videoEncoder.startSendBlackImage();
-        videoEnabled = false;
-    }
-
-    /**
-     * Enable send camera frames.
-     */
-    public void enableVideo() {
-        videoEncoder.stopSendBlackImage();
-        videoEnabled = true;
-    }
+//    public void disableVideo() {
+//        videoEncoder.startSendBlackImage();
+//        videoEnabled = false;
+//    }
+//
+//    /**
+//     * Enable send camera frames.
+//     */
+//    public void enableVideo() {
+//        videoEncoder.stopSendBlackImage();
+//        videoEnabled = true;
+//    }
 
     public int getBitrate() {
         return videoEncoder.getBitRate();
@@ -523,10 +524,10 @@ public abstract class USBBase
         if (streaming) getH264DataRtp(h264Buffer, info);
     }
 
-    @Override
-    public void inputPCMData(byte[] buffer, int size) {
-        audioEncoder.inputPCMData(buffer, size);
-    }
+//    @Override
+//    public void inputPCMData(byte[] buffer, int size) {
+//        audioEncoder.inputPCMData(buffer, size);
+//    }
 
     @Override
     public void inputYUVData(Frame frame) {
