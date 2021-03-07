@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="org.pytorch.demo">
 
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -58,10 +59,11 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".SetupMenuActivity"
-            android:screenOrientation="portrait" />
-        <activity android:name=".MainActivity" />
+            android:screenOrientation="portrait"
+            tools:ignore="Instantiatable" />
+
         <activity android:name=".vision.VisionListActivity" />
-        <activity android:name=".nlp.NLPListActivity" />
+
         <activity
             android:name=".vision.ImageClassificationActivity"
             android:label="@string/image_classification_title" />
@@ -72,6 +74,8 @@
             android:name=".RemoteFaceDetectActivity"
             android:label="@string/vision_card_face_recognition_remote_title" />
         <activity android:name=".nlp.TextClassificationActivity" />
+        <activity android:name=".MinePageActivity"
+            tools:ignore="Instantiatable" />
     </application>
 
 </manifest>

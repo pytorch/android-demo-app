@@ -4,7 +4,7 @@
     <string name="welcome_skip_button">Skip</string>
     <string name="main_vision_button">视觉</string>
     <string name="main_nlp_button">语音</string>
-
+    <string name="core_func">核心功能</string>
     <string name="vision_list_image_classification_button">Image Classification</string>
     <string name="image_classification_title">Image Classification</string>
     <string name="image_classification_results_header_row_name">Classification</string>
@@ -81,10 +81,16 @@
     <string name="check_login">自动登录</string>
     <string name="login">登录</string>
     <string name="loading">正在加载数据</string>
-
+    <string name="forget_password">忘记密码？</string>
     <string name="title_func">功能</string>
     <string name="title_data">数据</string>
-    <string name="title_sett">设置</string>
+    <string name="title_mime">我的</string>
     <string name="title_file">文件</string>
+    <string name="func_button">功能按钮</string>
 
+    <string name="local_recog">本地识别</string>
+    <string name="remote_recog">远程识别</string>
+    <string name="glass_recog">眼镜识别</string>
+    <string name="boat_recog">船舶识别检测</string>
+    <string name="person_register">人员信息录入</string>
 </resources>

@@ -1,0 +1,287 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="15dp"
+        android:background="@drawable/linearlayout_rount"
+        android:orientation="vertical"
+        android:padding="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="150dp"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="10dp">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="89dp"
+                    android:layout_height="95dp"
+                    android:padding="10dp"
+                    android:src="@drawable/profile" />
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/tv_name"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="10dp"
+                        android:hint="扩展"
+                        android:textSize="20dp"
+                        android:textStyle="bold" />
+
+
+                    <TextView
+                        android:id="@+id/tv_id"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="left"
+                        android:layout_margin="10dp"
+                        android:hint="扩展" />
+                </LinearLayout>
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/click_info_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="bottom|right"
+            android:text="扩展" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/linearlayout_rount"
+
+        android:orientation="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="30dp">
+
+
+        <LinearLayout
+            android:id="@+id/myaccount"
+            android:layout_width="match_parent"
+            android:layout_height="74dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="41dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:src="@drawable/account" />
+
+            <TextView
+                android:id="@+id/mypage_cart"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="15dp"
+                android:text="我的账户"
+                android:textSize="10pt" />
+
+            <ImageView
+                android:layout_width="59dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:layout_margin="101dp"
+
+                android:layout_marginEnd="0dp"
+                android:src="@drawable/enter_logo" />
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/setting"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="41dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:src="@drawable/setting" />
+
+            <TextView
+                android:id="@+id/mypage_sns"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="15dp"
+                android:text="设置"
+                android:textSize="10pt" />
+
+            <ImageView
+                android:layout_width="59dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:layout_margin="158dp"
+
+                android:layout_marginEnd="0dp"
+                android:src="@drawable/enter_logo" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/update_password"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="41dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:src="@drawable/update_password" />
+
+            <TextView
+                android:id="@+id/mypage_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="15dp"
+                android:text="修改密码"
+                android:textSize="10pt" />
+
+            <ImageView
+                android:layout_width="59dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:layout_margin="101dp"
+
+                android:layout_marginEnd="0dp"
+                android:src="@drawable/enter_logo" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/using_help"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="41dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:src="@drawable/help" />
+
+            <TextView
+                android:id="@+id/mypage_notice"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="15dp"
+                android:text="使用帮助"
+                android:textSize="10pt" />
+
+            <ImageView
+                android:layout_width="59dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:layout_margin="101dp"
+
+                android:layout_marginEnd="0dp"
+                android:src="@drawable/enter_logo" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/extend1"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="41dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:src="@drawable/account" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="15dp"
+                android:text="扩展"
+                android:textSize="10pt" />
+
+            <ImageView
+                android:layout_width="59dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:layout_margin="153dp"
+
+                android:layout_marginEnd="0dp"
+                android:src="@drawable/enter_logo" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/extend2"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:orientation="horizontal">
+
+            <ImageView
+                android:layout_width="30dp"
+                android:layout_height="41dp"
+                android:layout_gravity="center"
+                android:layout_margin="10dp"
+                android:src="@drawable/account" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_margin="15dp"
+                android:text="扩展"
+                android:textSize="10pt" />
+
+            <ImageView
+                android:layout_width="59dp"
+                android:layout_height="25dp"
+                android:layout_gravity="center"
+                android:layout_margin="153dp"
+
+                android:layout_marginEnd="0dp"
+                android:src="@drawable/enter_logo" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

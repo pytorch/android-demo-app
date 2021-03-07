@@ -49,10 +49,10 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
 
         //找到控件
         AccountLogin = findViewById(R.id.btn_AccountLogin);
-        mEtUser = findViewById(R.id.et_1);
-        mEtUser.setText("admin");
-        mEtPassword = findViewById(R.id.et_2);
-        mEtPassword.setText("123456");
+//        mEtUser = findViewById(R.id.et_1);
+//        mEtUser.setText("admin");
+//        mEtPassword = findViewById(R.id.et_2);
+//        mEtPassword.setText("123456");
 //        AccountLogin.setOnClickListener(this);
 //        saveUser();
 //        AccountLogin.setOnClickListener(v -> {
@@ -72,34 +72,6 @@ public class WelcomeActivity extends AppCompatActivity implements View.OnClickLi
 
 
     public void onClick(View v) {
-        //获取输入的用户名和密码
-//        String username = mEtUser.getText().toString();
-//        String password = mEtPassword.getText().toString();
-//        Intent intent = null;
-//        if (username.equals("") || password.equals("")) {
-//            //账户密码不能为空
-//            showToast("账号或密码不能为空");
-//        }
-////        String savedUsername = sp.getString("username", "");
-////        String savedPassword = sp.getString("password", "");
-//        String savedUsername = "admin";
-//        String savedPassword = "123456";
-//        if (username.equals(savedUsername) && password.equals(savedPassword)) {
-////             if new Util().sss === success
-//            intent = new Intent(WelcomeActivity.this, AccountLoginActivity.class);
-////            String res = sp.getString("username","none");
-//            String res = "admin";
-//            intent.putExtra("info", res);
-//            showToast("你好！"+res);
-//            startActivity(intent);
-
-//            intent = new Intent(WelcomeActivity.this, SelectVideos.class);
-//            startActivity(intent);
-//            startActivity(new Intent(String.valueOf(AccountLoginActivity.class)));
-//        } else {
-//            showToast("用户名或密码错误，请重新登录");
-//
-//        }
 
     }
     //进入设置页面

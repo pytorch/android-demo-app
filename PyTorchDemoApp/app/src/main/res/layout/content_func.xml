@@ -5,36 +5,81 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <FrameLayout
         android:id="@+id/main_vision_click_view"
         style="@style/Clickable"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="300dp"
         app:layout_constraintHeight_percent=".5"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@mipmap/bg_main">
+        android:background="@mipmap/home_main">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:drawableTop="@drawable/ic_vision_s"
-            android:drawablePadding="16dp"
-            android:text="@string/main_vision_button"
-            android:textAppearance="@style/TextAppearanceMainVisionNlp" />
 
     </FrameLayout>
-    <TextView
-        android:id="@+id/filecontent"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/title_func"
 
-        app:layout_constraintTop_toBottomOf="@+id/main_vision_click_view"
-        android:textSize="50dp"
-        android:textAlignment="center"
-        tools:ignore="MissingConstraints" />
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
+        android:background="#FFFAFA"
+
+        app:layout_constraintTop_toBottomOf="@+id/main_vision_click_view">
+
+        <TextView
+            android:id="@+id/func_title"
+            android:layout_width="wrap_content"
+            android:layout_height="70dp"
+            android:textAlignment="gravity"
+            android:layout_marginTop="10dp"
+            android:drawablePadding="16dp"
+            android:text="@string/core_func"
+
+            android:textAppearance="@style/TextAppearanceMainVisionNlp"
+            android:textColor="@color/black" />
+
+        <RadioGroup
+            android:id="@+id/func_button"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:background="#dcdcdc"
+            android:backgroundTint="@color/GRAY_050_A010"
+            android:orientation="horizontal"
+            android:layout_marginTop="80dp"
+            app:layout_constraintTop_toBottomOf="@+id/func_title"
+            tools:ignore="MissingConstraints">
+
+            <RadioButton
+                android:id="@+id/local_recog"
+                style="@style/Custom.TabRadioButton"
+                android:drawableTop="@drawable/tab_local_recog"
+                android:text="@string/local_recog" />
+
+            <RadioButton
+                android:id="@+id/remote_recog"
+                style="@style/Custom.TabRadioButton"
+                android:drawableTop="@drawable/tab_remote_recog"
+                android:text="@string/remote_recog" />
+
+            <RadioButton
+                android:id="@+id/boat_recog"
+                style="@style/Custom.TabRadioButton"
+                android:drawableTop="@drawable/tab_local_recog"
+                android:text="船舶检测" />
+
+            <RadioButton
+                android:id="@+id/person_register"
+                style="@style/Custom.TabRadioButton"
+                android:drawableTop="@drawable/tab_remote_recog"
+                android:text="眼镜识别" />
+
+
+        </RadioGroup>
+    </FrameLayout>
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

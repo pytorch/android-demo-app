@@ -25,8 +25,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
-import org.pytorch.demo.nlp.NLPListActivity;
-import org.pytorch.demo.vision.VisionListActivity;
 
 public class SideBarActivity extends AppCompatActivity {
 
@@ -84,6 +82,7 @@ public class SideBarActivity extends AppCompatActivity {
             //关闭侧边栏
             drawer.closeDrawers();
             return false;
+
         });
 
 //        findViewById(R.id.main_vision_click_view).setOnClickListener(v -> startActivity(new Intent(SideBarActivity.this, VisionListActivity.class)));
@@ -91,37 +90,32 @@ public class SideBarActivity extends AppCompatActivity {
         BottomNavigationView navigation = findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         navigation.setSelectedItemId(R.id.navigation_func);
+
     }
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener
-            = new BottomNavigationView.OnNavigationItemSelectedListener() {
+            = item -> {
+                FragmentManager fragmentManager = getSupportFragmentManager();  //使用fragmentmanager和transaction来实现切换效果
+                FragmentTransaction transaction = fragmentManager.beginTransaction();
 
-        @SuppressLint({"ResourceType", "NonConstantResourceId"})
-        @Override
-        public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-            FragmentManager fragmentManager = getSupportFragmentManager();  //使用fragmentmanager和transaction来实现切换效果
-            FragmentTransaction transaction = fragmentManager.beginTransaction();
+                switch (item.getItemId()) {
+                    case R.id.navigation_func:
+                        transaction.replace(R.id.content,new ContentfuncActivity());  //对应的java class
+                        transaction.commit();  //一定不要忘记commit，否则不会显示
+                        return true;
+                    case R.id.navigation_file:
+                        transaction.replace(R.id.content,new ContentfileActivity());  //对应的java class
+                        transaction.commit();  //一定不要忘记commit，否则不会显示
+                        return true;
 
-            switch (item.getItemId()) {
-                case R.id.navigation_func:
-                    transaction.replace(R.id.content,new ContentfuncActivity());  //对应的java class
-                    transaction.commit();  //一定不要忘记commit，否则不会显示
-                    return true;
-                case R.id.navigation_file:
-                    transaction.replace(R.id.content,new ContentfileActivity());  //对应的java class
-                    transaction.commit();  //一定不要忘记commit，否则不会显示
-                    return true;
+                    case R.id.navigation_mime:
+                        transaction.replace(R.id.content,new MinePageActivity());
+                        transaction.commit();
 
-                case R.id.navigation_sett:
-                    transaction.replace(R.id.content,new SetupMenuActivity());
-                    transaction.commit();
-//                    transaction.replace(R.id.content,new ContentfileActivity());
-//                    transaction.commit();
-                    return true;
+                        return true;
 
-            }
-            return false;
-        }
-    };
+                }
+                return false;
+            };
     public void init_function_button(){
         findViewById(R.id.button_datagram).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -137,15 +131,7 @@ public class SideBarActivity extends AppCompatActivity {
             }
         });
     }
-    //进入设置页面
-    public void SetupMenu(View view) {
-        startActivity(new Intent(SideBarActivity.this,SetupMenuActivity.class));
-    }
 
-    //退出
-    public void exit(View view){
-        startActivity(new Intent(SideBarActivity.this,WelcomeActivity.class));
 
-    }
 }
 

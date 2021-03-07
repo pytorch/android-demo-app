@@ -11,8 +11,8 @@
         android:icon="@drawable/func"
         android:title="@string/title_func" />
     <item
-        android:id="@+id/navigation_sett"
-        android:icon="@drawable/sett"
-        android:title="@string/title_sett" />
+        android:id="@+id/navigation_mime"
+        android:icon="@drawable/account"
+        android:title="@string/title_mime" />
 
 </menu>

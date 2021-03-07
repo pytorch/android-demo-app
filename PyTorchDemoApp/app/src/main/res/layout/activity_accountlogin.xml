@@ -9,12 +9,12 @@
     <TextView
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:text="登录界面"
+            android:text="账户登录"
             android:gravity="center"
             android:textSize="30sp"
             />
-    <View android:layout_width="match_parent" android:layout_height="1dp"
-          android:background="@color/orange_main"
+    <View android:layout_width="match_parent" android:layout_height="2dp"
+          android:background="@color/BLUE_A010"
             />
 
     <RelativeLayout
@@ -56,7 +56,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="12dp"
                 android:layout_toRightOf="@+id/img_account"
-                android:background="@color/orange_light"/>
+                android:background="@color/BLACK"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -106,7 +106,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginLeft="12dp"
                 android:layout_toRightOf="@+id/img_pw"
-                android:background="@color/orange_light"/>
+                android:background="@color/BLACK"/>
     </RelativeLayout>
     <LinearLayout
             android:layout_width="match_parent"
@@ -128,7 +128,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/check_password"
-                android:textColor="@color/top_bar_normal_bg" android:checked="false"/>
+                android:textColor="@color/BLACK" android:checked="false"/>
         <CheckBox
                 android:id="@+id/checkBox_login"
                 android:padding="10dp"
@@ -138,7 +138,7 @@
                 android:layout_weight="1"
                 android:layout_height="wrap_content"
                 android:text="@string/check_login"
-                android:textColor="@color/top_bar_normal_bg" android:checked="false"/>
+                android:textColor="@color/BLACK" android:checked="false"/>
 
     </LinearLayout>
     <Button
@@ -154,7 +154,20 @@
             android:text="@string/login"
             android:background="@drawable/btn_orange_selector"
             android:textColor="@android:color/white"
-            android:textSize="14dp"/>
+            android:textSize="18dp"/>
 
+    <Button
+        android:id="@+id/forget_pass"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="32dp"
+        android:layout_marginRight="32dp"
+        android:layout_marginTop="40dp"
+        android:paddingBottom="8dp"
+        android:paddingTop="8dp"
 
+        android:text="@string/forget_password"
+        android:background="@drawable/btn_orange_selector"
+        android:textColor="@android:color/white"
+        android:textSize="18dp"/>
 </LinearLayout>

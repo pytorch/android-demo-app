@@ -1,8 +1,7 @@
 package org.pytorch.demo;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.content.SharedPreferences;
+
 import android.os.Bundle;
 import android.text.InputType;
 import android.view.LayoutInflater;
@@ -12,6 +11,7 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.AppCompatEditText;
 import androidx.fragment.app.Fragment;
@@ -20,12 +20,14 @@ import org.pytorch.demo.util.Util;
 
 import java.io.IOException;
 
-public class SetupMenuActivity extends Fragment {
+public class SetupMenuActivity extends AppCompatActivity {
+
+
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                            Bundle savedInstanceState) {
+    public void  onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_setupmenu);
+
         Util util = new Util(this);
 
         AppCompatEditText rtmp_uri = findViewById(R.id.Input2);
@@ -37,18 +39,15 @@ public class SetupMenuActivity extends Fragment {
 
         System.out.println("in setup menu "+util.ws+util.server_uri);
         Button save = findViewById(R.id.Save);
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    new Util().SetLocalJson("{\"rtmp_uri\": \""+rtmp_uri.getText().toString()+"\", \"server_uri\": \""+server_uri.getText().toString()+"\"}");
-                } catch (IOException exception) {
-                    exception.printStackTrace();
-                }
-                Toast.makeText(SetupMenuActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
+        save.setOnClickListener(v -> {
+            try {
+                new Util().SetLocalJson("{\"rtmp_uri\": \""+rtmp_uri.getText().toString()+"\", \"server_uri\": \""+server_uri.getText().toString()+"\"}");
+            } catch (IOException exception) {
+                exception.printStackTrace();
+            }
+            Toast.makeText(SetupMenuActivity.this, "保存成功", Toast.LENGTH_SHORT).show();
 //                edit.putString("rtmp_uri", rtmp_uri.getText().toString());
 //                edit.putString("server_uri", server_uri.getText().toString());
-            }
         });
 
         findViewById(R.id.Return).setOnClickListener(new View.OnClickListener() {
@@ -57,6 +56,9 @@ public class SetupMenuActivity extends Fragment {
                 SetupMenuActivity.this.finish();
             }
         });
-        return inflater.inflate( R.layout.activity_setupmenu, container, false );  //要加载的layout文件
     }
+
+
+
+
 }

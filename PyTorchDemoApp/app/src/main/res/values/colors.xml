@@ -10,6 +10,7 @@
     <color name="top2">@color/colorAccent</color>
     <color name="top3">@color/colorPrimaryDark</color>
     <color name="orange_main">#ec6f1a</color>
+
     <color name="nlpPrimaryColor">#812ce5</color>
     <color name="black">#ff000000</color>
     <color name="tv_gray_deep">#818181</color>
