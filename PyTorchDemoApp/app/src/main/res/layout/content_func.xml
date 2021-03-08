@@ -6,21 +6,33 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <FrameLayout
+
+    <LinearLayout
         android:id="@+id/main_vision_click_view"
-        style="@style/Clickable"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
-        android:background="@mipmap/bg_file"
-        app:layout_constraintHeight_percent=".5"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        android:layout_height="wrap_content"
+        android:background="@color/textColor"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/main_func"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.157"
+        app:layout_constraintVertical_chainStyle="packed">
 
-
-    </FrameLayout>
-
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="15dp"
+            android:text="主页"
+            android:textSize="10pt" />
+    </LinearLayout>
     <FrameLayout
+        android:id="@+id/main_func"
         android:layout_width="match_parent"
         android:layout_height="400dp"
         android:background="#FFFAFA"
@@ -30,7 +42,7 @@
         <TextView
             android:id="@+id/func_title"
             android:layout_width="wrap_content"
-            android:layout_height="70dp"
+            android:layout_height="50dp"
             android:textAlignment="gravity"
             android:layout_marginTop="10dp"
             android:drawablePadding="16dp"
@@ -42,62 +54,80 @@
         <RadioGroup
             android:id="@+id/func_button"
             android:layout_width="match_parent"
-            android:layout_height="314dp"
+            android:layout_height="514dp"
             android:layout_alignParentBottom="true"
-            android:layout_marginTop="80dp"
+            android:layout_marginTop="70dp"
             android:background="#dcdcdc"
             android:backgroundTint="@color/GRAY_050_A010"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@+id/func_title"
             tools:ignore="MissingConstraints">
 
-            <RadioButton
-                android:id="@+id/local_recog"
-                style="@style/Custom.TabRadioButton"
-                android:layout_width="100dp"
-                android:layout_height="160dp"
-                android:drawableTop="@mipmap/phonemode"
-                android:text="@string/local_recog" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:id="@+id/local_recog"
+                    style="@style/Custom.TabRadioButton"
+                    android:layout_width="100dp"
+                    android:layout_height="105dp"
+                    android:drawableTop="@mipmap/phonemode"
 
-            <RadioButton
-                android:id="@+id/remote_recog"
-                style="@style/Custom.TabRadioButton"
-                android:layout_width="100dp"
-                android:layout_height="160dp"
-                android:drawableTop="@mipmap/phonemode"
-                android:text="@string/remote_recog" />
+                    android:text="@string/local_recog" />
 
-            <RadioButton
-                android:id="@+id/glass_remote_recog"
-                style="@style/Custom.TabRadioButton"
-                android:layout_width="100dp"
-                android:layout_height="160dp"
-                android:drawableTop="@mipmap/glassmode"
-                android:text="本地眼镜识别" />
+                <RadioButton
+                    android:id="@+id/remote_recog"
+                    style="@style/Custom.TabRadioButton"
+                    android:layout_width="100dp"
+                    android:layout_height="105dp"
+                    android:drawableTop="@mipmap/phonemode"
+                    android:text="@string/remote_recog" />
 
-            <RadioButton
-                android:id="@+id/glass_local_recog"
-                style="@style/Custom.TabRadioButton"
-                android:layout_width="100dp"
-                android:layout_height="160dp"
-                android:drawableTop="@mipmap/glassmode"
-                android:text="远程眼镜识别" />
+            </LinearLayout>
 
-            <RadioButton
-                android:id="@+id/shipname_detect"
-                style="@style/Custom.TabRadioButton"
-                android:layout_width="100dp"
-                android:layout_height="160dp"
-                android:drawableTop="@mipmap/ship"
-                android:text="船名检测" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <RadioButton
+                    android:id="@+id/glass_remote_recog"
+                    style="@style/Custom.TabRadioButton"
+                    android:layout_width="100dp"
+                    android:layout_height="105dp"
+                    android:drawableTop="@mipmap/glassmode"
+                    android:text="本地眼镜识别" />
 
-            <RadioButton
-                android:id="@+id/shipclass_detect"
-                style="@style/Custom.TabRadioButton"
-                android:layout_width="100dp"
-                android:layout_height="160dp"
-                android:drawableTop="@mipmap/ship"
-                android:text="船体类型检测" />
+                <RadioButton
+                    android:id="@+id/glass_local_recog"
+                    style="@style/Custom.TabRadioButton"
+                    android:layout_width="100dp"
+                    android:layout_height="105dp"
+                    android:drawableTop="@mipmap/glassmode"
+                    android:text="远程眼镜识别" />
+
+            </LinearLayout>
+           <LinearLayout
+               android:layout_width="match_parent"
+               android:layout_height="wrap_content"
+               android:orientation="horizontal">
+               <RadioButton
+                   android:id="@+id/shipname_detect"
+                   style="@style/Custom.TabRadioButton"
+                   android:layout_width="100dp"
+                   android:layout_height="105dp"
+                   android:drawableTop="@mipmap/ship"
+                   android:text="船名检测" />
+
+               <RadioButton
+                   android:id="@+id/shipclass_detect"
+                   style="@style/Custom.TabRadioButton"
+                   android:layout_width="100dp"
+                   android:layout_height="105dp"
+                   android:drawableTop="@mipmap/ship"
+                   android:text="船体类型检测" />
+
+           </LinearLayout>
 
 
         </RadioGroup>
