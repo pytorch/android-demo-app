@@ -347,7 +347,7 @@ public class GlassLocalActivity extends AppCompatActivity {
                 Toast.makeText(this, "speak error " + namedBox.id, Toast.LENGTH_SHORT).show();
             }
             Bitmap bitmap_c = null;
-            bitmap_c = cropBitmap(bitmap, namedBox.rect);
+            bitmap_c = Utils.cropBitmap(bitmap, namedBox.rect);
             imageView.setImageBitmap(bitmap_c);
             for (int i = 0; i < TOP_K; i++) {
                 final ResultRowView rowView = mResultRowViews[i];
@@ -383,7 +383,7 @@ public class GlassLocalActivity extends AppCompatActivity {
 //                }
 //            }
             if (flag){
-                Bitmap bitmap_c = cropBitmap(bitmap, box_c);
+                Bitmap bitmap_c = Utils.cropBitmap(bitmap, box_c);
                 if (bitmap_c == null)
                     continue;
                 Utils.NamedEmbedding unnamed = encode_face(bitmap_c);
@@ -427,27 +427,7 @@ public class GlassLocalActivity extends AppCompatActivity {
         }
         namedboxpool = new_namedboxpool;
     }
-    private Bitmap cropBitmap(Bitmap bitmap, float[] rect) {
-        try{
-            int x,y,w,h;
-            x = (int) (bitmap.getWidth() * rect[0]);
-            y = (int) (bitmap.getHeight() * rect[1]);
 
-            w = (int) (bitmap.getWidth() * (rect[2]-rect[0]));
-            h = (int) (bitmap.getHeight() * (rect[3]-rect[1]));
-
-            return Bitmap.createBitmap(bitmap, x, y, w, h,null, false);
-        }catch (IllegalArgumentException e)
-        {
-            e.printStackTrace();
-        }
-        catch (Exception e1)
-        {
-            e1.printStackTrace();
-        }
-        return null;
-
-    }
 
     private void update_embeddings(String str){
         String[] strings = str.split(new Util(this).deliminator);

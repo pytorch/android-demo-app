@@ -1,6 +1,7 @@
 package org.pytorch.demo;
 
 import android.content.Context;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -165,6 +166,29 @@ public class Utils {
       embedding = new float[512];
       id = null;
     }
+  }
+
+
+  public static Bitmap cropBitmap(Bitmap bitmap, float[] rect) {
+    try{
+      int x,y,w,h;
+      x = (int) (bitmap.getWidth() * rect[0]);
+      y = (int) (bitmap.getHeight() * rect[1]);
+
+      w = (int) (bitmap.getWidth() * (rect[2]-rect[0]));
+      h = (int) (bitmap.getHeight() * (rect[3]-rect[1]));
+
+      return Bitmap.createBitmap(bitmap, x, y, w, h,null, false);
+    }catch (IllegalArgumentException e)
+    {
+      e.printStackTrace();
+    }
+    catch (Exception e1)
+    {
+      e1.printStackTrace();
+    }
+    return null;
+
   }
 
 }

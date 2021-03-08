@@ -1,6 +1,7 @@
 package org.pytorch.demo
 
 import android.app.Activity
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.graphics.Rect
 import android.hardware.usb.UsbConstants.USB_CLASS_MISC
@@ -9,6 +10,7 @@ import android.os.Bundle
 import android.os.StrictMode
 import android.util.Log
 import android.view.SurfaceHolder
+import android.widget.ImageView
 import android.widget.Toast
 import com.neovisionaries.ws.client.*
 import com.serenegiant.usb.USBMonitor
@@ -20,6 +22,7 @@ import net.ossrs.rtmp.ConnectCheckerRtmp
 import org.json.JSONException
 import org.json.JSONObject
 import org.pytorch.demo.Utils.TOP_K
+import org.pytorch.demo.Utils.cropBitmap
 import org.pytorch.demo.streamlib.RtmpUSB
 import org.pytorch.demo.util.Util
 import org.pytorch.demo.vision.Helper.RectOverlay
@@ -85,6 +88,7 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
   private var webSocketFactory: WebSocketFactory? = null
   private var webSocket: WebSocket? = null
   private var server_state_ready = false
+  private var imageView2: ImageView? = null
 
   //    private Button offline_loginbtn;
   //    @Override
@@ -107,7 +111,8 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
     setContentView(R.layout.activity_glass_remote)
 //    requestPermission()
     graphicOverlay.bringToFront()
-    imageView.bringToFront()
+    imageView2 = findViewById(R.id.imageView2)
+    imageView2!!.bringToFront()
     mResultRowViews[0] = findViewById(R.id.image_classification_top1_result_row)
     mResultRowViews[0]?.bringToFront()
     mResultRowViews[1] = findViewById(R.id.image_classification_top2_result_row)
@@ -186,7 +191,7 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
           val h: Int = openglview.height
           println("in onTextMessage w:$w, h:$h")
           var center: Utils.NamedBox? = drawFaceResults_nbp(w, h)
-          runOnUiThread { updateUI(center) }
+          runOnUiThread { updateUI(center, null) }
         }
       })
       webSocket!!.addListener(object : WebSocketAdapter() {
@@ -244,7 +249,7 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
       jsonException.printStackTrace()
     }
   }
-  private fun updateUI(namedBox: Utils.NamedBox?) {
+  private fun updateUI(namedBox: Utils.NamedBox?, bitmap: Bitmap?) {
     if (namedBox != null) {
 
       for (i in 0 until Utils.TOP_K) {
@@ -254,6 +259,12 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
                 namedBox.prob_k[i])
         rowView?.setProgressState(true)
       }
+      if(bitmap != null){
+        var bitmap_c: Bitmap? = null
+        bitmap_c = cropBitmap(bitmap, namedBox.rect)
+        imageView2!!.setImageBitmap(bitmap_c)
+      }
+
     }
   }
   private fun drawFaceResults_nbp(width: Int, height: Int): Utils.NamedBox? {

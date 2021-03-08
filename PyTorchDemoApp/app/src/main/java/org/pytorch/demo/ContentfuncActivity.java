@@ -49,6 +49,10 @@ public class ContentfuncActivity extends Fragment {
         RadioButton shipclass_detect = getActivity().findViewById(R.id.shipclass_detect);
         setBounds(R.mipmap.ship,shipname_detect);
         setBounds(R.mipmap.ship,shipclass_detect);
+        RadioButton add_crew  = getActivity().findViewById(R.id.btn_add_crew);
+        RadioButton other_func = getActivity().findViewById(R.id.btn_other);
+        setBounds(R.mipmap.account,add_crew);
+        setBounds(R.mipmap.account,other_func);
         Activity baseActivity = getActivity();
         Button local_button = baseActivity.findViewById(R.id.local_recog);
         Button remote_button = baseActivity.findViewById(R.id.remote_recog);
@@ -64,6 +68,12 @@ public class ContentfuncActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ContentfuncActivity.this.getActivity(), GlassRemoteActivity.class));
+            }
+        });
+        add_crew.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(ContentfuncActivity.this.getActivity(), AddNewCrew.class));
             }
         });
 

@@ -99,4 +99,11 @@
     <string name="glass_recog">眼镜识别</string>
     <string name="boat_recog">船舶识别检测</string>
     <string name="person_register">人员信息录入</string>
+    <string name="auxi_func">辅助功能</string>
+    <string name="add_crew">新增船员</string>
+    <string name="other_func">其他功能</string>
+    <string name="ship_class_detect">船体类型检测</string>
+    <string name="shipname_detect">船名检测</string>
+    <string name="glass_local_recog">本地识别（使用眼镜）</string>
+    <string name="glass_remote_recog">远程识别（使用眼镜）</string>
 </resources>
