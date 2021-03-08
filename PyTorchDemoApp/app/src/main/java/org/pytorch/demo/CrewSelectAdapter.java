@@ -6,30 +6,18 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Environment;
-import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
-import android.widget.PopupWindow;
-import android.widget.ProgressBar;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
-import androidx.viewpager2.widget.ViewPager2;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.pytorch.demo.util.Util;
 
 import java.util.ArrayList;
@@ -40,6 +28,7 @@ import java.util.Map;
 public class CrewSelectAdapter extends RecyclerView.Adapter<CrewSelectAdapter.ViewPagerViewHolder> {
     ViewGroup parent;
     ArrayList<Util.Crew> crewArrayList;
+    SwipeRefreshLayout swipeRefreshLayout;
     @NonNull
 
     @Override
@@ -47,6 +36,8 @@ public class CrewSelectAdapter extends RecyclerView.Adapter<CrewSelectAdapter.Vi
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.content_select_face_datagram, parent, false);
         this.parent = parent;
         crewArrayList = new Util().get_all_crews();
+        System.out.println("in create crew array list len is " + crewArrayList.size());
+
         return new ViewPagerViewHolder(view);
     }
 
@@ -56,58 +47,28 @@ public class CrewSelectAdapter extends RecyclerView.Adapter<CrewSelectAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull ViewPagerViewHolder holder, int position) {
         if(position == 0){
-            System.out.println("in onbindviewholder position is "+position);
-            listView = holder.itemView.findViewById(R.id.listview);
-            Button button = holder.itemView.findViewById(R.id.button);
-
-//            button.setOnClickListener(new View.OnClickListener() {
-//                @SuppressLint("StaticFieldLeak")
-//                @Override
-//                public void onClick(View v) {
-//                    String login_id = "1";
-//                    new AsyncTask<String, Integer, ArrayList<Util.Crew>>() {
-//
-//
-//                        @Override
-//                        protected ArrayList<Util.Crew> doInBackground(String... arg0) {
-//                            ArrayList<Util.Crew> crewArrayList = new Util().get_all_crews();
-//                            return crewArrayList;
-//                        }
-//
-//                        protected void onPostExecute(ArrayList<Util.Crew> result) {
-//                            if (result != null) {
-//                                Toast.makeText(parent.getContext(), "刷新完成", Toast.LENGTH_SHORT).show();
-//                                updateListView0(result);
-//                            } else {
-//                                Toast.makeText(parent.getContext(), "刷新失败，网络或服务器出错", Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    }.execute("1");
-//                }
-//            });
-            button.setOnClickListener(new View.OnClickListener() {
+            swipeRefreshLayout = holder.itemView.findViewById(R.id.swiperFresh);
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
                 @Override
-                public void onClick(View v) {
-                    Toast.makeText(parent.getContext(), "刷新完成", Toast.LENGTH_SHORT).show();
-                    updateListView0(crewArrayList);
+                public void onRefresh() {
+                    refresh_lv0();
                 }
             });
-
+            System.out.println("in onbindviewholder position is "+position);
+            listView = holder.itemView.findViewById(R.id.list);
+            updateListView0(crewArrayList);
         }
         else {
+            swipeRefreshLayout = holder.itemView.findViewById(R.id.swiperFresh);
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    refresh_lv1();
+                }
+            });
             System.out.println("in onbindviewholder position is " + position);
-            listView1 = holder.itemView.findViewById(R.id.listview);
-            Button button = holder.itemView.findViewById(R.id.button);
-
-            button.setOnClickListener(new View.OnClickListener() {
-                                          @Override
-                                          public void onClick(View v) {
-//                                              String login_id = "1";
-//                                              String[] filenames = new Util().GetLocalVideos();
-                                              updateListView1(crewArrayList);
-                                          }
-                                      }
-            );
+            listView1 = holder.itemView.findViewById(R.id.list);
+            updateListView1(crewArrayList);
 
             listView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -171,8 +132,6 @@ public class CrewSelectAdapter extends RecyclerView.Adapter<CrewSelectAdapter.Vi
 
                 }
 
-
-
                 @Override
                 @SuppressLint("StaticFieldLeak")
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -233,12 +192,27 @@ public class CrewSelectAdapter extends RecyclerView.Adapter<CrewSelectAdapter.Vi
 
     }
 
+    public void refresh_lv0(){
+        crewArrayList = new Util().get_all_crews();
+        updateListView0(crewArrayList);
+        Toast.makeText(parent.getContext(),"刷新成功", Toast.LENGTH_SHORT).show();
+        swipeRefreshLayout.setRefreshing(false);
+    }
+    public void refresh_lv1(){
+        crewArrayList = new Util().get_all_crews();
+        updateListView1(crewArrayList);
+        Toast.makeText(parent.getContext(),"刷新成功", Toast.LENGTH_SHORT).show();
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+
 
     public void updateListView1(ArrayList<Util.Crew> crewArrayList){
         ArrayList<Map<String,String>> list = new ArrayList<>();
         for (int i = 0; i < crewArrayList.size(); i++){
             String filename = crewArrayList.get(i).getCrew_file().getName();
-            if(filename.startsWith("local_tmp_datagram")){
+            System.out.println("in updatelistview1 get name " + filename);
+            if(filename.startsWith("local_temp_datagram")){
                 Map<String, String> map= new HashMap<>();
                 map.put("name", crewArrayList.get(i).getCrew_id());
                 map.put("file", crewArrayList.get(i).getCrew_file().getName());
@@ -256,19 +230,21 @@ public class CrewSelectAdapter extends RecyclerView.Adapter<CrewSelectAdapter.Vi
                 new int[]{R.id.text1, R.id.text2});
 
         listView1.setAdapter(adapter);
+        listView1.bringToFront();
     }
 
     public void updateListView0(ArrayList<Util.Crew> crewArrayList){
         ArrayList<Map<String,String>> list = new ArrayList<>();
         for (int i = 0; i < crewArrayList.size(); i++){
             String filename = crewArrayList.get(i).getCrew_file().getName();
-            if(!filename.startsWith("local_tmp_datagram")){
-                Map<String, String> map= new HashMap<>();
-                map.put("name", crewArrayList.get(i).getCrew_id());
-                map.put("file", crewArrayList.get(i).getCrew_file().getName());
+            System.out.println("in updatelistview0 get name " + filename);
+
+            Map<String, String> map= new HashMap<>();
+            map.put("name", crewArrayList.get(i).getCrew_id());
+            map.put("file", crewArrayList.get(i).getCrew_file().getName());
 //                map.put("site", jsonArrays.getString(i));
-                list.add(map);
-            }
+            list.add(map);
+            System.out.println("in updatelistview0 list size " + list.size());
         }
 
 
@@ -279,11 +255,9 @@ public class CrewSelectAdapter extends RecyclerView.Adapter<CrewSelectAdapter.Vi
                 new int[]{R.id.text1, R.id.text2});
 
         listView.setAdapter(adapter);
-
-
-
-
+        listView.bringToFront();
     }
+
     @Override
     public int getItemCount() {
         return 2;

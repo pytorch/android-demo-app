@@ -3,8 +3,6 @@ package org.pytorch.demo;
 
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
-import android.os.Bundle;
-import android.os.Environment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.LayoutInflater;
@@ -12,13 +10,9 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
-import androidx.viewpager2.widget.ViewPager2;
 import androidx.recyclerview.widget.RecyclerView;
 
 import org.json.JSONArray;
@@ -89,34 +83,34 @@ public class DatagramSelectAdapter extends RecyclerView.Adapter<DatagramSelectAd
 //            textView.setText(String.format("***********************set to %d", position));
 
             System.out.println("in onbindviewholder position is "+position);
-            listView = holder.itemView.findViewById(R.id.listview);
-            Button button = holder.itemView.findViewById(R.id.button);
+            listView = holder.itemView.findViewById(R.id.list);
+//            Button button = holder.itemView.findViewById(R.id.button);
 
-            button.setOnClickListener(new View.OnClickListener() {
-                @SuppressLint("StaticFieldLeak")
-                @Override
-                public void onClick(View v) {
-                    String login_id = "1";
-                    new AsyncTask<String, Integer, String>() {
-
-
-                        @Override
-                        protected String doInBackground(String... arg0) {
-                            String res = new Util().GetAvailableDatagrams("id");
-                            return res;
-                        }
-
-                        protected void onPostExecute(String result) {
-                            if (result != null) {
-                                Toast.makeText(parent.getContext(), "刷新完成", Toast.LENGTH_SHORT).show();
-                                updateListView0(result);
-                            } else {
-                                Toast.makeText(parent.getContext(), "刷新失败，检查网络", Toast.LENGTH_SHORT).show();
-                            }
-                        }
-                    }.execute("1");
-                }
-            });
+//            button.setOnClickListener(new View.OnClickListener() {
+//                @SuppressLint("StaticFieldLeak")
+//                @Override
+//                public void onClick(View v) {
+//                    String login_id = "1";
+//                    new AsyncTask<String, Integer, String>() {
+//
+//
+//                        @Override
+//                        protected String doInBackground(String... arg0) {
+//                            String res = new Util().GetAvailableDatagrams("id");
+//                            return res;
+//                        }
+//
+//                        protected void onPostExecute(String result) {
+//                            if (result != null) {
+//                                Toast.makeText(parent.getContext(), "刷新完成", Toast.LENGTH_SHORT).show();
+//                                updateListView0(result);
+//                            } else {
+//                                Toast.makeText(parent.getContext(), "刷新失败，检查网络", Toast.LENGTH_SHORT).show();
+//                            }
+//                        }
+//                    }.execute("1");
+//                }
+//            });
 
 
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -149,18 +143,18 @@ public class DatagramSelectAdapter extends RecyclerView.Adapter<DatagramSelectAd
 //                textView.setText(String.format("*****************set to %d", position));
 
                 System.out.println("in onbindviewholder position is " + position);
-                listView1 = holder.itemView.findViewById(R.id.listview);
-                Button button = holder.itemView.findViewById(R.id.button);
+                listView1 = holder.itemView.findViewById(R.id.list);
+//                Button button = holder.itemView.findViewById(R.id.button);
 
-                button.setOnClickListener(new View.OnClickListener() {
-                                              @Override
-                                              public void onClick(View v) {
-                                                  String login_id = "1";
-                                                  String[] filenames = new Util().GetLocalDatagrams();
-                                                  updateListView1(filenames);
-                                              }
-                                          }
-                );
+//                button.setOnClickListener(new View.OnClickListener() {
+//                                              @Override
+//                                              public void onClick(View v) {
+//                                                  String login_id = "1";
+//                                                  String[] filenames = new Util().GetLocalDatagrams();
+//                                                  updateListView1(filenames);
+//                                              }
+//                                          }
+//                );
 
 //            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 //                @Override

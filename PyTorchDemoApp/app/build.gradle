@@ -92,4 +92,8 @@ dependencies {
     implementation project(':usbserial-release')
     implementation project(':x5s-developmentkit')
 
+
+    // as name
+    implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
+
 }
