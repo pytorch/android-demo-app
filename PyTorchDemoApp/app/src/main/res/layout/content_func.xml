@@ -41,12 +41,12 @@
 
         <TextView
             android:id="@+id/func_title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:textAlignment="gravity"
             android:layout_marginTop="10dp"
             android:drawablePadding="16dp"
             android:text="@string/core_func"
+            android:textAlignment="center"
 
             android:textAppearance="@style/TextAppearanceMainVisionNlp"
             android:textColor="@color/black" />
