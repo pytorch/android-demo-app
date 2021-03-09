@@ -299,6 +299,8 @@ public class Utils {
 
                   {".log", "text/plain"},
 
+                  {".json", "text/plain"},
+
                   {".m3u", "audio/x-mpegurl"},
 
                   {".m4a", "audio/mp4a-latm"},

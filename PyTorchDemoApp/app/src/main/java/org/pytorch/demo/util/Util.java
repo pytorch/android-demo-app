@@ -21,6 +21,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.pytorch.demo.BitmapToVideoEncoder;
 import org.pytorch.demo.FaceDetectionActivity;
+import org.pytorch.demo.RemoteFaceDetectActivity;
 import org.pytorch.demo.Utils;
 
 import java.io.File;
@@ -476,6 +477,13 @@ public class Util {
         webSocket.sendText("");
     }
 
+    public void delete_datagram(String name) {
+        File file = new File(datagram_path, name);
+        if (file.exists()){
+            file.delete();
+        }
+    }
+
     private static class NamedEmbedding{
         public float[] embedding;
         public String id;
@@ -590,6 +598,11 @@ public class Util {
             // Failed to establish a WebSocket connection.
         } catch (InterruptedException e) {
             e.printStackTrace();
+        }
+        catch (RuntimeException re){
+            re.printStackTrace();
+            return null;
+
         }
 
         webSocket.disconnect();

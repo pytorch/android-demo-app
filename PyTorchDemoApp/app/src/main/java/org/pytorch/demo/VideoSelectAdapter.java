@@ -145,11 +145,11 @@ public class VideoSelectAdapter extends RecyclerView.Adapter<VideoSelectAdapter.
                         }
                         protected void onPostExecute(String result) {
                             if (result != null) {
-                                Utils.ShowMDToast(parent.getContext(), "下载完成", Utils.dura_short, Utils.Type_success);
+                                MDToast.makeText(parent.getContext(), "下载完成", Utils.dura_short, Utils.Type_success).show();
                                 System.out.println(result);
                             }else{
 //                                Toast.makeText(parent.getContext(), "下载失败，网络或服务器出错",Toast.LENGTH_SHORT).show();
-                                Utils.ShowMDToast(parent.getContext(), "下载失败，网络或服务器出错", Utils.dura_short, Utils.Type_info);
+                                MDToast.makeText(parent.getContext(), "下载失败，网络或服务器出错", Utils.dura_short, Utils.Type_info).show();
                             }
                         }
                     }.execute(name);
@@ -186,7 +186,7 @@ public class VideoSelectAdapter extends RecyclerView.Adapter<VideoSelectAdapter.
                     dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialog) {
-                            Utils.ShowMDToast(parent.getContext(), "上传成功", Utils.dura_short, Utils.Type_success);
+                            MDToast.makeText(parent.getContext(), "上传成功", Utils.dura_short, Utils.Type_success).show();
 //                            Toast.makeText(parent.getContext(), "上传成功", Toast.LENGTH_SHORT).show();
                         }
                     });
@@ -205,12 +205,12 @@ public class VideoSelectAdapter extends RecyclerView.Adapter<VideoSelectAdapter.
 
                         protected void onPostExecute(String result){
                             if (result != null){
-                                Utils.ShowMDToast(parent.getContext(), "上传完成", Utils.dura_short, Utils.Type_success);
+                                MDToast.makeText(parent.getContext(), "上传完成", Utils.dura_short, Utils.Type_success).show();
 //                                Toast.makeText(parent.getContext(), "上传完成",Toast.LENGTH_SHORT).show();
                                 System.out.println(result);
                             }else{
 //                                Toast.makeText(parent.getContext(), "上传失败，检查网络或服务器",Toast.LENGTH_SHORT).show();
-                                Utils.ShowMDToast(parent.getContext(), "上传失败，检查网络或服务器", Utils.dura_short, Utils.Type_warning);
+                                MDToast.makeText(parent.getContext(), "上传失败，检查网络或服务器", Utils.dura_short, Utils.Type_warning).show();
 
                             }
                         }
@@ -249,14 +249,20 @@ public class VideoSelectAdapter extends RecyclerView.Adapter<VideoSelectAdapter.
                                     if(i==0)//预览
                                     {
                                         //TODO call media here
-                                        Intent intent = new Intent(Intent.ACTION_VIEW);
-
                                         File file = new File(new Util().video_path , name);
                                         System.out.println("in onclick video path is " + file.getAbsolutePath());
+                                        Intent intent = new Intent(Intent.ACTION_VIEW);
+                                        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
                                         if (file.exists()){
-                                            Uri contentUri = FileProvider.getUriForFile(parent.getContext(), "com.mydomain.fileprovider", file);
+                                            Uri contentUri = FileProvider.getUriForFile(parent.getContext(), "authority", file);
 //                                            Uri uri = Uri.fromFile(file);
+                                            parent.getContext().grantUriPermission(parent.getContext().getPackageName(), contentUri, Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+
                                             String type = Utils.getMIMEType(file);
+                                            System.out.println("type is " + type);
+                                            System.out.println("uri is " + contentUri.getPath());
                                             intent.setDataAndType(contentUri, type);
                                             parent.getContext().startActivity(intent);
                                             MDToast.makeText(parent.getContext(), "成功打开", Utils.dura_short, Utils.Type_success).show();
@@ -287,12 +293,13 @@ public class VideoSelectAdapter extends RecyclerView.Adapter<VideoSelectAdapter.
 
     private void refresh_lv0() {
         //TODO implement server code and retrieve server videos here
+        MDToast.makeText(parent.getContext(), "刷新失败",Utils.dura_short, Utils.Type_info).show();
         swipeRefreshLayout.setRefreshing(false);
     }
 
     public void updateListView1(String[] filenames){
         if (filenames.length == 0){
-            Utils.ShowMDToast(parent.getContext(), new Util().video_path + "下没有文件",Utils.dura_short, Utils.Type_info);
+            MDToast.makeText(parent.getContext(), new Util().video_path + "下没有文件",Utils.dura_short, Utils.Type_info).show();
 //            Toast.makeText(parent.getContext(), new Util().video_path + "下没有文件", Toast.LENGTH_SHORT).show();
             return;
         }
