@@ -46,9 +46,9 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private final static String LOG_TAG = MainActivity.class.getSimpleName();
 
     private int mStart = 1;
-    HandlerThread mTimerThread;
-    Handler mTimerHandler;
-    Runnable mRunnable = new Runnable() {
+    private HandlerThread mTimerThread;
+    private Handler mTimerHandler;
+    private Runnable mRunnable = new Runnable() {
         @Override
         public void run() {
             mTimerHandler.postDelayed(mRunnable, 1000);
