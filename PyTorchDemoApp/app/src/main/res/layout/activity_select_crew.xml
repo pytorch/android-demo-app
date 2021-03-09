@@ -25,12 +25,12 @@
             <androidx.appcompat.widget.Toolbar
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="?attr/colorPrimary"
-                android:textAppearance="@style/TextAppearanceMainVisionNlp"
-                android:textColor="#000000"
+                android:layout_height="50dp"
+                android:background="@mipmap/bg_file"
+                android:textColor="@color/black"
                 app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay"
-                app:title="选择数据包" />
+                app:titleTextColor="@color/black"
+                app:title="@string/check_crew" />
         </com.google.android.material.appbar.AppBarLayout>
 
         <com.google.android.material.tabs.TabLayout
@@ -54,19 +54,6 @@
         </androidx.viewpager2.widget.ViewPager2>
 
     </LinearLayout>
-
-
-
-
-
-    <!--    <include-->
-<!--        android:id="@+id/include"-->
-<!--        layout="@layout/content_select_crew"-->
-<!--        android:layout_width="389dp"-->
-<!--        android:layout_height="549dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/appBarLayout"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/tab_layout" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

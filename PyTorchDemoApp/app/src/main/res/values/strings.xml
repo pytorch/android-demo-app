@@ -106,4 +106,7 @@
     <string name="shipname_detect">船名检测</string>
     <string name="glass_local_recog">本地识别（使用眼镜）</string>
     <string name="glass_remote_recog">远程识别（使用眼镜）</string>
+    <string name="check_crew">查看和更新船员</string>
+    <string name="check_local_datagrams">本地数据包文件</string>
+    <string name="check_local_videos">查看本地视频文件</string>
 </resources>

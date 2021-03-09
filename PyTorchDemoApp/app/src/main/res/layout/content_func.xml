@@ -1,193 +1,219 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@mipmap/bg_file"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
     android:layout_height="match_parent">
 
-
-    <LinearLayout
-        android:id="@+id/main_vision_click_view"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:gravity="center_vertical"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/main_func"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.157"
-        app:layout_constraintVertical_chainStyle="packed">
+        android:background="@mipmap/bg_file"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        android:layout_height="match_parent">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginTop="15dp"
-            android:layout_marginBottom="15dp"
-            android:text="主页"
-            android:textSize="36sp" />
-    </LinearLayout>
-
-    <FrameLayout
-        android:id="@+id/main_func"
-        android:layout_width="match_parent"
-        android:layout_height="873dp"
-        android:background="#FFFAFA"
-        app:layout_constraintTop_toBottomOf="@+id/main_vision_click_view">
 
         <LinearLayout
+            android:id="@+id/main_vision_click_view"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="100dp"
+            android:gravity="center_vertical"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/main_func"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.157"
+            app:layout_constraintVertical_chainStyle="packed">
+
             <TextView
-                android:id="@+id/func_title"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:drawablePadding="16dp"
-                android:text="@string/core_func"
-                android:textAlignment="center"
-
-                android:textAppearance="@style/TextAppearanceMainVisionNlp"
-                android:textColor="@color/black" />
-
-            <RadioGroup
-                android:id="@+id/func_button"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="#dcdcdc"
-                android:backgroundTint="@color/GRAY_050_A010"
-                android:orientation="vertical"
-                app:layout_constraintTop_toBottomOf="@+id/func_title"
-                tools:ignore="MissingConstraints">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/local_recog"
-                        style="@style/Custom.TabRadioButton"
-                        android:layout_width="100dp"
-                        android:layout_height="105dp"
-                        android:drawableTop="@mipmap/phonemode"
-
-                        android:text="@string/local_recog" />
-
-                    <RadioButton
-                        android:id="@+id/remote_recog"
-                        style="@style/Custom.TabRadioButton"
-                        android:layout_width="100dp"
-                        android:layout_height="105dp"
-                        android:drawableTop="@mipmap/phonemode"
-                        android:text="@string/remote_recog" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/glass_remote_recog"
-                        style="@style/Custom.TabRadioButton"
-                        android:layout_width="100dp"
-                        android:layout_height="105dp"
-                        android:drawableTop="@mipmap/glassmode"
-                        android:text="@string/glass_remote_recog" />
-
-                    <RadioButton
-                        android:id="@+id/glass_local_recog"
-                        style="@style/Custom.TabRadioButton"
-                        android:layout_width="100dp"
-                        android:layout_height="105dp"
-                        android:drawableTop="@mipmap/glassmode"
-                        android:text="@string/glass_local_recog" />
-
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/shipname_detect"
-                        style="@style/Custom.TabRadioButton"
-                        android:layout_width="100dp"
-                        android:layout_height="105dp"
-                        android:drawableTop="@mipmap/ship"
-                        android:text="@string/shipname_detect" />
-
-                    <RadioButton
-                        android:id="@+id/shipclass_detect"
-                        style="@style/Custom.TabRadioButton"
-                        android:layout_width="100dp"
-                        android:layout_height="105dp"
-                        android:drawableTop="@mipmap/ship"
-                        android:text="@string/ship_class_detect" />
-
-                </LinearLayout>
-
-            </RadioGroup>
-            <TextView
-                android:id="@+id/func_title_1"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_marginTop="10dp"
-                android:drawablePadding="16dp"
-                android:text="@string/auxi_func"
-                android:textAlignment="center"
-
-                android:textAppearance="@style/TextAppearanceMainVisionNlp"
-                android:textColor="@color/black" />
-
-            <RadioGroup
-                android:id="@+id/func_button_auxi"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:background="#dcdcdc"
-                android:backgroundTint="@color/GRAY_050_A010"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <RadioButton
-                        android:id="@+id/btn_add_crew"
-                        style="@style/Custom.TabRadioButton"
-                        android:layout_width="100dp"
-                        android:layout_height="105dp"
-                        android:drawableTop="@mipmap/account"
-
-                        android:text="@string/add_crew" />
-
-                    <RadioButton
-                        android:id="@+id/btn_other"
-                        style="@style/Custom.TabRadioButton"
-                        android:layout_width="100dp"
-                        android:layout_height="105dp"
-                        android:drawableTop="@mipmap/account"
-                        android:text="@string/other_func" />
-
-                </LinearLayout>
-            </RadioGroup>
-
-
+                android:layout_gravity="center"
+                android:layout_marginTop="15dp"
+                android:layout_marginBottom="15dp"
+                android:text="主页"
+                android:textSize="36sp" />
         </LinearLayout>
 
+        <FrameLayout
+            android:id="@+id/main_func"
+            android:layout_width="match_parent"
+            android:layout_height="873dp"
+            android:background="#FFFAFA"
+            app:layout_constraintTop_toBottomOf="@+id/main_vision_click_view">
 
-    </FrameLayout>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:orientation="vertical">
+                <TextView
+                    android:id="@+id/func_title"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:drawablePadding="16dp"
+                    android:text="@string/core_func"
+                    android:textAlignment="center"
+                    android:background="@color/GRAY"
+                    android:textAppearance="@style/TextAppearanceMainVisionNlp"
+                    android:textColor="@color/black" />
+
+                <RadioGroup
+                    android:id="@+id/func_button"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="#dcdcdc"
+                    android:backgroundTint="@color/GRAY_050_A010"
+                    android:orientation="vertical"
+                    app:layout_constraintTop_toBottomOf="@+id/func_title"
+                    tools:ignore="MissingConstraints">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/local_recog"
+                            style="@style/Custom.TabRadioButton"
+                            android:layout_width="100dp"
+                            android:layout_height="105dp"
+                            android:drawableTop="@mipmap/phonemode"
+
+                            android:text="@string/local_recog" />
+
+                        <RadioButton
+                            android:id="@+id/remote_recog"
+                            style="@style/Custom.TabRadioButton"
+                            android:layout_width="100dp"
+                            android:layout_height="105dp"
+                            android:drawableTop="@mipmap/phonemode"
+                            android:text="@string/remote_recog" />
+
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/glass_remote_recog"
+                            style="@style/Custom.TabRadioButton"
+                            android:layout_width="100dp"
+                            android:layout_height="105dp"
+                            android:drawableTop="@mipmap/glassmode"
+                            android:text="@string/glass_remote_recog" />
+
+                        <RadioButton
+                            android:id="@+id/glass_local_recog"
+                            style="@style/Custom.TabRadioButton"
+                            android:layout_width="100dp"
+                            android:layout_height="105dp"
+                            android:drawableTop="@mipmap/glassmode"
+                            android:text="@string/glass_local_recog" />
+
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/shipname_detect"
+                            style="@style/Custom.TabRadioButton"
+                            android:layout_width="100dp"
+                            android:layout_height="105dp"
+                            android:drawableTop="@mipmap/ship"
+                            android:text="@string/shipname_detect" />
+
+                        <RadioButton
+                            android:id="@+id/shipclass_detect"
+                            style="@style/Custom.TabRadioButton"
+                            android:layout_width="100dp"
+                            android:layout_height="105dp"
+                            android:drawableTop="@mipmap/ship"
+                            android:text="@string/ship_class_detect" />
+
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray"/>
+
+                </RadioGroup>
+                <TextView
+                    android:id="@+id/func_title_1"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="10dp"
+                    android:drawablePadding="16dp"
+                    android:text="@string/auxi_func"
+                    android:textAlignment="center"
+                    android:background="@color/GRAY"
+
+                    android:textAppearance="@style/TextAppearanceMainVisionNlp"
+                    android:textColor="@color/black" />
+
+                <RadioGroup
+                    android:id="@+id/func_button_auxi"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:background="#dcdcdc"
+                    android:backgroundTint="@color/GRAY_050_A010"
+                    android:orientation="vertical">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <RadioButton
+                            android:id="@+id/btn_add_crew"
+                            style="@style/Custom.TabRadioButton"
+                            android:layout_width="100dp"
+                            android:layout_height="105dp"
+                            android:drawableTop="@mipmap/account"
+
+                            android:text="@string/add_crew" />
+
+                        <RadioButton
+                            android:id="@+id/btn_other"
+                            style="@style/Custom.TabRadioButton"
+                            android:layout_width="100dp"
+                            android:layout_height="105dp"
+                            android:drawableTop="@mipmap/account"
+                            android:text="@string/other_func" />
+
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@android:color/darker_gray"/>
+                </RadioGroup>
 
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+            </LinearLayout>
+
+
+        </FrameLayout>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>
+

@@ -5,6 +5,8 @@ import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,13 +18,18 @@ import android.widget.SimpleAdapter;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.FileProvider;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
+import com.valdesekamdem.library.mdtoast.MDToast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.pytorch.demo.util.Util;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -40,7 +47,7 @@ public class VideoSelectAdapter extends RecyclerView.Adapter<VideoSelectAdapter.
 
     ListView listView;
     ListView listView1;
-
+    SwipeRefreshLayout swipeRefreshLayout;
     @Override
     public void onBindViewHolder(@NonNull ViewPagerViewHolder holder, int position) {
 //        TextView textView = holder.itemView.findViewById(R.id.textView);
@@ -83,8 +90,17 @@ public class VideoSelectAdapter extends RecyclerView.Adapter<VideoSelectAdapter.
 
         if(position == 0){
 
+            swipeRefreshLayout = holder.itemView.findViewById(R.id.swiperFresh);
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    refresh_lv0();
+                }
+            });
             System.out.println("in onbindviewholder position is "+position);
             listView = holder.itemView.findViewById(R.id.list);
+
+            //TODO implement server api to get all uploaded videos
 //            Button button = holder.itemView.findViewById(R.id.button);
 //
 //            button.setOnClickListener(new View.OnClickListener() {
@@ -114,45 +130,44 @@ public class VideoSelectAdapter extends RecyclerView.Adapter<VideoSelectAdapter.
 //            });
 
 
-//            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                @Override
-//                @SuppressLint("StaticFieldLeak")
-//                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                    System.out.println("position "+position);
-//                    String name = ((HashMap<String, String>)(listView.getItemAtPosition(position))).get("name");
-//                    System.out.println(name);
-//                    new AsyncTask<String, Integer, String>(){
-//                        @Override
-//                        protected String doInBackground(String... arg0){
-//                            String res = new Util().DownloadDatagramByName(arg0[0]);
-//                            return res;
-//                        }
-//                        protected void onPostExecute(String result) {
-//                            if (result != null) {
-//                                Toast.makeText(parent.getContext(), "下载完成", Toast.LENGTH_SHORT).show();
-//                                System.out.println(result);
-//                            }else{
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                @SuppressLint("StaticFieldLeak")
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    System.out.println("position "+position);
+                    String name = ((HashMap<String, String>)(listView.getItemAtPosition(position))).get("name");
+                    System.out.println(name);
+                    new AsyncTask<String, Integer, String>(){
+                        @Override
+                        protected String doInBackground(String... arg0){
+                            String res = new Util().DownloadDatagramByName(arg0[0]);
+                            return res;
+                        }
+                        protected void onPostExecute(String result) {
+                            if (result != null) {
+                                Utils.ShowMDToast(parent.getContext(), "下载完成", Utils.dura_short, Utils.Type_success);
+                                System.out.println(result);
+                            }else{
 //                                Toast.makeText(parent.getContext(), "下载失败，网络或服务器出错",Toast.LENGTH_SHORT).show();
-//                            }
-//                        }
-//                    }.execute(name);
-//                }
-//            });
+                                Utils.ShowMDToast(parent.getContext(), "下载失败，网络或服务器出错", Utils.dura_short, Utils.Type_info);
+                            }
+                        }
+                    }.execute(name);
+                }
+            });
         }
         else {
+            swipeRefreshLayout = holder.itemView.findViewById(R.id.swiperFresh);
+            swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    refresh_lv1();
+                }
+            });
             System.out.println("in onbindviewholder position is " + position);
             listView1 = holder.itemView.findViewById(R.id.list);
-//            Button button = holder.itemView.findViewById(R.id.button);
-//
-//            button.setOnClickListener(new View.OnClickListener() {
-//                                          @Override
-//                                          public void onClick(View v) {
-//                                              String login_id = "1";
-//                                              String[] filenames = new Util().GetLocalVideos();
-//                                              updateListView1(filenames);
-//                                          }
-//                                      }
-//            );
+            String[] filenames = new Util().GetLocalVideos();
+            updateListView1(filenames);
 
             listView1.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
@@ -171,7 +186,8 @@ public class VideoSelectAdapter extends RecyclerView.Adapter<VideoSelectAdapter.
                     dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
                         @Override
                         public void onDismiss(DialogInterface dialog) {
-                            Toast.makeText(parent.getContext(), "上传成功", Toast.LENGTH_SHORT).show();
+                            Utils.ShowMDToast(parent.getContext(), "上传成功", Utils.dura_short, Utils.Type_success);
+//                            Toast.makeText(parent.getContext(), "上传成功", Toast.LENGTH_SHORT).show();
                         }
                     });
                     dialog.setMessage("正在上传，请稍等");
@@ -189,10 +205,13 @@ public class VideoSelectAdapter extends RecyclerView.Adapter<VideoSelectAdapter.
 
                         protected void onPostExecute(String result){
                             if (result != null){
-                                Toast.makeText(parent.getContext(), "上传完成",Toast.LENGTH_SHORT).show();
+                                Utils.ShowMDToast(parent.getContext(), "上传完成", Utils.dura_short, Utils.Type_success);
+//                                Toast.makeText(parent.getContext(), "上传完成",Toast.LENGTH_SHORT).show();
                                 System.out.println(result);
                             }else{
-                                Toast.makeText(parent.getContext(), "上传失败，检查网络或服务器",Toast.LENGTH_SHORT).show();
+//                                Toast.makeText(parent.getContext(), "上传失败，检查网络或服务器",Toast.LENGTH_SHORT).show();
+                                Utils.ShowMDToast(parent.getContext(), "上传失败，检查网络或服务器", Utils.dura_short, Utils.Type_warning);
+
                             }
                         }
                     }.execute(filename);
@@ -212,15 +231,12 @@ public class VideoSelectAdapter extends RecyclerView.Adapter<VideoSelectAdapter.
 
                 }
 
-
-
                 @Override
                 @SuppressLint("StaticFieldLeak")
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     System.out.println("position "+position);
                     String name = ((HashMap<String, String>)(listView1.getItemAtPosition(position))).get("name");
                     System.out.println(name);
-//                Environment.getDataDirectory()
 
                     final String[] choices = new String[]{"预览", "上传"};
 
@@ -233,44 +249,51 @@ public class VideoSelectAdapter extends RecyclerView.Adapter<VideoSelectAdapter.
                                     if(i==0)//预览
                                     {
                                         //TODO call media here
+                                        Intent intent = new Intent(Intent.ACTION_VIEW);
+
+                                        File file = new File(new Util().video_path , name);
+                                        System.out.println("in onclick video path is " + file.getAbsolutePath());
+                                        if (file.exists()){
+                                            Uri contentUri = FileProvider.getUriForFile(parent.getContext(), "com.mydomain.fileprovider", file);
+//                                            Uri uri = Uri.fromFile(file);
+                                            String type = Utils.getMIMEType(file);
+                                            intent.setDataAndType(contentUri, type);
+                                            parent.getContext().startActivity(intent);
+                                            MDToast.makeText(parent.getContext(), "成功打开", Utils.dura_short, Utils.Type_success).show();
+                                        }else{
+                                            MDToast.makeText(parent.getContext(), "文件不存在，文件路径错误", Utils.dura_short, Utils.Type_error).show();
+                                        }
                                     }
-                                    else if (i == 1)// 下载
+                                    else if (i == 1)//上传
                                     {
                                         upload_dialog(name);
                                     }
-//                                    Toast.makeText(parent.getContext(), "点的是：" + choices[i], Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .create();
 
                     alertDialog.show();
-
-//                    Button button_upload = popupWindow.getContentView().findViewById(R.id.button_upload);
-//                    button_upload.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//
-//                        }
-//                    });
-//                    Button button_preview = popupWindow.getContentView().findViewById(R.id.button_preview);
-//                    button_preview.setOnClickListener(new View.OnClickListener() {
-//                        @Override
-//                        public void onClick(View v) {
-//                            //TODO open media and play video here
-//                        }
-//                    });
-//                    ProgressBar progressBar = popupWindow.getContentView().findViewById(R.id.progressBar);
-//                    progressBar.setMax(100);
-
                 }
             });
         }
 
     }
 
+    private void refresh_lv1() {
+        String[] filenames = new Util().GetLocalVideos();
+        updateListView1(filenames);
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
+    private void refresh_lv0() {
+        //TODO implement server code and retrieve server videos here
+        swipeRefreshLayout.setRefreshing(false);
+    }
+
     public void updateListView1(String[] filenames){
         if (filenames.length == 0){
-            Toast.makeText(parent.getContext(), new Util().video_path + "下没有文件", Toast.LENGTH_SHORT).show();
+            Utils.ShowMDToast(parent.getContext(), new Util().video_path + "下没有文件",Utils.dura_short, Utils.Type_info);
+//            Toast.makeText(parent.getContext(), new Util().video_path + "下没有文件", Toast.LENGTH_SHORT).show();
             return;
         }
         System.out.println("in updata listview first filename string is "+filenames[0]);
