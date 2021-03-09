@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">PyTorchDemo</string>
+    <string name="app_name">船员人脸识别</string>
     <string name="authority">MyFileProvider</string>
     <string name="action_settings">Settings</string>
     <string name="welcome_skip_button">Skip</string>

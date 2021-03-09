@@ -672,15 +672,20 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        webSocket.sendClose();
-        webSocket.disconnect();
-        if(mPublisher == null)
-        {
-            System.out.println("mPublisher is null");
-            return;
+        try{
+            webSocket.sendClose();
+            webSocket.disconnect();
+            if(mPublisher == null)
+            {
+                System.out.println("mPublisher is null");
+                return;
+            }
+            mPublisher.stopPublish();
+            mPublisher.stopRecord();
+        }catch(NullPointerException nullPointerException){
+            nullPointerException.printStackTrace();
         }
-        mPublisher.stopPublish();
-        mPublisher.stopRecord();
+
 
     }
 

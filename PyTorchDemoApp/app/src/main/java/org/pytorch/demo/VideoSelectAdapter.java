@@ -50,43 +50,6 @@ public class VideoSelectAdapter extends RecyclerView.Adapter<VideoSelectAdapter.
     SwipeRefreshLayout swipeRefreshLayout;
     @Override
     public void onBindViewHolder(@NonNull ViewPagerViewHolder holder, int position) {
-//        TextView textView = holder.itemView.findViewById(R.id.textView);
-//        textView.setText(String.format("set to %d", position));
-//
-//        listView = holder.itemView.findViewById(R.id.listview);
-//        Button button = holder.itemView.findViewById(R.id.button);
-//
-//        button.setOnClickListener(new View.OnClickListener() {
-//                                      @SuppressLint("StaticFieldLeak")
-//                                      @Override
-//                                      public void onClick(View v) {
-//                                          String login_id = "1";
-//                                          new AsyncTask<String, Integer, String>(){
-//
-//
-//                                              @Override
-//                                              protected String doInBackground(String... arg0){
-//                                                  String res = new Util().GetAvailableDatagrams("id");
-//                                                  return res;
-//                                              }
-//
-//                                              protected void onPostExecute(String result){
-//                                                  if (result != null){
-//                                                      Toast.makeText(parent.getContext(), "刷新完成",Toast.LENGTH_SHORT).show();
-//                                                      updateListView(result);
-//                                                  }else{
-//                                                      Toast.makeText(parent.getContext(), "刷新失败，检查网络",Toast.LENGTH_SHORT).show();
-//                                                  }
-//                                              }
-//
-////                                              @Override
-////                                              protected onProgressUpdate(Integer... progress){
-////                                                  setProgressPercent(progress[0]);
-////                                              }
-//                                          }.execute("1");
-//                                      }
-//                                  }
-//        );
 
         if(position == 0){
 
@@ -99,7 +62,6 @@ public class VideoSelectAdapter extends RecyclerView.Adapter<VideoSelectAdapter.
             });
             System.out.println("in onbindviewholder position is "+position);
             listView = holder.itemView.findViewById(R.id.list);
-
             //TODO implement server api to get all uploaded videos
 //            Button button = holder.itemView.findViewById(R.id.button);
 //
@@ -287,6 +249,7 @@ public class VideoSelectAdapter extends RecyclerView.Adapter<VideoSelectAdapter.
 
     private void refresh_lv1() {
         String[] filenames = new Util().GetLocalVideos();
+        MDToast.makeText(parent.getContext(), "刷新完成", MDToast.LENGTH_SHORT, MDToast.TYPE_SUCCESS).show();
         updateListView1(filenames);
         swipeRefreshLayout.setRefreshing(false);
     }

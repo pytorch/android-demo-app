@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.os.StrictMode
 import android.util.Log
 import android.view.SurfaceHolder
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
 import com.neovisionaries.ws.client.*
@@ -89,6 +90,7 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
   private var webSocket: WebSocket? = null
   private var server_state_ready = false
   private var imageView2: ImageView? = null
+  private var detect: Button? = null
 
   //    private Button offline_loginbtn;
   //    @Override
@@ -143,7 +145,8 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
       }
     }
 
-    detect.setOnClickListener {
+    detect = findViewById(R.id.btn_detect)
+    detect!!.setOnClickListener {
 
       //send http or websocket to get result
       val msg = "{\"event\": \"detect\"}"

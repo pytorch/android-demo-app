@@ -50,17 +50,18 @@
                 android:layout_height="wrap_content"
 
                 android:orientation="vertical">
+
                 <TextView
                     android:id="@+id/func_title"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="10dp"
+                    android:background="@color/GRAY"
                     android:drawablePadding="16dp"
                     android:text="@string/core_func"
                     android:textAlignment="center"
-                    android:background="@color/GRAY"
                     android:textAppearance="@style/TextAppearanceMainVisionNlp"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/WHITE" />
 
                 <RadioGroup
                     android:id="@+id/func_button"
@@ -156,18 +157,19 @@
                         android:background="@android:color/darker_gray"/>
 
                 </RadioGroup>
+
                 <TextView
                     android:id="@+id/func_title_1"
                     android:layout_width="match_parent"
                     android:layout_height="50dp"
                     android:layout_marginTop="10dp"
+                    android:background="@color/GRAY"
                     android:drawablePadding="16dp"
                     android:text="@string/auxi_func"
                     android:textAlignment="center"
-                    android:background="@color/GRAY"
 
                     android:textAppearance="@style/TextAppearanceMainVisionNlp"
-                    android:textColor="@color/black" />
+                    android:textColor="@color/WHITE" />
 
                 <RadioGroup
                     android:id="@+id/func_button_auxi"

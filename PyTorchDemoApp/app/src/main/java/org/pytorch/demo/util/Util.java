@@ -9,6 +9,7 @@ import android.os.StrictMode;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
 import com.neovisionaries.ws.client.HostnameUnverifiedException;
 import com.neovisionaries.ws.client.OpeningHandshakeException;
 import com.neovisionaries.ws.client.WebSocket;
@@ -22,6 +23,7 @@ import org.json.JSONObject;
 import org.pytorch.demo.BitmapToVideoEncoder;
 import org.pytorch.demo.FaceDetectionActivity;
 import org.pytorch.demo.RemoteFaceDetectActivity;
+import org.pytorch.demo.SettingContent;
 import org.pytorch.demo.Utils;
 
 import java.io.File;
@@ -323,6 +325,32 @@ public class Util {
             fileNotFoundException.printStackTrace();
         }
     }
+    public SettingContent GetSettingContent(){
+        String json = GetLocalJson().toString();
+        Gson gson = new Gson();
+        return gson.fromJson(json, SettingContent.class);
+    }
+
+    public void SetSettingContent(SettingContent settingContent) throws IOException {
+        Gson gson = new Gson();
+        SetLocalJson(gson.toJson(settingContent));
+    }
+
+    public void SetToken(String token){
+        SettingContent settingContent = GetSettingContent();
+        settingContent.setToken(token);
+        try {
+            SetSettingContent(settingContent);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+    }
+    public String GetToken(){
+        SettingContent settingContent = GetSettingContent();
+        return settingContent.getToken();
+    }
+
+
 
     public JSONObject GetLocalJson(){
 //        File Directory = Environment.getExternalStorageDirectory();

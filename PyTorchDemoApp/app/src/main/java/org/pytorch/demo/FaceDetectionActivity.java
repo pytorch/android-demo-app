@@ -98,7 +98,7 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
 
     private static final int INPUT_TENSOR_WIDTH = 360;
     private static final int INPUT_TENSOR_HEIGHT = 480;
-    private static final int TOP_K = 3;
+    private static final int TOP_K = Utils.TOP_K;
     private static final int MOVING_AVG_PERIOD = 10;
     private static final String FORMAT_MS = "%dms";
     private static final String FORMAT_AVG_MS = "avg:%.0fms";
@@ -586,6 +586,8 @@ public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetection
         }
         if (result.bitmap_c != null){
             imageView.setImageBitmap(result.bitmap_c);
+
+            Utils.convertDis2Prob(result.topNClassNames, result.topNScores);
 
             for (int i = 0; i < TOP_K; i++) {
                 final ResultRowView rowView = mResultRowViews[i];

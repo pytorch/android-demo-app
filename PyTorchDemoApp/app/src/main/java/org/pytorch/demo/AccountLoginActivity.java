@@ -13,10 +13,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.valdesekamdem.library.mdtoast.MDToast;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.pytorch.demo.util.Base64Utils;
 import org.pytorch.demo.util.SharedPreferencesUtils;
+import org.pytorch.demo.util.Util;
 import org.pytorch.demo.widget.LoadingDialog;
 
 import java.io.IOException;
@@ -298,14 +301,12 @@ public class AccountLoginActivity extends Activity
                 if(jsonObject.has("detail")){
                     JSONObject jo =(JSONObject) jsonObject.getJSONObject("detail");
                     String hint = jo.getString("msg");
-//                    Toast.makeText(this, hint, Toast.LENGTH_LONG).show();
+                    showToast(hint);
                     return false;
                 }
                 else{
                     String token = jsonObject.getString("access_token");
-                    Utils.token = token;
-//                    intent = new Intent(AccountLoginActivity.this, SideBarActivity.class);
-//                    startActivity(intent);
+                    new Util().SetToken(token);
                     return true;
                 }
             } catch (JSONException jsonException) {
@@ -560,7 +561,7 @@ public class AccountLoginActivity extends Activity
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(org.pytorch.demo.AccountLoginActivity.this, msg, Toast.LENGTH_SHORT).show();
+                MDToast.makeText(org.pytorch.demo.AccountLoginActivity.this, msg, MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show();
             }
         });
 

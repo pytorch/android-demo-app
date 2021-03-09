@@ -21,6 +21,27 @@ public class Utils {
 
   public static String token = null;
   public static int TOP_K = 3;
+  public static float distance_threshold = 0.7f;
+
+  public static void convertDis2Prob(String[] names, float[] dists){
+    float total = 0;
+    for (int i = 0; i < dists.length; i++){
+      if (dists[i] > distance_threshold){
+        names[i] = "UNKNOWN";
+        dists[i] = 0;
+      }
+      else{
+        dists[i] = distance_threshold - dists[i];
+        total += dists[i];
+      }
+
+    }
+    for (int i = 0; i < dists.length; i++){
+      dists[i]/=total;
+    }
+  }
+
+
 
   public static String assetFilePath(Context context, String assetName) {
     File file = new File(context.getFilesDir(), assetName);

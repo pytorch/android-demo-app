@@ -228,8 +228,25 @@ public class DatagramSelectAdapter extends RecyclerView.Adapter<DatagramSelectAd
                                     }
                                     else if (i == 1)//删除
                                     {
-                                        new Util().delete_datagram(name);
-                                        MDToast.makeText(parent.getContext(), "文件已删除", Utils.dura_short, Utils.Type_success).show();
+                                        new AlertDialog.Builder(parent.getContext())
+                                                .setTitle("删除 " + name)
+                                                .setMessage("是否确定删除 "+ name)
+
+                                                // Specifying a listener allows you to take an action before dismissing the dialog.
+                                                // The dialog is automatically dismissed when a dialog button is clicked.
+                                                .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                                                    public void onClick(DialogInterface dialog, int which) {
+                                                        // Continue with delete operation
+                                                        new Util().delete_datagram(name);
+                                                        MDToast.makeText(parent.getContext(), "文件已删除", Utils.dura_short, Utils.Type_success).show();
+                                                    }
+                                                })
+
+                                                // A null listener allows the button to dismiss the dialog and take no further action.
+                                                .setNegativeButton(android.R.string.no, null)
+                                                .setIcon(android.R.drawable.ic_dialog_alert)
+                                                .show();
+
                                     }
                                 }
                             })
@@ -246,8 +263,9 @@ public class DatagramSelectAdapter extends RecyclerView.Adapter<DatagramSelectAd
     }
 
     private void refresh_lv1() {
-      String[] filenames = new Util().GetLocalDatagrams();
-      updateListView1(filenames);
+        String[] filenames = new Util().GetLocalDatagrams();
+        MDToast.makeText(parent.getContext(), "刷新完成", MDToast.LENGTH_SHORT, MDToast.TYPE_SUCCESS).show();
+        updateListView1(filenames);
     }
 
     @SuppressLint("StaticFieldLeak")

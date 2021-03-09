@@ -17,13 +17,14 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="279dp"
+            android:layout_height="142dp"
             android:layout_gravity="center"
-            android:drawableTop="@drawable/ic_vision_s"
             android:drawablePadding="16dp"
+            android:gravity="center"
             android:text="本地文件编辑"
-            android:textAppearance="@style/TextAppearanceMainVisionNlp" />
+            android:textColor="@color/GRAY"
+            android:textSize="36sp" />
 
     </FrameLayout>
 

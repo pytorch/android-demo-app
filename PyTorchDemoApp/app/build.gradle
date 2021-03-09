@@ -93,7 +93,8 @@ dependencies {
     implementation project(':x5s-developmentkit')
 
 
-    // as name
+    // layout
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.1.0"
-
+    // json parse
+    implementation 'com.google.code.gson:gson:2.8.4'
 }
