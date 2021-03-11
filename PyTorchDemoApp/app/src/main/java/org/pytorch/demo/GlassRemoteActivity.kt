@@ -167,8 +167,8 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
     val token = util.GetToken()
     try {
 
-      if (token != null)
-        serverUri = serverUri.replace("{TOKEN}", Utils.token)
+//      if (token != null)
+//        serverUri = serverUri.replace("{TOKEN}", Utils.token)
       serverUri = serverUri.replace("{RTMP}", "livestream")
       println("in rfda, serveruri $serverUri")
       webSocket = webSocketFactory!!.createSocket(serverUri)

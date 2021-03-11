@@ -615,7 +615,7 @@ public class Util {
     }
 
     public String getWebsocket_TEMPLATE(){
-        return "ws://"+ws_uri+":8080/ws?rtmp={RTMP}&token={TOKEN}";
+        return "ws://"+ws_uri+":8080/ws?rtmp={RTMP}&token="+settingContent.getToken();
     }
 
     public String getRandomAlphaString(int length) {

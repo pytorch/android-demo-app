@@ -294,7 +294,9 @@ public class AccountLoginActivity extends Activity
 
         Util util = new Util();
         String server_addr = util.settingContent.getServer_addr();
-        res = sendByOKHttp("http://"+server_addr+"/api/account/login", username, password);
+        String url = "http://"+server_addr+":8080/api/account/login";
+        System.out.println("in ala url is " + url);
+        res = sendByOKHttp(url, username, password);
 
         System.out.println("in onclick res is " + res);
         if (res!=null){
