@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">TorchVideo</string>
-    <string name="classify">Classify</string>
-    <string name="run_model">Running the model...</string>
+    <string name="pause">Pause</string>
+    <string name="resume">Resume</string>
     <string name="restart">Restart</string>
     <string name="select">Select</string>
     <string name="live">Live</string>

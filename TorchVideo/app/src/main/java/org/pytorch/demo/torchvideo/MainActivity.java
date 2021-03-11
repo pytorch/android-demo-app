@@ -9,7 +9,6 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.MediaController;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
@@ -30,12 +29,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements Runnable {
-    private Button mButtonClassify;
+    private Button mButtonPauseResume;
     private ProgressBar mProgressBar;
     private Bitmap mBitmap = null;
     private Module mModule = null;
     private int mTestVideoIndex = 0;
-    private String[] mTestVideos = {"video1", "video2"};
+    private String[] mTestVideos = {"video1", "video2", "video3"};
     private String[] mClasses;
     List<String> mResults = new ArrayList<>();
     private VideoView mVideoView;
@@ -44,10 +43,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private final static float[] MEAN_RGB = new float[] {0.45f, 0.45f, 0.45f};
     private final static float[] STD_RGB = new float[] {0.225f, 0.225f, 0.225f};
     private final static int INPUT_SIZE = 3 * 4 * 160 * 160;
-
-
-    // see http://host.robots.ox.ac.uk:8080/pascal/VOC/voc2007/segexamples/index.html for the list of classes with indexes
-    private static final int CLASSNUM = 21;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,11 +67,12 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         mTextView = findViewById(R.id.textView);
 
-        mVideoView = findViewById(R.id.videoView);
-        initializePlayer();
-        MediaController controller = new MediaController(this);
-        controller.setMediaPlayer(mVideoView);
-        mVideoView.setMediaController(controller);
+
+//        MediaController controller = new MediaController(this);
+//        controller.setMediaPlayer(mVideoView);
+//        mVideoView.setMediaController(controller);
+
+        mTextView.setVisibility(View.INVISIBLE);
 
         final Button buttonTest = findViewById(R.id.testButton);
         buttonTest.setText(String.format("Video 1/%d", mTestVideos.length));
@@ -85,29 +81,47 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 mTestVideoIndex = (mTestVideoIndex + 1) % mTestVideos.length;
                 buttonTest.setText(String.format("Video %d/%d", mTestVideoIndex + 1, mTestVideos.length));
                 mTextView.setText("");
-            }
-        });
-
-
-        mButtonClassify = findViewById(R.id.classifyButton);
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
-        mButtonClassify.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v) {
-                mButtonClassify.setEnabled(false);
-                //mProgressBar.setVisibility(ProgressBar.VISIBLE);
-                mButtonClassify.setText(getString(R.string.run_model));
+                mTextView.setVisibility(View.INVISIBLE);
+                setVideo();
 
                 Thread thread = new Thread(MainActivity.this);
                 thread.start();
             }
         });
+
+
+        mButtonPauseResume = findViewById(R.id.pauseResumeButton);
+        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mButtonPauseResume.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                //mButtonStart.setEnabled(false);
+                //mProgressBar.setVisibility(ProgressBar.VISIBLE);
+                if (mVideoView.isPlaying()) {
+                    mButtonPauseResume.setText(getString(R.string.resume));
+                    mVideoView.pause();
+                }
+                else {
+                    mButtonPauseResume.setText(getString(R.string.pause));
+                    mVideoView.start();
+                }
+
+//                Thread thread = new Thread(MainActivity.this);
+//                thread.start();
+
+            }
+        });
+
+        mVideoView = findViewById(R.id.videoView);
+        setVideo();
+
     }
 
-    private void initializePlayer() {
+    private void setVideo() {
         Uri videoUri = getMedia(mTestVideos[mTestVideoIndex]);
         mVideoView.setVideoURI(videoUri);
         mVideoView.start();
-        mVideoView.pause();
+        mButtonPauseResume.setText(getString(R.string.pause));
+        //mVideoView.pause();
     }
 
 
@@ -148,22 +162,23 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         mResults.clear();
 
-
         for (int i = 0; i < durationTo; i++) {
             int from = i * 1000;
             int to = (i + 1) * 1000;
             if (i == durationTo - 1)
                 to = (int) Math.ceil(durationMs) - (i * 1000);
+
+            final long startTime = SystemClock.elapsedRealtime();
             final String result = getResult(from, to, mmr);
+            final long inferenceTime = SystemClock.elapsedRealtime() - startTime;
+
             // TODO: show new result every 1s
             final int finalI = i;
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-//                    mButtonClassify.setEnabled(true);
-//                    mButtonClassify.setText(getString(R.string.classify));
-//                    mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-                    mTextView.setText(String.format("%ds: %s", finalI +1, result));
+                    mTextView.setVisibility(View.VISIBLE);
+                    mTextView.setText(String.format("%ds: %s - %dms", finalI +1, result, inferenceTime));
                 }
             });
             mResults.add(result);
@@ -196,10 +211,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         final float[] inputs = inputTensor.getDataAsFloatArray();
 
-        final long startTime = SystemClock.elapsedRealtime();
         Tensor outputTensor = mModule.forward(IValue.from(inputTensor)).toTensor();
-        final long inferenceTime = SystemClock.elapsedRealtime() - startTime;
-        System.out.println("video classification inference time(ms): " + inferenceTime);
 
         final float[] scores = outputTensor.getDataAsFloatArray();
 
