@@ -89,7 +89,7 @@ class FaceDetectionActivity2 : AppCompatActivity(), LifecycleOwner {
         captureButton = findViewById(R.id.capture_button)
         btn_getImage = findViewById(R.id.btn_getImage)
         imageView = findViewById(R.id.imageView)
-        graphicOverlay = findViewById(R.id.graphic_overlay)
+        graphicOverlay = findViewById(R.id.graphicOverlay)
         graphicOverlay.bringToFront()
         switch_cam = findViewById(R.id.img_view_switch)
         switch_cam.bringToFront()
@@ -102,9 +102,7 @@ class FaceDetectionActivity2 : AppCompatActivity(), LifecycleOwner {
         mResultRowViews[1] = findViewById(R.id.image_classification_top2_result_row)
         mResultRowViews[2] = findViewById(R.id.image_classification_top3_result_row)
 
-        mFpsText = findViewById(R.id.image_classification_fps_text)
-        mMsText = findViewById(R.id.image_classification_ms_text)
-        mMsAvgText = findViewById(R.id.image_classification_ms_avg_text)
+
 
         val embds = Util()._embeddings_from_files
         update_embeddings(embds)
@@ -461,14 +459,14 @@ class FaceDetectionActivity2 : AppCompatActivity(), LifecycleOwner {
             }
         }
 
-        mMsText.setText(String.format(Locale.US, Utils.FORMAT_MS, moduleForwardDuration))
-        if (mMsText.getVisibility() != View.VISIBLE) {
-            mMsText.setVisibility(View.VISIBLE)
-        }
-        mFpsText.setText(String.format(Locale.US, Utils.FORMAT_FPS, 1000f / moduleAnalysisDuration))
-        if (mFpsText.getVisibility() != View.VISIBLE) {
-            mFpsText.setVisibility(View.VISIBLE)
-        }
+//        mMsText.setText(String.format(Locale.US, Utils.FORMAT_MS, moduleForwardDuration))
+//        if (mMsText.getVisibility() != View.VISIBLE) {
+//            mMsText.setVisibility(View.VISIBLE)
+//        }
+//        mFpsText.setText(String.format(Locale.US, Utils.FORMAT_FPS, 1000f / moduleAnalysisDuration))
+//        if (mFpsText.getVisibility() != View.VISIBLE) {
+//            mFpsText.setVisibility(View.VISIBLE)
+//        }
 
     }
 

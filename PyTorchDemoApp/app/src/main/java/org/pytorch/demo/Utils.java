@@ -3,6 +3,7 @@ package org.pytorch.demo;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.SystemClock;
@@ -39,9 +40,17 @@ public class Utils {
   public static float distance_threshold = 0.7f;
   public static final String FORMAT_MS = "%dms";
   public static final String FORMAT_AVG_MS = "avg:%.0fms";
-
+  public static final String FILE_PROVIDER_AUTHORITY = "authority";
   public static final String FORMAT_FPS = "%.1fFPS";
   public static final String SCORES_FORMAT = "%.2f";
+
+
+  public static Bitmap rotateImage(Bitmap source, float angle) {
+    Matrix matrix = new Matrix();
+    matrix.postRotate(angle);
+    return Bitmap.createBitmap(source, 0, 0, source.getWidth(), source.getHeight(),
+            matrix, true);
+  }
   public static void convertDis2Prob(String[] names, float[] dists){
     float total = 0;
     for (int i = 0; i < dists.length; i++){

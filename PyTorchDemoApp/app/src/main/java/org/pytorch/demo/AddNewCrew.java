@@ -8,12 +8,14 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.AppCompatEditText;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.FileProvider;
 
@@ -46,6 +48,7 @@ import java.util.Date;
 
 import static java.lang.Math.max;
 import static java.lang.Math.min;
+import static org.pytorch.demo.Utils.rotateImage;
 
 public class AddNewCrew extends AppCompatActivity {
 
@@ -68,7 +71,7 @@ public class AddNewCrew extends AppCompatActivity {
     private static final int REQUEST_PERMISSION_CODE = 267;
     private static final int TAKE_PHOTO = 189;
     private static final int CHOOSE_PHOTO = 385;
-    private static final String FILE_PROVIDER_AUTHORITY = "com.mydomain.fileprovider";
+    private static final String FILE_PROVIDER_AUTHORITY = Utils.FILE_PROVIDER_AUTHORITY;
     private Uri mImageUri, mImageUriFromFile;
     private File imageFile;
 
@@ -95,11 +98,17 @@ public class AddNewCrew extends AppCompatActivity {
             }
         });
 
+        findViewById(R.id.btn_return).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         findViewById(R.id.btn_submit).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                TextInputEditText textInputEditText = findViewById(R.id.input_id);
+                AppCompatEditText textInputEditText = findViewById(R.id.input_id);
                 crewID = textInputEditText.getText().toString();
                 if(crewFace == null || crewID.equals("")){
                     Toast.makeText(AddNewCrew.this,"没有设置人脸或id"+crewID, Toast.LENGTH_SHORT).show();
@@ -444,13 +453,38 @@ public class AddNewCrew extends AppCompatActivity {
                     try {
                         /*如果拍照成功，将Uri用BitmapFactory的decodeStream方法转为Bitmap*/
                         Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().openInputStream(mImageUri));
+                        ExifInterface ei = new ExifInterface(imageFile.getAbsolutePath());
+                        int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                                ExifInterface.ORIENTATION_UNDEFINED);
+
+                        Bitmap rotatedBitmap = null;
+                        switch(orientation) {
+
+                            case ExifInterface.ORIENTATION_ROTATE_90:
+                                rotatedBitmap = rotateImage(bitmap, 90);
+                                break;
+
+                            case ExifInterface.ORIENTATION_ROTATE_180:
+                                rotatedBitmap = rotateImage(bitmap, 180);
+                                break;
+
+                            case ExifInterface.ORIENTATION_ROTATE_270:
+                                rotatedBitmap = rotateImage(bitmap, 270);
+                                break;
+
+                            case ExifInterface.ORIENTATION_NORMAL:
+                            default:
+                                rotatedBitmap = bitmap;
+                        }
                         Log.i(TAG, "onActivityResult: imageUri " + mImageUri);
                         galleryAddPic(mImageUriFromFile);
                         ImageView imageView = findViewById(R.id.input_image);
-                        imageView.setImageBitmap(bitmap);//显示到ImageView上
+                        imageView.setImageBitmap(rotatedBitmap);//显示到ImageView上
                         crewFace = bitmap;
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
+                    } catch (IOException exception) {
+                        exception.printStackTrace();
                     }
                 }
                 break;

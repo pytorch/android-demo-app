@@ -58,6 +58,8 @@ import static java.lang.Math.min;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
 
+import net.ossrs.yasea.SrsCameraView;
+
 public class GlassLocalActivity extends AppCompatActivity {
 
     public static final String SCORES_FORMAT = "%.2f";
@@ -171,10 +173,13 @@ public class GlassLocalActivity extends AppCompatActivity {
 //                    case R.id.cameraOnOffBtn:
 //                        toggleCameraOnOffBtn();
 //                        break;
-//                    case R.id.takePictureBtn:
-//                        findViewById(R.id.takePictureBtn).setEnabled(false);
-//                        takePicture();
-//                        break;
+                    case R.id.detectBtn:
+                        //TODO detect
+                        //get bitmap
+                        Bitmap bitmap = mSplitCameraView.getBitmap();
+                        analyzeImage(bitmap, 0);
+                        Toast.makeText(GlassLocalActivity.this, "detecting ", Toast.LENGTH_SHORT).show();
+                        break;
                     case R.id.videoBtn:
                         findViewById(R.id.videoBtn).setEnabled(false);
                         toogleVideoBtn();
@@ -184,7 +189,7 @@ public class GlassLocalActivity extends AppCompatActivity {
         };
 
 //        (findViewById(R.id.cameraOnOffBtn)).setOnClickListener(listener);
-//        (findViewById(R.id.takePictureBtn)).setOnClickListener(listener);
+        (findViewById(R.id.detectBtn)).setOnClickListener(listener);
         (findViewById(R.id.videoBtn)).setOnClickListener(listener);
 
 //        (findViewById(R.id.takePictureBtn)).setEnabled(false);
@@ -819,20 +824,20 @@ public class GlassLocalActivity extends AppCompatActivity {
         MySplitCamera.getInstance(this).setOnPreviewFrameListener(new AbstractUVCCameraHandler.OnPreViewResultListener() {
             @Override
             public void onPreviewResult(byte[] nv21bytearray) {
-                int width = 1280;
-                int height = 720;
-                YuvImage yuvImage = new YuvImage(nv21bytearray, ImageFormat.NV21, width, height, null);
-                ByteArrayOutputStream os = new ByteArrayOutputStream();
-                yuvImage.compressToJpeg(new Rect(0, 0, width, height), 100, os);
-                byte[] jpegByteArray = os.toByteArray();
-                Bitmap bitmap = BitmapFactory.decodeByteArray(jpegByteArray, 0, jpegByteArray.length);
-//                runOnUiThread(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        analyzeImage(bitmap,0);
-//                    }
-//                });//卡死啦
-                analyzeImage(bitmap, 0);
+//                int width = 1280;
+//                int height = 720;
+//                YuvImage yuvImage = new YuvImage(nv21bytearray, ImageFormat.NV21, width, height, null);
+//                ByteArrayOutputStream os = new ByteArrayOutputStream();
+//                yuvImage.compressToJpeg(new Rect(0, 0, width, height), 100, os);
+//                byte[] jpegByteArray = os.toByteArray();
+//                Bitmap bitmap = BitmapFactory.decodeByteArray(jpegByteArray, 0, jpegByteArray.length);
+////                runOnUiThread(new Runnable() {
+////                    @Override
+////                    public void run() {
+////                        analyzeImage(bitmap,0);
+////                    }
+////                });//卡死啦
+//                analyzeImage(bitmap, 0);
 
             }
         });
