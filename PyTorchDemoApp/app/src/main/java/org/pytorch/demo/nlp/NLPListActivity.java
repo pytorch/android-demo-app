@@ -5,8 +5,7 @@ import android.os.Bundle;
 
 import org.pytorch.demo.AbstractListActivity;
 import org.pytorch.demo.R;
-import org.pytorch.demo.vision.ImageClassificationActivity;
-import org.pytorch.demo.vision.VisionListActivity;
+
 
 public class NLPListActivity extends AbstractListActivity {
 

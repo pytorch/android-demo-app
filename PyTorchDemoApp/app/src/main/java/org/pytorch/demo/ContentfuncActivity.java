@@ -56,7 +56,7 @@ public class ContentfuncActivity extends Fragment {
         Activity baseActivity = getActivity();
         Button local_button = baseActivity.findViewById(R.id.local_recog);
         Button remote_button = baseActivity.findViewById(R.id.remote_recog);
-        local_button.setOnClickListener(v -> startActivity(new Intent(ContentfuncActivity.this.getActivity(),FaceDetectionActivity.class)));
+        local_button.setOnClickListener(v -> startActivity(new Intent(ContentfuncActivity.this.getActivity(),FaceDetectionActivity2.class)));
         remote_button.setOnClickListener(v -> startActivity(new Intent(ContentfuncActivity.this.getActivity(),RemoteFaceDetectActivity.class)));
         baseActivity.findViewById(R.id.glass_local_recog).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -90,7 +90,7 @@ public class ContentfuncActivity extends Fragment {
         //当这个图片被绘制时，给他绑定一个矩形 ltrb规定这个矩形  (这里的长和宽写死了 自己可以可以修改成 形参传入)
         drawable_news.setBounds(0, 0, 95, 95);
         //设置图片在文字的哪个方向
-        radioButton.setCompoundDrawables(null,null,null, drawable_news);
+        radioButton.setCompoundDrawables(null,drawable_news,null, null);
     }
 
 

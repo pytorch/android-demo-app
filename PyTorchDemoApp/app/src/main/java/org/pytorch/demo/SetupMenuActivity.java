@@ -49,7 +49,7 @@ public class SetupMenuActivity extends AppCompatActivity implements AdapterView.
         setContentView(R.layout.activity_setupmenu);
 
         Util util = new Util();
-
+//        R.layout.activity_face_detection2
         rtmp_uri = findViewById(R.id.et_rtmp_addr);
         rtmp_uri.setInputType(InputType.TYPE_TEXT_FLAG_MULTI_LINE);
         server_uri = findViewById(R.id.et_server_addr);
@@ -80,7 +80,7 @@ public class SetupMenuActivity extends AppCompatActivity implements AdapterView.
         load_setting();
 
 
-        System.out.println("in setup menu "+util.ws+util.server_uri);
+//        System.out.println("in setup menu "+util.ws+util.server_uri);
         Button save = findViewById(R.id.Save);
         save.setOnClickListener(v -> {
             try {

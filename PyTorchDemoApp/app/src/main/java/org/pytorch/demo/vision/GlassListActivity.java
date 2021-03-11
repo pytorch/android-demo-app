@@ -9,12 +9,10 @@ import android.widget.Toast;
 import com.serenegiant.usb.USBMonitor;
 
 import org.pytorch.demo.AbstractListActivity;
-import org.pytorch.demo.FaceDetectionActivity;
 import org.pytorch.demo.GlassLocalActivity;
 import org.pytorch.demo.GlassRemoteActivity;
 import org.pytorch.demo.InfoViewFactory;
 import org.pytorch.demo.R;
-import org.pytorch.demo.RemoteFaceDetectActivity;
 
 import static android.hardware.usb.UsbConstants.USB_CLASS_MISC;
 import static android.hardware.usb.UsbConstants.USB_CLASS_STILL_IMAGE;

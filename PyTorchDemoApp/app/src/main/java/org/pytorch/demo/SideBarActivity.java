@@ -29,11 +29,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 
 
-import org.pytorch.demo.nlp.NLPListActivity;
-import org.pytorch.demo.vision.GlassListActivity;
-import org.pytorch.demo.vision.SetFaceLogin;
-import org.pytorch.demo.vision.VisionListActivity;
-
 
 public class SideBarActivity extends AppCompatActivity {
 

@@ -39,6 +39,9 @@ android {
     }
     buildToolsVersion '28.0.3'
     ndkVersion '21.1.6352462'
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 }
 
 dependencies {
@@ -56,15 +59,19 @@ dependencies {
     implementation 'androidx.navigation:navigation-fragment:2.2.2'
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     implementation fileTree(dir: 'E:\\hanjiaxiangmu\\android-demo-app\\PyTorchDemoApp\\app\\src\\libs', include: ['*.aar', '*.jar'], exclude: [])
-    def camerax_version = "1.0.0-alpha05"
+    implementation 'androidx.navigation:navigation-ui-ktx:2.2.2'
+    def camerax_version = "1.0.0-beta07"
+    // def camerax_version = "1.0.0-alpha05"
     implementation "androidx.camera:camera-core:$camerax_version"
     implementation "androidx.camera:camera-camera2:$camerax_version"
+    implementation "androidx.camera:camera-lifecycle:$camerax_version"
+    implementation "androidx.camera:camera-view:1.0.0-alpha14"
     implementation 'com.google.android.material:material:1.2.0-alpha06'
 
     implementation 'org.pytorch:pytorch_android:1.6.0-SNAPSHOT'
     implementation 'org.pytorch:pytorch_android_torchvision:1.6.0-SNAPSHOT'
     implementation "androidx.core:core-ktx:+"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.4.30"
     //    网络通信库
     implementation "com.squareup.okhttp3:okhttp:3.12.2"
     implementation "org.java-websocket:Java-WebSocket:1.4.0"

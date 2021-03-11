@@ -36,6 +36,7 @@ import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 import com.seu.magicfilter.utils.MagicFilterType;
+import com.valdesekamdem.library.mdtoast.MDToast;
 
 import net.ossrs.yasea.SrsCameraView;
 import net.ossrs.yasea.SrsEncodeHandler;
@@ -68,7 +69,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 
     public static final String SCORES_FORMAT = "%.2f";
     private Button btnPublish;
-    private Button btnSwitchCamera;
+    private ImageView btnSwitchCamera;
     private Button btnRecord;
     private Button btnSwitchEncoder;
     private Button btnPause;
@@ -153,10 +154,9 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 
         //init parameters
         Util util = new Util();
-//        rtmpUrl = util.getRTMPURL();
-        rtmpUrl = "rtmp://10.138.116.66/live/livestream";
+        rtmpUrl = util.getRTMPURL();
+        serverUri = util.getWebsocket_TEMPLATE();
         recPath = Environment.getExternalStorageDirectory().getPath() + "/test.mp4";
-        serverUri = util.ws;
 
         requestPermission_rfda();
     }
@@ -208,7 +208,8 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
         btnDetect = (Button) findViewById(R.id.detect);
         btnDetect.setText("检测");
         btnPublish = (Button) findViewById(R.id.publish);
-        btnSwitchCamera = (Button) findViewById(R.id.swCam);
+        btnSwitchCamera = (ImageView) findViewById(R.id.swCam);
+        btnSwitchCamera.bringToFront();
 //        btnRecord = (Button) findViewById(R.id.record_yasea);
 //        btnSwitchEncoder = (Button) findViewById(R.id.swEnc);
 //        btnPause = (Button) findViewById(R.id.pause);
@@ -269,7 +270,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
             @Override
             public void onClick(View v) {
                 if (btnPublish.getText().toString().contentEquals("推流")) {
-                    rtmpUrl = efu.getText().toString();
+                    rtmpUrl = efu.getText().toString() + "?token=" + new Util().GetToken();
 //                    SharedPreferences.Editor editor = sp.edit();
 //                    editor.putString("rtmpUrl", rtmpUrl);
 //                    editor.apply();
@@ -360,6 +361,8 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
         try{
 //            serverUri.replace("{RTMP}", rtmpUrl);
 
+            Util util = new Util();
+            token = util.GetToken();
 //            System.out.println("in util ws is " + ws);
             if (token != null)
                 serverUri=serverUri.replace("{TOKEN}", token);
@@ -442,16 +445,17 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
             System.out.println(ioe.toString());
         }
         catch (OpeningHandshakeException e)
-        {
+        {e.printStackTrace();
             // A violation against the WebSocket protocol was detected
             // during the opening handshake.
         }
         catch (HostnameUnverifiedException e)
-        {
+        {e.printStackTrace();
             // The certificate of the peer does not match the expected hostname.
         }
         catch (WebSocketException e)
         {
+            e.printStackTrace();
             // Failed to establish a WebSocket connection.
         }catch (RuntimeException re){
             Toast.makeText(RemoteFaceDetectActivity.this, "远程服务器错误", Toast.LENGTH_LONG).show();
@@ -711,7 +715,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 
     private void handleException(Exception e) {
         try {
-            Toast.makeText(getApplicationContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
+            MDToast.makeText(getApplicationContext(), e.getMessage(), MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR).show();
             mPublisher.stopPublish();
             mPublisher.stopRecord();
             btnPublish.setText("推流");
@@ -726,12 +730,12 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 
     @Override
     public void onRtmpConnecting(String msg) {
-        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+        MDToast.makeText(getApplicationContext(), msg, MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show();
     }
 
     @Override
     public void onRtmpConnected(String msg) {
-        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+        MDToast.makeText(getApplicationContext(), msg, MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show();
     }
 
     @Override
@@ -744,12 +748,12 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 
     @Override
     public void onRtmpStopped() {
-        Toast.makeText(getApplicationContext(), "Stopped", Toast.LENGTH_SHORT).show();
+        MDToast.makeText(getApplicationContext(), "rtmp中断", MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show();
     }
 
     @Override
     public void onRtmpDisconnected() {
-        Toast.makeText(getApplicationContext(), "Disconnected", Toast.LENGTH_SHORT).show();
+        MDToast.makeText(getApplicationContext(), "rtmp断开", MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show();
     }
 
     @Override
@@ -801,22 +805,22 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 
     @Override
     public void onRecordPause() {
-        Toast.makeText(getApplicationContext(), "Record paused", Toast.LENGTH_SHORT).show();
+        MDToast.makeText(getApplicationContext(), "暂停录像", MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show();
     }
 
     @Override
     public void onRecordResume() {
-        Toast.makeText(getApplicationContext(), "Record resumed", Toast.LENGTH_SHORT).show();
+        MDToast.makeText(getApplicationContext(), "继续录像", MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show();
     }
 
     @Override
     public void onRecordStarted(String msg) {
-        Toast.makeText(getApplicationContext(), "Recording file: " + msg, Toast.LENGTH_SHORT).show();
+        MDToast.makeText(getApplicationContext(), "录像: " + msg, MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show();
     }
 
     @Override
     public void onRecordFinished(String msg) {
-        Toast.makeText(getApplicationContext(), "MP4 file saved: " + msg, Toast.LENGTH_SHORT).show();
+        MDToast.makeText(getApplicationContext(), "MP4文件已保存: " + msg, MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show();
     }
 
     @Override
@@ -833,12 +837,12 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 
     @Override
     public void onNetworkWeak() {
-        Toast.makeText(getApplicationContext(), "Network weak", Toast.LENGTH_SHORT).show();
+        MDToast.makeText(getApplicationContext(), "网络差", MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show();
     }
 
     @Override
     public void onNetworkResume() {
-        Toast.makeText(getApplicationContext(), "Network resume", Toast.LENGTH_SHORT).show();
+        MDToast.makeText(getApplicationContext(), "网络已连接", MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show();
     }
 
     @Override

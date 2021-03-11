@@ -16,6 +16,7 @@ import android.widget.Toast
 import com.neovisionaries.ws.client.*
 import com.serenegiant.usb.USBMonitor
 import com.serenegiant.usb.UVCCamera
+import com.valdesekamdem.library.mdtoast.MDToast
 import kotlinx.android.synthetic.main.activity_glass_remote.*
 import kotlinx.android.synthetic.main.activity_glass_remote.graphicOverlay
 import kotlinx.android.synthetic.main.activity_remote_face_detect.*
@@ -44,14 +45,14 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
 
   override fun onConnectionSuccessRtmp() {
     runOnUiThread {
-      Toast.makeText(this, "Success", Toast.LENGTH_SHORT).show()
+      MDToast.makeText(this, "连接成功", MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show()
     }
   }
 
 
   override fun onConnectionFailedRtmp(reason: String) {
     runOnUiThread {
-      Toast.makeText(this, "Failed $reason", Toast.LENGTH_SHORT).show()
+      MDToast.makeText(this, "连接失败，由于$reason", MDToast.LENGTH_SHORT, MDToast.TYPE_WARNING).show()
       rtmpUSB.stopStream(uvcCamera)
     }
   }
@@ -62,7 +63,7 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
 
   override fun onDisconnectRtmp() {
     runOnUiThread {
-      Toast.makeText(this, "Disconnect", Toast.LENGTH_SHORT).show()
+      MDToast.makeText(this, "断开连接", MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show()
     }
   }
 
@@ -135,7 +136,7 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
     start_stop.setOnClickListener {
       if (uvcCamera != null) {
         if (!rtmpUSB.isStreaming) {
-          Toast.makeText(this@GlassRemoteActivity, "开始推流，地址"+et_url.text.toString(), Toast.LENGTH_SHORT).show()
+          MDToast.makeText(this@GlassRemoteActivity, "开始推流，地址"+et_url.text.toString(), MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show()
           startStream(et_url.text.toString())
           start_stop.text = "停止推流"
         } else {
@@ -154,7 +155,7 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
         webSocket!!.sendText(msg)
         println("detect sent")
       } else {
-        Toast.makeText(this@GlassRemoteActivity, "server还没有准备好", Toast.LENGTH_SHORT).show()
+        MDToast.makeText(this@GlassRemoteActivity, "server还没有准备好", MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show()
       }
     }
 
@@ -162,10 +163,11 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
 
     namedboxpool = ArrayList<Utils.NamedBox>()
     webSocketFactory = WebSocketFactory()
-    var serverUri = Util().ws;
+    var serverUri = util.websocket_TEMPLATE;
+    val token = util.GetToken()
     try {
 
-      if (Utils.token != null)
+      if (token != null)
         serverUri = serverUri.replace("{TOKEN}", Utils.token)
       serverUri = serverUri.replace("{RTMP}", "livestream")
       println("in rfda, serveruri $serverUri")
@@ -185,7 +187,7 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
           if (message != null) {
             if (message.contains("ready")) {
               server_state_ready = true
-              Toast.makeText(this@GlassRemoteActivity, "ws连接成功", Toast.LENGTH_SHORT).show()
+              MDToast.makeText(this@GlassRemoteActivity, "ws连接成功", MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show()
             }
             if(server_state_ready)
               updateNamedboxpool(message)
@@ -212,7 +214,7 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
     } catch (e: WebSocketException) {
       // Failed to establish a WebSocket connection.
     } catch (re: RuntimeException) {
-      Toast.makeText(this@GlassRemoteActivity, "远程服务器错误", Toast.LENGTH_LONG).show()
+      MDToast.makeText(this@GlassRemoteActivity, "远程服务器错误", MDToast.LENGTH_LONG, MDToast.TYPE_ERROR).show()
       finishActivity(11)
     }
 
@@ -311,7 +313,7 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
   private val onDeviceConnectListener = object : USBMonitor.OnDeviceConnectListener {
     override fun onAttach(device: UsbDevice?) {
       if (device != null) {
-        Toast.makeText(this@GlassRemoteActivity, "usb设备已接入with class " + device.getDeviceClass(), Toast.LENGTH_SHORT).show()
+        MDToast.makeText(this@GlassRemoteActivity, "usb设备已接入with class " + device.getDeviceClass(), MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show()
 
         if(device.deviceClass == USB_CLASS_MISC)
           usbMonitor.requestPermission(device)
@@ -328,7 +330,7 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
 
       val camera = UVCCamera()
       ctrlBlock = controlBlock
-      Toast.makeText(this@GlassRemoteActivity, "打开usb相机完成", Toast.LENGTH_SHORT).show()
+      MDToast.makeText(this@GlassRemoteActivity, "打开usb相机完成", MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show()
       camera.open(ctrlBlock, false)
 
       try {
@@ -343,7 +345,7 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
       }
       uvcCamera = camera
       rtmpUSB.startPreview(uvcCamera, width, height)
-      Toast.makeText(this@GlassRemoteActivity, "开始预览", Toast.LENGTH_SHORT).show()
+      MDToast.makeText(this@GlassRemoteActivity, "开始预览", MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show()
     }
 
     override fun onDisconnect(device: UsbDevice?, ctrlBlock: USBMonitor.UsbControlBlock?) {

@@ -292,7 +292,9 @@ public class AccountLoginActivity extends Activity
         }
         String res = null;
 
-        res = sendByOKHttp("http://10.138.100.154:8080/api/account/login", username, password);
+        Util util = new Util();
+        String server_addr = util.settingContent.getServer_addr();
+        res = sendByOKHttp("http://"+server_addr+"/api/account/login", username, password);
 
         System.out.println("in onclick res is " + res);
         if (res!=null){
@@ -307,6 +309,7 @@ public class AccountLoginActivity extends Activity
                 else{
                     String token = jsonObject.getString("access_token");
                     new Util().SetToken(token);
+                    Utils.token = token;
                     return true;
                 }
             } catch (JSONException jsonException) {

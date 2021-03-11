@@ -20,9 +20,7 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.pytorch.demo.BitmapToVideoEncoder;
-import org.pytorch.demo.FaceDetectionActivity;
-import org.pytorch.demo.RemoteFaceDetectActivity;
+
 import org.pytorch.demo.SettingContent;
 import org.pytorch.demo.Utils;
 
@@ -47,76 +45,49 @@ public class Util {
     public String datagram_path = project_path + "/datagrams";
     public String video_path = project_path + "/videos";
     public String config_path = project_path + "/config";
-    public String default_ws = "ws://10.138.118.224.7:8000/ws/chat/lobby/";//websocket测试地址
-    public String default_server = "120.27.241.217";
+    public String default_ws = "10.138.118.224";//websocket测试地址
+    public String default_rtmp = "120.27.241.217";
     private WebSocketFactory webSocketFactory;
     private WebSocket webSocket;
     private String available_datagrams;
     private SharedPreferences sharedPreferences;
-    public String ws = null;
-    public String server_uri = null;
+    public String ws_uri = null;
+    public String rtmp_uri = null;
+    public SettingContent settingContent;
     public double upload_progress;
     public Util(Activity activity)  {
-        File project_dir = new File(project_path);
-        if (!project_dir.exists()){
-            project_dir.mkdir();
+        try{
+            settingContent = GetSettingContent();
+            ws_uri = settingContent.getServer_addr();
+            rtmp_uri = settingContent.getRtmp_addr();
+        }catch (NullPointerException xception) {
+            xception.printStackTrace();
         }
-//        Util();
-//        sharedPreferences = activity.getSharedPreferences("info",  Activity.MODE_PRIVATE);
-//        ws = sharedPreferences.getString("rtmp_uri", default_ws);
-//        server_uri = sharedPreferences.getString("server_uri", default_server);
-//        default_server = server_uri;
-//        default_ws = ws;
-        JSONObject jsonObject = GetLocalJson();
-        if (jsonObject != null)
+        if (ws_uri == null){
+            ws_uri = default_ws;
+        }
+        if (rtmp_uri == null)
         {
-            try{
-                ws = jsonObject.getString("rtmp_uri");
-                server_uri = jsonObject.getString("server_uri");
-            }catch (JSONException | NullPointerException jsonException){
-                jsonException.printStackTrace();
-            }
+            rtmp_uri = default_rtmp;
         }
-
-        if (ws == null){
-            ws = default_ws;
-        }
-        if (server_uri == null)
-        {
-            server_uri = default_server;
-        }
-        System.out.println("server_uri "+server_uri);
-        System.out.println("rtmp uri " + ws);
-
     }
 
 
     public Util(){
-        File project_dir = new File(project_path);
-        if (!project_dir.exists()){
-            project_dir.mkdir();
-        }
-        JSONObject jsonObject = GetLocalJson();
         try{
-//            String rtmp_uri = jsonObject.getString("rtmp_uri");
-
-//            server_uri = jsonObject.getString("server_uri");
-            server_uri = "10.138.100.154";
-            ws = "ws://"+server_uri+":8080/ws?rtmp={RTMP}&token={TOKEN}";
-            System.out.println("in util ws is " + ws);
-
-        }catch (NullPointerException jsonException){
-            jsonException.printStackTrace();
+            settingContent = GetSettingContent();
+            ws_uri = settingContent.getServer_addr();
+            rtmp_uri = settingContent.getRtmp_addr();
+        }catch (NullPointerException xception) {
+            xception.printStackTrace();
         }
-        if (ws == null){
-            ws = default_ws;
+        if (ws_uri == null){
+            ws_uri = default_ws;
         }
-        if (server_uri == null)
+        if (rtmp_uri == null)
         {
-            server_uri = default_server;
+            rtmp_uri = default_rtmp;
         }
-        System.out.println("server_uri "+server_uri);
-        System.out.println("rtmp uri " + ws);
     }
 
     public String deliminator = "\\${10,}";
@@ -127,7 +98,7 @@ public class Util {
 
 //        WebSocket webSocket;
         try{
-            webSocket=webSocketFactory.createSocket(ws);
+            webSocket=webSocketFactory.createSocket(ws_uri);
 
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
@@ -215,7 +186,7 @@ public class Util {
 
 //        WebSocket webSocket;
         try{
-            webSocket=webSocketFactory.createSocket(ws);
+            webSocket=webSocketFactory.createSocket(ws_uri);
 
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
@@ -346,7 +317,7 @@ public class Util {
         }
     }
     public String GetToken(){
-        SettingContent settingContent = GetSettingContent();
+//        SettingContent settingContent = GetSettingContent();
         return settingContent.getToken();
     }
 
@@ -568,7 +539,7 @@ public class Util {
 
 //        WebSocket webSocket;
         try{
-            webSocket=webSocketFactory.createSocket(ws);
+            webSocket=webSocketFactory.createSocket(ws_uri);
 
             StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
             StrictMode.setThreadPolicy(policy);
@@ -640,7 +611,11 @@ public class Util {
 
     public String getRTMPURL(){
 //        return "rtmp://"+server_uri+"/" + getRandomAlphaString(3) + '/' + getRandomAlphaDigitString(5);
-        return "rtmp://" + server_uri + "/live/livestream";
+        return "rtmp://" + rtmp_uri + "/live/livestream?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMCIsImV4cCI6MTYxNTQ1NDA3OCwic2NvcGVzIjpbImFwcHVzZXIiXX0.YaJewk07x36ThTgGlPh9M832CQtzJYDvq6HkJ7ynmTM";
+    }
+
+    public String getWebsocket_TEMPLATE(){
+        return "ws://"+ws_uri+":8080/ws?rtmp={RTMP}&token={TOKEN}";
     }
 
     public String getRandomAlphaString(int length) {

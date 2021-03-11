@@ -110,4 +110,5 @@
     <string name="check_crew">查看和更新船员</string>
     <string name="check_local_datagrams">本地数据包文件</string>
     <string name="check_local_videos">查看本地视频文件</string>
+    <string name="title_activity_face_detection2">FaceDetectionActivity2</string>
 </resources>

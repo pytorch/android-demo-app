@@ -105,4 +105,24 @@
             android:id="@+id/action_Second4Fragment_to_First4Fragment"
             app:destination="@id/First4Fragment" />
     </fragment>
+    <fragment
+        android:id="@+id/First5Fragment"
+        android:name="org.pytorch.demo.First5Fragment"
+        android:label="@string/first_fragment_label"
+        tools:layout="@layout/fragment_first5">
+
+        <action
+            android:id="@+id/action_First5Fragment_to_Second5Fragment"
+            app:destination="@id/Second5Fragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/Second5Fragment"
+        android:name="org.pytorch.demo.Second5Fragment"
+        android:label="@string/second_fragment_label"
+        tools:layout="@layout/fragment_second5">
+
+        <action
+            android:id="@+id/action_Second5Fragment_to_First5Fragment"
+            app:destination="@id/First5Fragment" />
+    </fragment>
 </navigation>
