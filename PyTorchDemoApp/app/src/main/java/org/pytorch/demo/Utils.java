@@ -45,6 +45,18 @@ public class Utils {
   public static final String SCORES_FORMAT = "%.2f";
 
 
+  /*
+  * @params rtmp_uri: uri with format like rtmp://ip[:port]/rtmp1/rtmp2
+  * @return rtmp2
+  *
+  * */
+  public static String extract_rtmp_string(String rtmp_uri){
+    int i = rtmp_uri.lastIndexOf("/");
+    if (i >= 0)
+      return rtmp_uri.substring(i+1);
+    else
+      return "";
+  }
   public static Bitmap rotateImage(Bitmap source, float angle) {
     Matrix matrix = new Matrix();
     matrix.postRotate(angle);

@@ -92,6 +92,11 @@ public class Util {
 
     public String deliminator = "\\${10,}";
 
+    public String generateFileName(){
+        return "" + System.currentTimeMillis();
+    }
+
+
     public String UploadVideoByName(String s){
         upload_progress = 0;
         webSocketFactory = new WebSocketFactory();

@@ -842,7 +842,7 @@ public class GlassLocalActivity extends AppCompatActivity {
             }
         });
 
-        //////
+
 
         /* Insert code segment below if you want to record the video */
         MySplitCamera.getInstance(this).setRecordVideoCallback(new RecordVideoCallback() {

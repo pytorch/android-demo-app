@@ -125,11 +125,12 @@ public class SetupMenuActivity extends AppCompatActivity implements AdapterView.
 
     }
     public void load_setting(){
-        String setting = new Util().GetLocalJson().toString();
-        Gson gson = new Gson();
+
 
 
         try {
+            String setting = new Util().GetLocalJson().toString();
+            Gson gson = new Gson();
             SettingContent settingContent = gson.fromJson(setting, SettingContent.class);
             rtmp_uri.setText(settingContent.getRtmp_addr());
             server_uri.setText(settingContent.getServer_addr());

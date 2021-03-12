@@ -12,14 +12,11 @@ import android.util.Log
 import android.view.SurfaceHolder
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.Toast
 import com.neovisionaries.ws.client.*
 import com.serenegiant.usb.USBMonitor
 import com.serenegiant.usb.UVCCamera
 import com.valdesekamdem.library.mdtoast.MDToast
 import kotlinx.android.synthetic.main.activity_glass_remote.*
-import kotlinx.android.synthetic.main.activity_glass_remote.graphicOverlay
-import kotlinx.android.synthetic.main.activity_remote_face_detect.*
 import net.ossrs.rtmp.ConnectCheckerRtmp
 import org.json.JSONException
 import org.json.JSONObject
@@ -169,7 +166,10 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
 
 //      if (token != null)
 //        serverUri = serverUri.replace("{TOKEN}", Utils.token)
-      serverUri = serverUri.replace("{RTMP}", "livestream")
+
+//            serverUri.replace("{RTMP}", rtmpUrl);
+      val rtmp = Utils.extract_rtmp_string(et_url.text.toString())
+      serverUri = serverUri.replace("{RTMP}", rtmp)
       println("in rfda, serveruri $serverUri")
       webSocket = webSocketFactory!!.createSocket(serverUri)
       val policy = StrictMode.ThreadPolicy.Builder().permitAll().build()

@@ -361,12 +361,13 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
         try{
 //            serverUri.replace("{RTMP}", rtmpUrl);
 
-            Util util = new Util();
-            token = util.GetToken();
+            String rtmp = Utils.extract_rtmp_string(efu.getText().toString());
+//            Util util = new Util();
+//            token = util.GetToken();
 //            System.out.println("in util ws is " + ws);
-            if (token != null)
-                serverUri=serverUri.replace("{TOKEN}", token);
-            serverUri = serverUri.replace("{RTMP}", "livestream");
+//            if (token != null)
+//                serverUri=serverUri.replace("{TOKEN}", token);
+            serverUri = serverUri.replace("{RTMP}", rtmp);
             System.out.println("in rfda, serveruri " + serverUri);
             webSocket=webSocketFactory.createSocket(serverUri);
             // Android 4.0 之后不能在主线程中请求HTTP请求

@@ -59,7 +59,6 @@ public class AccountLoginActivity extends Activity
         initViews();
         setupEvents();
         initData();
-
     }
 
     private void initData() {

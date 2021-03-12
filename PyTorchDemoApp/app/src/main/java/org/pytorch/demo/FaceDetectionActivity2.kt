@@ -7,14 +7,16 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.SystemClock
 import android.util.Log
-import android.util.Rational
 import android.util.Size
-import android.view.MotionEvent
-import android.view.TextureView
 import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
-import androidx.camera.core.*
+import androidx.camera.core.CameraSelector
+import androidx.camera.core.ImageAnalysis
+import androidx.camera.core.Preview
+import androidx.camera.core.VideoCapture
+import androidx.camera.lifecycle.ProcessCameraProvider
+import androidx.camera.view.PreviewView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
@@ -29,12 +31,6 @@ import org.pytorch.torchvision.TensorImageUtils
 import java.io.File
 import java.util.*
 import kotlin.collections.ArrayList
-import androidx.camera.core.CameraSelector
-import androidx.camera.core.impl.LensFacingConverter
-import androidx.camera.core.impl.PreviewConfig
-import androidx.camera.core.impl.VideoCaptureConfig
-import androidx.camera.lifecycle.ProcessCameraProvider
-import androidx.camera.view.PreviewView
 
 
 private const val REQUEST_CODE_PERMISSIONS = 10
@@ -115,8 +111,7 @@ class FaceDetectionActivity2 : AppCompatActivity(), LifecycleOwner {
                     this, REQUIRED_PERMISSIONS, REQUEST_CODE_PERMISSIONS)
         }
 
-        val file = File(externalMediaDirs.first(),
-                "${System.currentTimeMillis()}.mp4")
+
 
         btn_getImage.setOnClickListener { view : View ->
             var bitmap = viewFinder.bitmap
@@ -144,6 +139,12 @@ class FaceDetectionActivity2 : AppCompatActivity(), LifecycleOwner {
                 captureButton.setBackgroundColor(Color.GREEN)
                 captureButton.setText("录像中...")
                 switch_cam.isEnabled = false
+                val video_dir = File(Util().video_path)
+                if (!video_dir.exists()) {
+                    video_dir.mkdir()
+                }
+                val child = Util().generateFileName()
+                val file = File(video_dir, "$child.mp4")
                 videoCapture.startRecording(file, ContextCompat.getMainExecutor(this), object: VideoCapture.OnVideoSavedCallback{
                     override fun onVideoSaved(file: File) {
                         MDToast.makeText(this@FaceDetectionActivity2,"文件保存到$file", MDToast.LENGTH_LONG, MDToast.TYPE_INFO).show()
