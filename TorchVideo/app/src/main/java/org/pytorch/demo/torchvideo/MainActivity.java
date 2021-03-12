@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements Runnable {
-    private final String TAG = MainActivity.this.getLocalClassName();
+    private final String TAG = MainActivity.class.getSimpleName();
     private Button mButtonPauseResume;
     private Module mModule = null;
     private int mTestVideoIndex = 0;
@@ -67,12 +67,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         }
 
         mTextView = findViewById(R.id.textView);
-
-
-//        MediaController controller = new MediaController(this);
-//        controller.setMediaPlayer(mVideoView);
-//        mVideoView.setMediaController(controller);
-
         mTextView.setVisibility(View.INVISIBLE);
 
         final Button buttonTest = findViewById(R.id.testButton);
