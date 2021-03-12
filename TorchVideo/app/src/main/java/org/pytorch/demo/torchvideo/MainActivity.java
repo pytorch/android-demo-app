@@ -159,7 +159,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         int durationTo = (int) Math.ceil(durationMs / 1000);
 
         mResults.clear();
-
         for (int i = 0; !mStopThread && i < durationTo; i++) {
             int from = i * 1000;
             int to = (i + 1) * 1000;
@@ -170,7 +169,24 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             final String result = getResult(from, to, mmr);
             final long inferenceTime = SystemClock.elapsedRealtime() - startTime;
 
-            // TODO: show new result every 1s
+            if (i * 1000 > mVideoView.getCurrentPosition()) {
+                try {
+                    Thread.sleep(i*1000 - mVideoView.getCurrentPosition());
+                } catch (InterruptedException e) {
+                    Log.e(TAG, "Thread sleep exception");
+                }
+            }
+
+            while (!mVideoView.isPlaying()) {
+                if (mStopThread) break;
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException e) {
+                    Log.e(TAG, "Thread sleep exception");
+                }
+            }
+            if (mStopThread) break;
+
             final int finalI = i;
             runOnUiThread(new Runnable() {
                 @Override
