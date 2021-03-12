@@ -9,7 +9,6 @@ import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.VideoView;
 
@@ -29,16 +28,18 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements Runnable {
+    private final String TAG = MainActivity.this.getLocalClassName();
     private Button mButtonPauseResume;
-    private ProgressBar mProgressBar;
-    private Bitmap mBitmap = null;
     private Module mModule = null;
     private int mTestVideoIndex = 0;
     private String[] mTestVideos = {"video1", "video2", "video3"};
     private String[] mClasses;
-    List<String> mResults = new ArrayList<>();
+    private List<String> mResults = new ArrayList<>();
     private VideoView mVideoView;
     private TextView mTextView;
+
+    private Thread mThread;
+    private boolean mStopThread;
 
     private final static float[] MEAN_RGB = new float[] {0.45f, 0.45f, 0.45f};
     private final static float[] STD_RGB = new float[] {0.225f, 0.225f, 0.225f};
@@ -61,7 +62,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             mClasses = new String[classes.size()];
             classes.toArray(mClasses);
         } catch (IOException e) {
-            Log.e("Video Classification", "Error reading model file", e);
+            Log.e(TAG, "Error reading model file", e);
             finish();
         }
 
@@ -82,20 +83,15 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 buttonTest.setText(String.format("Video %d/%d", mTestVideoIndex + 1, mTestVideos.length));
                 mTextView.setText("");
                 mTextView.setVisibility(View.INVISIBLE);
+                mStopThread = true;
                 setVideo();
-
-                Thread thread = new Thread(MainActivity.this);
-                thread.start();
             }
         });
 
 
         mButtonPauseResume = findViewById(R.id.pauseResumeButton);
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
         mButtonPauseResume.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //mButtonStart.setEnabled(false);
-                //mProgressBar.setVisibility(ProgressBar.VISIBLE);
                 if (mVideoView.isPlaying()) {
                     mButtonPauseResume.setText(getString(R.string.resume));
                     mVideoView.pause();
@@ -104,10 +100,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                     mButtonPauseResume.setText(getString(R.string.pause));
                     mVideoView.start();
                 }
-
-//                Thread thread = new Thread(MainActivity.this);
-//                thread.start();
-
             }
         });
 
@@ -121,7 +113,19 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         mVideoView.setVideoURI(videoUri);
         mVideoView.start();
         mButtonPauseResume.setText(getString(R.string.pause));
-        //mVideoView.pause();
+
+        if (mThread != null && mThread.isAlive()) {
+            try {
+                mThread.join();
+            }
+            catch (InterruptedException e) {
+                Log.e(TAG, e.getLocalizedMessage());
+            }
+        }
+
+        mStopThread = false;
+        mThread = new Thread(MainActivity.this);
+        mThread.start();
     }
 
 
@@ -162,7 +166,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         mResults.clear();
 
-        for (int i = 0; i < durationTo; i++) {
+        for (int i = 0; !mStopThread && i < durationTo; i++) {
             int from = i * 1000;
             int to = (i + 1) * 1000;
             if (i == durationTo - 1)
@@ -183,9 +187,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             });
             mResults.add(result);
         }
-
-
-
     }
 
     private String getResult(int from, int to, MediaMetadataRetriever mmr) {

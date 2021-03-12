@@ -78,7 +78,7 @@
         android:layout_height="24dp"
         android:layout_marginBottom="30dp"
         android:textAlignment="center"
-        android:background="#FFFF00FF"
+        android:background="#FF2356E7"
         android:textColor="#FFFFFFFF"
         app:layout_constraintBottom_toTopOf="@+id/pauseResumeButton"
         app:layout_constraintEnd_toEndOf="parent"
