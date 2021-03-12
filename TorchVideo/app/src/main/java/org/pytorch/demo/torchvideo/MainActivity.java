@@ -73,6 +73,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         buttonTest.setText(String.format("Video 1/%d", mTestVideos.length));
         buttonTest.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                //mVideoView.stopPlayback();
                 mTestVideoIndex = (mTestVideoIndex + 1) % mTestVideos.length;
                 buttonTest.setText(String.format("Video %d/%d", mTestVideoIndex + 1, mTestVideos.length));
                 mTextView.setText("");
@@ -173,19 +174,20 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 try {
                     Thread.sleep(i*1000 - mVideoView.getCurrentPosition());
                 } catch (InterruptedException e) {
-                    Log.e(TAG, "Thread sleep exception");
+                    Log.e(TAG, "Thread sleep exception: " + e.getLocalizedMessage());
                 }
             }
 
             while (!mVideoView.isPlaying()) {
-                if (mStopThread) break;
+                if (mStopThread || (mVideoView.getCurrentPosition() >= mVideoView.getDuration())) break;
                 try {
+                    Log.d(">>>>>", "sleep 100" +  mVideoView.getCurrentPosition()+","+ mVideoView.getDuration());
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
-                    Log.e(TAG, "Thread sleep exception");
+                    Log.e(TAG, "Thread sleep exception: " + e.getLocalizedMessage());
                 }
             }
-            if (mStopThread) break;
+            //if (mStopThread) break;
 
             final int finalI = i;
             runOnUiThread(new Runnable() {
@@ -235,8 +237,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             }
         }
 
-        return mClasses[maxn + 1];
+        return mClasses[maxn];
     }
-
-
 }
