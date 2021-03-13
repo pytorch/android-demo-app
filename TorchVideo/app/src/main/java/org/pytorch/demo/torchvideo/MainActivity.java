@@ -1,21 +1,19 @@
 package org.pytorch.demo.torchvideo;
 
-import android.Manifest;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.SystemClock;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.VideoView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
 
 import org.pytorch.IValue;
 import org.pytorch.Module;
@@ -24,8 +22,6 @@ import org.pytorch.Tensor;
 import org.pytorch.torchvision.TensorImageUtils;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.FloatBuffer;
@@ -37,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private Button mButtonPauseResume;
     private Module mModule = null;
     private int mTestVideoIndex = 0;
-    private String[] mTestVideos = {"video3"};//{"video1", "video2", "video3"};
+    private String[] mTestVideos = {"video1", "video2", "video3"};
     private String[] mClasses;
     private List<String> mResults = new ArrayList<>();
     private VideoView mVideoView;
@@ -54,10 +50,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        ActivityCompat.requestPermissions(this,
-                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE},
-                1000);
 
         try {
             mModule = PyTorchAndroid.loadModuleFromAsset(getAssets(), "video_classification.pt");
@@ -175,9 +167,9 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             if (i == durationTo - 1)
                 to = (int) Math.ceil(durationMs) - (i * 1000);
 
-            final long startTime = SystemClock.elapsedRealtime();
-            final String result = getResult(from, to, mmr);
-            final long inferenceTime = SystemClock.elapsedRealtime() - startTime;
+            final Pair<String, Long> pair = getResult(from, to, mmr);
+            final String result = pair.first;
+            final long inferenceTime = pair.second;
 
             if (i * 1000 > mVideoView.getCurrentPosition()) {
                 try {
@@ -211,41 +203,13 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     }
 
 
-    public static void saveBitmap(String name, Bitmap bitmap) {
-
-        File f = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS)
-                .toString() + "/" + name + ".png");
-        try {
-            f.createNewFile();
-            FileOutputStream fOut = null;
-            fOut = new FileOutputStream(f);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 100, fOut);
-            fOut.flush();
-            fOut.close();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private String getResult(int from, int to, MediaMetadataRetriever mmr) {
+    private Pair<String, Long> getResult(int from, int to, MediaMetadataRetriever mmr) {
         int diff = to - from;
-
-        long startTime = SystemClock.elapsedRealtime();
 
         Bitmap bitmap1 = mmr.getFrameAtTime(from, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
         Bitmap bitmap2 = mmr.getFrameAtTime(1000 * (from + (int)(diff * 0.33)), MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
         Bitmap bitmap3= mmr.getFrameAtTime(1000 * (from + (int)(diff * 0.67)),MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
         Bitmap bitmap4 = mmr.getFrameAtTime(1000 * to, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
-
-        Log.d("!!!!!!!", "getFrame time: " + (SystemClock.elapsedRealtime() - startTime));
-
-        saveBitmap(String.format("%s_%d_%d", mTestVideos[mTestVideoIndex], from/1000, 0), bitmap1);
-        saveBitmap(String.format("%s_%d_%d", mTestVideos[mTestVideoIndex], from/1000, 1), bitmap2);
-        saveBitmap(String.format("%s_%d_%d", mTestVideos[mTestVideoIndex], from/1000, 2), bitmap3);
-        saveBitmap(String.format("%s_%d_%d", mTestVideos[mTestVideoIndex], from/1000, 3), bitmap4);
-
-        startTime = SystemClock.elapsedRealtime();
 
         FloatBuffer inTensorBuffer = Tensor.allocateFloatBuffer(INPUT_SIZE);
 
@@ -254,25 +218,16 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         Bitmap resizedBitmap3 = Bitmap.createScaledBitmap(bitmap3, 160, 160, true);
         Bitmap resizedBitmap4 = Bitmap.createScaledBitmap(bitmap4, 160, 160, true);
 
-//        Log.d("!!!!!!!", "resizedBitmap time: " + (SystemClock.elapsedRealtime() - startTime));
-//        startTime = SystemClock.elapsedRealtime();
-
         TensorImageUtils.bitmapToFloatBuffer(resizedBitmap1, 0,0,resizedBitmap1.getWidth(),resizedBitmap1.getHeight(), MEAN_RGB, STD_RGB, inTensorBuffer, 0);
         TensorImageUtils.bitmapToFloatBuffer(resizedBitmap2, 0,0,resizedBitmap2.getWidth(),resizedBitmap2.getHeight(), MEAN_RGB, STD_RGB, inTensorBuffer, 3 * resizedBitmap1.getWidth() * resizedBitmap1.getHeight());
         TensorImageUtils.bitmapToFloatBuffer(resizedBitmap3, 0,0,resizedBitmap3.getWidth(),resizedBitmap3.getHeight(), MEAN_RGB, STD_RGB, inTensorBuffer, 3 * 2 * resizedBitmap1.getWidth() * resizedBitmap1.getHeight());
         TensorImageUtils.bitmapToFloatBuffer(resizedBitmap4, 0,0,resizedBitmap4.getWidth(),resizedBitmap4.getHeight(), MEAN_RGB, STD_RGB, inTensorBuffer, 3 * 3 * resizedBitmap1.getWidth() * resizedBitmap1.getHeight());
 
-//        Log.d("!!!!!!!", "bitmapToFloatBuffer time: " + (SystemClock.elapsedRealtime() - startTime));
-
-
         Tensor inputTensor = Tensor.fromBlob(inTensorBuffer, new long[]{1, 3, 4, 160, 160});
 
-        final float[] inputs = inputTensor.getDataAsFloatArray();
-
-        startTime = SystemClock.elapsedRealtime();
+        final long startTime = SystemClock.elapsedRealtime();
         Tensor outputTensor = mModule.forward(IValue.from(inputTensor)).toTensor();
-        long inferenceTime = SystemClock.elapsedRealtime() - startTime;
-        Log.d("!!!!!!!", "inferenceTime="+inferenceTime);
+        final long inferenceTime = SystemClock.elapsedRealtime() - startTime;
 
         final float[] scores = outputTensor.getDataAsFloatArray();
 
@@ -285,6 +240,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             }
         }
 
-        return mClasses[maxn];
+        return new Pair<>(mClasses[maxn], inferenceTime);
     }
 }
