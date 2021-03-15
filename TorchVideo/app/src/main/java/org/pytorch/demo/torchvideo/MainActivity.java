@@ -26,6 +26,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity implements Runnable {
@@ -33,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private Button mButtonPauseResume;
     private Module mModule = null;
     private int mTestVideoIndex = 0;
-    private String[] mTestVideos = {"video1", "video2", "video3"};
+    private final String[] mTestVideos = {"video1", "video2", "video3", "video4", "video5"};
     private String[] mClasses;
     private List<String> mResults = new ArrayList<>();
     private VideoView mVideoView;
@@ -44,8 +46,11 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
     private final static float[] MEAN_RGB = new float[] {0.45f, 0.45f, 0.45f};
     private final static float[] STD_RGB = new float[] {0.225f, 0.225f, 0.225f};
-    private final static int INPUT_SIZE = 3 * 4 * 160 * 160;
+    private final static int COUNT_OF_FRAMES_PER_INFERENCE = 4;
+    private final static int TARGET_VIDEO_SIZE = 160;
+    private final static int MODEL_INPUT_SIZE = COUNT_OF_FRAMES_PER_INFERENCE * 3 * TARGET_VIDEO_SIZE * TARGET_VIDEO_SIZE;
 
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,13 +172,17 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             if (i == durationTo - 1)
                 to = (int) Math.ceil(durationMs) - (i * 1000);
 
-            final Pair<String, Long> pair = getResult(from, to, mmr);
-            final String result = pair.first;
+            final Pair<Integer[], Long> pair = getResult(from, to, mmr);
+            final Integer[] scoresIdx = pair.first;
+            String top5[] = new String[5];
+            for (int j = 0; j < 5; j++)
+                top5[j] = mClasses[scoresIdx[j]];
+            final String result = String.join(", ", top5);
             final long inferenceTime = pair.second;
 
             if (i * 1000 > mVideoView.getCurrentPosition()) {
                 try {
-                    Thread.sleep(i*1000 - mVideoView.getCurrentPosition());
+                    Thread.sleep(i * 1000 - mVideoView.getCurrentPosition());
                 } catch (InterruptedException e) {
                     Log.e(TAG, "Thread sleep exception: " + e.getLocalizedMessage());
                 }
@@ -182,7 +191,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             while (!mVideoView.isPlaying()) {
                 if (mStopThread || (mVideoView.getCurrentPosition() >= mVideoView.getDuration())) break;
                 try {
-                    Log.d(">>>>>", "sleep 100" +  mVideoView.getCurrentPosition()+","+ mVideoView.getDuration());
                     Thread.sleep(100);
                 } catch (InterruptedException e) {
                     Log.e(TAG, "Thread sleep exception: " + e.getLocalizedMessage());
@@ -203,43 +211,42 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     }
 
 
-    private Pair<String, Long> getResult(int from, int to, MediaMetadataRetriever mmr) {
-        int diff = to - from;
+    private Pair<Integer[], Long> getResult(int fromMs, int toMs, MediaMetadataRetriever mmr) {
 
-        Bitmap bitmap1 = mmr.getFrameAtTime(from, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
-        Bitmap bitmap2 = mmr.getFrameAtTime(1000 * (from + (int)(diff * 0.33)), MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
-        Bitmap bitmap3= mmr.getFrameAtTime(1000 * (from + (int)(diff * 0.67)),MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
-        Bitmap bitmap4 = mmr.getFrameAtTime(1000 * to, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+        FloatBuffer inTensorBuffer = Tensor.allocateFloatBuffer(MODEL_INPUT_SIZE);
 
-        FloatBuffer inTensorBuffer = Tensor.allocateFloatBuffer(INPUT_SIZE);
+        for (int i = 0; i < COUNT_OF_FRAMES_PER_INFERENCE; i++) {
+            long timeUs = 1000 * (fromMs + (int) ((toMs - fromMs) * i / (COUNT_OF_FRAMES_PER_INFERENCE - 1.)));
+            Bitmap bitmap = mmr.getFrameAtTime(timeUs, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
+            float ratio = Math.min(bitmap.getWidth(), bitmap.getHeight()) / (float)TARGET_VIDEO_SIZE;
+            Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth() / ratio), (int)(bitmap.getHeight() / ratio), true);
+            Bitmap centerCroppedBitmap = Bitmap.createBitmap(resizedBitmap,
+                    resizedBitmap.getWidth() > resizedBitmap.getHeight() ? (resizedBitmap.getWidth() - resizedBitmap.getHeight()) / 2 : 0,
+                    resizedBitmap.getHeight() > resizedBitmap.getWidth() ? (resizedBitmap.getHeight() - resizedBitmap.getWidth()) / 2 : 0,
+                    TARGET_VIDEO_SIZE, TARGET_VIDEO_SIZE);
 
-        Bitmap resizedBitmap1 = Bitmap.createScaledBitmap(bitmap1, 160, 160, true);
-        Bitmap resizedBitmap2 = Bitmap.createScaledBitmap(bitmap2, 160, 160, true);
-        Bitmap resizedBitmap3 = Bitmap.createScaledBitmap(bitmap3, 160, 160, true);
-        Bitmap resizedBitmap4 = Bitmap.createScaledBitmap(bitmap4, 160, 160, true);
+            TensorImageUtils.bitmapToFloatBuffer(centerCroppedBitmap, 0, 0,
+                    TARGET_VIDEO_SIZE, TARGET_VIDEO_SIZE, MEAN_RGB, STD_RGB, inTensorBuffer,
+                    (COUNT_OF_FRAMES_PER_INFERENCE - 1) * i * TARGET_VIDEO_SIZE * TARGET_VIDEO_SIZE);
+        }
 
-        TensorImageUtils.bitmapToFloatBuffer(resizedBitmap1, 0,0,resizedBitmap1.getWidth(),resizedBitmap1.getHeight(), MEAN_RGB, STD_RGB, inTensorBuffer, 0);
-        TensorImageUtils.bitmapToFloatBuffer(resizedBitmap2, 0,0,resizedBitmap2.getWidth(),resizedBitmap2.getHeight(), MEAN_RGB, STD_RGB, inTensorBuffer, 3 * resizedBitmap1.getWidth() * resizedBitmap1.getHeight());
-        TensorImageUtils.bitmapToFloatBuffer(resizedBitmap3, 0,0,resizedBitmap3.getWidth(),resizedBitmap3.getHeight(), MEAN_RGB, STD_RGB, inTensorBuffer, 3 * 2 * resizedBitmap1.getWidth() * resizedBitmap1.getHeight());
-        TensorImageUtils.bitmapToFloatBuffer(resizedBitmap4, 0,0,resizedBitmap4.getWidth(),resizedBitmap4.getHeight(), MEAN_RGB, STD_RGB, inTensorBuffer, 3 * 3 * resizedBitmap1.getWidth() * resizedBitmap1.getHeight());
-
-        Tensor inputTensor = Tensor.fromBlob(inTensorBuffer, new long[]{1, 3, 4, 160, 160});
+        Tensor inputTensor = Tensor.fromBlob(inTensorBuffer, new long[]{1, 3, COUNT_OF_FRAMES_PER_INFERENCE, 160, 160});
 
         final long startTime = SystemClock.elapsedRealtime();
         Tensor outputTensor = mModule.forward(IValue.from(inputTensor)).toTensor();
         final long inferenceTime = SystemClock.elapsedRealtime() - startTime;
 
         final float[] scores = outputTensor.getDataAsFloatArray();
+        Integer scoresIdx[] = new Integer[scores.length];
+        for (int i = 0; i < scores.length; i++)
+            scoresIdx[i] = i;
 
-        double maxnum = -Double.MAX_VALUE;
-        int maxn = 0;
-        for (int i = 0; i < 400; i++) {
-            if (scores[i] > maxnum) {
-                maxnum = scores[i];
-                maxn = i;
+        Arrays.sort(scoresIdx, new Comparator<Integer>() {
+            @Override public int compare(final Integer o1, final Integer o2) {
+                return Float.compare(scores[o2], scores[o1]);
             }
-        }
+        });
 
-        return new Pair<>(mClasses[maxn], inferenceTime);
+        return new Pair<>(scoresIdx, inferenceTime);
     }
 }

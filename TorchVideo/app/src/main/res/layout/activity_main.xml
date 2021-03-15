@@ -74,12 +74,15 @@
 
     <TextView
         android:id="@+id/textView"
-        android:layout_width="220dp"
-        android:layout_height="24dp"
-        android:layout_marginBottom="30dp"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:textAlignment="center"
         android:background="#FF2356E7"
         android:textColor="#FFFFFFFF"
+        android:lines="2"
+        android:minLines="2"
+        android:singleLine="false"
         app:layout_constraintBottom_toTopOf="@+id/pauseResumeButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
