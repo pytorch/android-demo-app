@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.Rect;
 import android.hardware.Camera;
@@ -63,7 +64,6 @@ import static org.pytorch.demo.Utils.token;
 
 public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpHandler.RtmpListener,
         SrsRecordHandler.SrsRecordListener, SrsEncodeHandler.SrsEncodeListener {
-
     private static final String TAG = "Yasea";
     public final static int RC_CAMERA = 100;
 
@@ -74,8 +74,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
     private Button btnSwitchEncoder;
     private Button btnPause;
     private Button btnDetect;
-    private Button record;
-    private SharedPreferences sp;
+
     private String rtmpUrl;
     private String recPath;
     private String serverUri;
@@ -230,6 +229,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 
         mCameraView = (SrsCameraView) findViewById(R.id.glsurfaceview_camera);
 
+
         mPublisher = new SrsPublisher(mCameraView);
         mPublisher.setEncodeHandler(new SrsEncodeHandler(this));
         mPublisher.setRtmpHandler(new RtmpHandler(this));
@@ -251,6 +251,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
             mPublisher.setPreviewResolution(640, 480);
             mPublisher.setOutputResolution(480, 640);
         }
+
         mPublisher.getmCameraView().open_camera();
         mPublisher.setVideoHDMode();
         mPublisher.startCamera();
@@ -304,10 +305,15 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
         btnDetect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                Bitmap bitmap = mPublisher.getBitmap();
+                imageView.setImageBitmap(bitmap);
                 String msg = "{\"event\": \"detect\"}";
 //                    webSocket.sendText(msg);
                 if (server_state_ready){
                     webSocket.sendText(msg);
+                    btnDetect.setText("检测中");
+                    btnDetect.setEnabled(false);
+//                    bitmap.getBy
                     System.out.println("detect sent");
                 }
                 else{
@@ -401,6 +407,8 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
                     // need further operation
                     // put box and info into boxpool
 
+                    btnDetect.setText("检测");
+                    btnDetect.setEnabled(true);
 
 //                    NamedBox namedBox = new NamedBox(message);
 //                    namedboxpool.clear();
@@ -419,8 +427,8 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
                     }
                     else
                         System.out.println("in onTextMessage message is null");
-                    int w = mCameraView.getWidth();
-                    int h = mCameraView.getHeight();
+                    int w = mCameraView.getMeasuredWidth();
+                    int h = mCameraView.getMeasuredHeight();
                     System.out.println("in onTextMessage w:"+w+", h:"+h);
                     NamedBox center = drawFaceResults_nbp(w, h);
                     runOnUiThread(() -> updateUI(center));
@@ -514,7 +522,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
                 rowView.nameTextView.setText(namedBox.id_k[i]);
                 rowView.scoreTextView.setText(String.format(Locale.US, SCORES_FORMAT,
                         namedBox.prob_k[i]));
-                rowView.setProgressState(true);
+                rowView.setProgressState(false);
             }
         }
     }

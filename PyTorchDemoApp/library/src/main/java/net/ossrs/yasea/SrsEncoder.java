@@ -1,9 +1,12 @@
 package net.ossrs.yasea;
 
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Rect;
 import android.media.AudioFormat;
 import android.media.AudioRecord;
+import android.media.Image;
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;
 import android.media.MediaCodecList;
@@ -14,7 +17,6 @@ import android.util.Log;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.util.concurrent.atomic.AtomicInteger;
-
 /**
  * Created by Leo Ma on 4/1/2016.
  */
@@ -77,6 +79,23 @@ public class SrsEncoder {
     public SrsEncoder(SrsEncodeHandler handler) {
         mHandler = handler;
         mVideoColorFormat = chooseVideoEncoder();
+    }
+
+
+    public Bitmap getOutputBitmap(){
+//        vencoder.dequeueOutputBuffer(MediaCodec.BufferInfo)
+        final int index = vencoder.dequeueInputBuffer(1000);
+        Image image = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            image = vencoder.getInputImage(index);
+
+            ByteBuffer buffer = image.getPlanes()[0].getBuffer();
+            byte[] bytes = new byte[buffer.capacity()];
+            buffer.get(bytes);
+            Bitmap bitmapImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length, null);
+            return bitmapImage;
+        }
+        return null;
     }
 
     public void setFlvMuxer(SrsFlvMuxer flvMuxer) {

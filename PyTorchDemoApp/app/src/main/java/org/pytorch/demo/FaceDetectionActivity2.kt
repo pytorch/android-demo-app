@@ -413,20 +413,21 @@ class FaceDetectionActivity2 : AppCompatActivity(), LifecycleOwner {
 
 //
 //                drawOnBitmap(bitmap, nms_boxes);
-                val width: Int = viewFinder.width
-                val height = viewFinder.height
+                val width: Int = viewFinder.measuredWidth
+                val height = viewFinder.measuredHeight
                 println("in if width is $width height is $height")
 
                 //TODO make http request here to get identity of picture
 //                    send_unrecognized_image(bitmap, nms_boxes);
                 get_unrecognized_face_embedding(bitmap, nms_boxes, encoder, namedEmbeddings, namedboxpool)
-                midbox = drawFaceResults(nms_boxes, width, height - 100, graphicOverlay, namedboxpool)
+//                midbox = drawFaceResults(nms_boxes, width, height, graphicOverlay, namedboxpool)
+                midbox = drawFaceResults1(width, height, graphicOverlay, namedboxpool)
                 //                set_prediction(bitmap, midbox);
-                update_namedboxpool()
+//                update_namedboxpool()
                 println("nms boxes " + nms_boxes.size)
             } else {
                 graphicOverlay.clear()
-                update_namedboxpool()
+//                update_namedboxpool()
             }
             moduleAnalysisDuration = SystemClock.elapsedRealtime() - moduleForwardStartTime
             println("inference time is $moduleForwardDuration")
@@ -441,12 +442,11 @@ class FaceDetectionActivity2 : AppCompatActivity(), LifecycleOwner {
         } else {
             var bitmap_c: Bitmap? = null
             bitmap_c = cropBitmap(bitmap2show, midbox.rect)
-            updateUI(arrayOf(midbox.id_k[0], midbox.id_k[1], midbox.id_k[2]), floatArrayOf(midbox.prob_k[0], midbox.prob_k[1], midbox.prob_k[2]), bitmap_c,
-                    moduleForwardDuration, moduleAnalysisDuration)
+            updateUI(arrayOf(midbox.id_k[0], midbox.id_k[1], midbox.id_k[2]), floatArrayOf(midbox.prob_k[0], midbox.prob_k[1], midbox.prob_k[2]), bitmap_c)
         }
     }
 
-    private fun updateUI(ids: Array<String>, probs: FloatArray, bitmap_c: Bitmap?, moduleForwardDuration: Long, moduleAnalysisDuration: Long) {
+    private fun updateUI(ids: Array<String>, probs: FloatArray, bitmap_c: Bitmap?) {
 
         if (bitmap_c != null) {
             imageView.setImageBitmap(bitmap_c)
@@ -454,8 +454,7 @@ class FaceDetectionActivity2 : AppCompatActivity(), LifecycleOwner {
             for (i in 0 until Utils.TOP_K) {
                 val rowView:ResultRowView? = mResultRowViews[i]
                 rowView?.nameTextView?.setText(ids.get(i))
-                rowView?.scoreTextView?.text = String.format(Locale.US, SCORES_FORMAT,
-                        probs.get(i))
+                rowView?.scoreTextView?.text = String.format(SCORES_FORMAT, probs[i])
                 rowView?.setProgressState(false)
             }
         }

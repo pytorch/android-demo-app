@@ -265,9 +265,10 @@ public class GlassLocalActivity extends AppCompatActivity {
 //                    send_unrecognized_image(bitmap, nms_boxes);
                 get_unrecognized_face_embedding(bitmap, nms_boxes);
                 set_namedboxpool_isvalid_false();
-                midbox = drawFaceResults(nms_boxes, width, height);
+//                midbox = drawFaceResults(nms_boxes, width, height);
+                midbox = Utils.drawFaceResults1(width, height, graphicOverlay, namedboxpool);
 //                set_prediction(bitmap, midbox);
-                update_namedboxpool();
+//                update_namedboxpool();
 
                 System.out.println("nms boxes "+nms_boxes.size());
 
@@ -275,7 +276,7 @@ public class GlassLocalActivity extends AppCompatActivity {
             else
             {
                 graphicOverlay.clear();
-                update_namedboxpool();
+//                update_namedboxpool();
             }
             moduleAnalysisDuration = SystemClock.elapsedRealtime() - moduleForwardStartTime;
 

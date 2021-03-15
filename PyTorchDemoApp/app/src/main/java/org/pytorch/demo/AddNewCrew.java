@@ -480,7 +480,7 @@ public class AddNewCrew extends AppCompatActivity {
                         galleryAddPic(mImageUriFromFile);
                         ImageView imageView = findViewById(R.id.input_image);
                         imageView.setImageBitmap(rotatedBitmap);//显示到ImageView上
-                        crewFace = bitmap;
+                        crewFace = rotatedBitmap;
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     } catch (IOException exception) {
@@ -494,11 +494,7 @@ public class AddNewCrew extends AppCompatActivity {
                 }
                 Log.i(TAG, "onActivityResult: ImageUriFromAlbum: " + data.getData());
                 if (resultCode == RESULT_OK) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        handleImageOnKitKat(data);//4.4之后图片解析
-                    } else {
-                        handleImageBeforeKitKat(data);//4.4之前图片解析
-                    }
+                    handleImageOnKitKat(data);//4.4之后图片解析
                 }
                 break;
             default:
@@ -514,7 +510,11 @@ public class AddNewCrew extends AppCompatActivity {
     private void handleImageBeforeKitKat(Intent data) {
         Uri uri = data.getData();
         String imagePath = getImagePath(uri, null);
-        displayImage(imagePath);
+        try {
+            displayImage(imagePath);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 
     /**
@@ -544,18 +544,45 @@ public class AddNewCrew extends AppCompatActivity {
             //如果是file类型的uri，则直接获取路径
             imagePath = uri.getPath();
         }
-        displayImage(imagePath);
+        try {
+            displayImage(imagePath);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
     }
 
     /**
      * 将imagePath指定的图片显示到ImageView上
      */
-    private void displayImage(String imagePath) {
+    private void displayImage(String imagePath) throws IOException {
         if (imagePath != null) {
+            ExifInterface ei = new ExifInterface(imagePath);
+            int orientation = ei.getAttributeInt(ExifInterface.TAG_ORIENTATION,
+                    ExifInterface.ORIENTATION_UNDEFINED);
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            Bitmap rotatedBitmap = null;
+            switch(orientation) {
+
+                case ExifInterface.ORIENTATION_ROTATE_90:
+                    rotatedBitmap = rotateImage(bitmap, 90);
+                    break;
+
+                case ExifInterface.ORIENTATION_ROTATE_180:
+                    rotatedBitmap = rotateImage(bitmap, 180);
+                    break;
+
+                case ExifInterface.ORIENTATION_ROTATE_270:
+                    rotatedBitmap = rotateImage(bitmap, 270);
+                    break;
+
+                case ExifInterface.ORIENTATION_NORMAL:
+                default:
+                    rotatedBitmap = bitmap;
+            }
+
             ImageView imageView = findViewById(R.id.input_image);
-            crewFace = bitmap;
-            imageView.setImageBitmap(bitmap);
+            crewFace = rotatedBitmap;
+            imageView.setImageBitmap(rotatedBitmap);
         } else {
             Toast.makeText(this, "failed to get image", Toast.LENGTH_SHORT).show();
         }

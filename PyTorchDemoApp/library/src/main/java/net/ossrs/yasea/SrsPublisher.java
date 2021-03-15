@@ -1,5 +1,6 @@
 package net.ossrs.yasea;
 
+import android.graphics.Bitmap;
 import android.hardware.Camera;
 import android.media.AudioRecord;
 import android.media.audiofx.AcousticEchoCanceler;
@@ -32,6 +33,12 @@ public class SrsPublisher {
     private SrsFlvMuxer mFlvMuxer;
     private SrsMp4Muxer mMp4Muxer;
     private SrsEncoder mEncoder;
+
+    public Bitmap getBitmap(){
+        return mEncoder.getOutputBitmap();
+    }
+
+
 
     public SrsPublisher(SrsCameraView view) {
         mCameraView = view;

@@ -432,6 +432,7 @@ public abstract class USBBase
         if (glInterface != null) {
             return glInterface;
         } else {
+
             throw new RuntimeException("You can't do it. You are not using Opengl");
         }
     }

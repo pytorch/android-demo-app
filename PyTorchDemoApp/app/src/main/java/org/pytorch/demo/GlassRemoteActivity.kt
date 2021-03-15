@@ -124,6 +124,7 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
     usbMonitor = USBMonitor(this, onDeviceConnectListener)
 //    Toast.makeText(this, "usb monitor done", Toast.LENGTH_SHORT).show()
     isUsbOpen = false
+
     usbMonitor.register()
 //    Toast.makeText(this, "usb register done", Toast.LENGTH_SHORT).show()
     val util: Util = Util()
@@ -150,6 +151,7 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
       val msg = "{\"event\": \"detect\"}"
       if (server_state_ready) {
         webSocket!!.sendText(msg)
+
         println("detect sent")
       } else {
         MDToast.makeText(this@GlassRemoteActivity, "server还没有准备好", MDToast.LENGTH_SHORT, MDToast.TYPE_INFO).show()
@@ -260,9 +262,9 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
       for (i in 0 until Utils.TOP_K) {
         val rowView: ResultRowView? = mResultRowViews[i]
         rowView?.nameTextView?.text = namedBox.id_k[i]
-        rowView?.scoreTextView?.text = String.format(Locale.US, RemoteFaceDetectActivity.SCORES_FORMAT,
+        rowView?.scoreTextView?.text = String.format(Utils.SCORES_FORMAT,
                 namedBox.prob_k[i])
-        rowView?.setProgressState(true)
+        rowView?.setProgressState(false)
       }
       if(bitmap != null){
         var bitmap_c: Bitmap? = null
@@ -286,6 +288,7 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
           least_dist = dist
         }
       }
+
     }
     if (namedboxpool != null) {
       for (namedBox in namedboxpool!!) {
@@ -306,6 +309,7 @@ class GlassRemoteActivity : Activity(), SurfaceHolder.Callback, ConnectCheckerRt
   private fun startStream(url: String) {
     if (rtmpUSB.prepareVideo(width, height, 30, 4000 * 1024, false, 0,
         uvcCamera) && rtmpUSB.prepareAudio()) {
+
       rtmpUSB.startStream(uvcCamera, url)
     }
   }

@@ -67,7 +67,7 @@ public class Utils {
     float total = 0;
     for (int i = 0; i < dists.length; i++){
       if (dists[i] > distance_threshold){
-        names[i] = "UNKNOWN";
+        names[i] = "非已知船员";
         dists[i] = 0;
       }
       else{
@@ -77,7 +77,9 @@ public class Utils {
 
     }
     for (int i = 0; i < dists.length; i++){
-      dists[i]/=total;
+      if (total > 0)
+        if (dists[i] != 0)
+          dists[i]/=total;
     }
   }
 
@@ -355,6 +357,41 @@ public class Utils {
     return least_index;
   }
 
+  public static NamedBox drawFaceResults1(int width, int height, GraphicOverlay graphicOverlay, ArrayList<NamedBox> namedboxpool){
+    graphicOverlay.clear();
+    System.out.println("in draw face results");
+    NamedBox ret_named_box = null;
+    double least_dist = 100;
+    for(NamedBox namedBox : namedboxpool){
+      double dist = distance2middle(namedBox.rect);
+      if (dist < least_dist){
+        least_dist = dist;
+        ret_named_box = namedBox;
+      }
+    }
+    System.out.println("distance least is " + least_dist + " and namedbox is " + ret_named_box.id);
+    for(NamedBox namedBox : namedboxpool){
+      String info = null;
+      int color;
+      if (namedBox.prob_k[0] < distance_threshold){
+        info = namedBox.id;
+      }
+      if (namedBox == ret_named_box) {
+        color = Color.BLUE;
+      }
+      else
+        color = Color.RED;
+
+
+      float[] xyxy = {namedBox.rect[0]*width,namedBox.rect[1]*height,namedBox.rect[2]*width,namedBox.rect[3]*height};
+      Rect rect = new Rect((int)xyxy[0], (int)xyxy[1], (int)xyxy[2], (int)xyxy[3]);
+
+      RectOverlay rectOverlay = new RectOverlay(graphicOverlay, rect, info, color);
+      graphicOverlay.add(rectOverlay);
+    }
+    namedboxpool.clear();
+    return ret_named_box;
+  }
   public static NamedBox drawFaceResults(ArrayList<float[]> nms_boxes, int width, int height, GraphicOverlay graphicOverlay, ArrayList<NamedBox> namedboxpool) {
     int counter =0;
     graphicOverlay.clear();
@@ -372,8 +409,6 @@ public class Utils {
         least_dist = dist;
       }
     }
-
-
     int color = Color.RED;
     for (int i = 0; i<nms_boxes.size(); i++){
       float[] xyxy1 = nms_boxes.get(i);
@@ -384,8 +419,11 @@ public class Utils {
       {
         if (IoU(xyxy1, namedBox.rect) > 0.5)
         {
-          info = namedBox.id;
-          namedBox.is_valid = true;
+          if (namedBox.prob_k[0] < distance_threshold){
+            info = namedBox.id;
+            namedBox.is_valid = true;
+          }
+
 
           if (i == least_index) {
             ret_named_box = namedBox;
