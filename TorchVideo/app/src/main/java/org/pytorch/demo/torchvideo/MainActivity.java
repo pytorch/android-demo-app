@@ -1,5 +1,6 @@
 package org.pytorch.demo.torchvideo;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
@@ -40,6 +41,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private List<String> mResults = new ArrayList<>();
     private VideoView mVideoView;
     private TextView mTextView;
+    private Uri mVideoUri;
 
     private Thread mThread;
     private boolean mStopThread;
@@ -50,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private final static int TARGET_VIDEO_SIZE = 160;
     private final static int MODEL_INPUT_SIZE = COUNT_OF_FRAMES_PER_INFERENCE * 3 * TARGET_VIDEO_SIZE * TARGET_VIDEO_SIZE;
 
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -79,12 +81,12 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         buttonTest.setText(String.format("Video 1/%d", mTestVideos.length));
         buttonTest.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //mVideoView.stopPlayback();
                 mTestVideoIndex = (mTestVideoIndex + 1) % mTestVideos.length;
                 buttonTest.setText(String.format("Video %d/%d", mTestVideoIndex + 1, mTestVideos.length));
                 mTextView.setText("");
                 mTextView.setVisibility(View.INVISIBLE);
                 mStopThread = true;
+                mVideoUri = getMedia(mTestVideos[mTestVideoIndex]);
                 setVideo();
             }
         });
@@ -104,15 +106,24 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             }
         });
 
-        mVideoView = findViewById(R.id.videoView);
-        setVideo();
+        final Button buttonSelect = findViewById(R.id.selectButton);
+        buttonSelect.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                pickIntent.setType("video/*");
+                startActivityForResult(pickIntent, 1);
+            }
+        });
 
+        mVideoView = findViewById(R.id.videoView);
+        mVideoUri = getMedia(mTestVideos[mTestVideoIndex]);
+        setVideo();
     }
 
     private void setVideo() {
-        Uri videoUri = getMedia(mTestVideos[mTestVideoIndex]);
-        mVideoView.setVideoURI(videoUri);
+        mVideoView.setVideoURI(mVideoUri);
         mVideoView.start();
+        mButtonPauseResume.setVisibility(View.VISIBLE);
         mButtonPauseResume.setText(getString(R.string.pause));
 
         if (mThread != null && mThread.isAlive()) {
@@ -158,7 +169,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     public void run() {
 
         MediaMetadataRetriever mmr = new MediaMetadataRetriever();
-        mmr.setDataSource(this.getApplicationContext(), getMedia(mTestVideos[mTestVideoIndex]));
+        mmr.setDataSource(this.getApplicationContext(), mVideoUri);
         String stringDuration = mmr.extractMetadata(MediaMetadataRetriever.METADATA_KEY_DURATION);
         double durationMs = Double.parseDouble(stringDuration);
 
@@ -196,7 +207,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                     Log.e(TAG, "Thread sleep exception: " + e.getLocalizedMessage());
                 }
             }
-            //if (mStopThread) break;
 
             final int finalI = i;
             runOnUiThread(new Runnable() {
@@ -204,9 +214,14 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 public void run() {
                     mTextView.setVisibility(View.VISIBLE);
                     mTextView.setText(String.format("%ds: %s - %dms", finalI +1, result, inferenceTime));
+
                 }
             });
             mResults.add(result);
+        }
+
+        if (!mStopThread) {
+            runOnUiThread(() -> mButtonPauseResume.setVisibility(View.INVISIBLE));
         }
     }
 
@@ -248,5 +263,33 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         });
 
         return new Pair<>(scoresIdx, inferenceTime);
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == RESULT_OK && data != null) {
+            Uri selectedMediaUri = data.getData();
+            if (selectedMediaUri.toString().contains("video")) {
+                mVideoUri = selectedMediaUri;
+                setVideo();
+
+//
+//
+//                String[] filePathColumn = {MediaStore.Images.Media.DATA};
+//                if (selectedMediaUri != null) {
+//                    Cursor cursor = getContentResolver().query(selectedMediaUri,
+//                            filePathColumn, null, null, null);
+//                    if (cursor != null) {
+//                        cursor.moveToFirst();
+//                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+//                        String picturePath = cursor.getString(columnIndex);
+//                        cursor.close();
+//                    }
+//                }
+
+            }
+        }
     }
 }

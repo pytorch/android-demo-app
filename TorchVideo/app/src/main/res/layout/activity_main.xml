@@ -26,51 +26,30 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/videoView" />
 
-    <ProgressBar
-        android:id="@+id/progressBar"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/videoView" />
 
     <Button
         android:id="@+id/testButton"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="20dp"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/selectButton"
+        app:layout_constraintEnd_toStartOf="@+id/pauseResumeButton"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pauseResumeButton" />
+        app:layout_constraintTop_toBottomOf="@+id/videoView" />
 
     <Button
         android:id="@+id/selectButton"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
         android:text="@string/select"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/liveButton"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/testButton"
-        app:layout_constraintTop_toTopOf="@+id/testButton" />
-
-    <Button
-        android:id="@+id/liveButton"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:text="@string/live"
-        android:textAllCaps="false"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/selectButton"
-        app:layout_constraintTop_toTopOf="@+id/selectButton" />
+        app:layout_constraintStart_toEndOf="@+id/pauseResumeButton"
+        app:layout_constraintTop_toBottomOf="@+id/videoView" />
 
     <TextView
         android:id="@+id/textView"
