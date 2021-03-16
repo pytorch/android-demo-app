@@ -34,9 +34,10 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity implements Runnable {
     private final String TAG = MainActivity.class.getSimpleName();
     private Button mButtonPauseResume;
+    private Button mButtonTest;
     private Module mModule = null;
     private int mTestVideoIndex = 0;
-    private final String[] mTestVideos = {"video1", "video2", "video3", "video4", "video5"};
+    private final String[] mTestVideos = {"video1", "video2", "video3"};
     private String[] mClasses;
     private List<String> mResults = new ArrayList<>();
     private VideoView mVideoView;
@@ -77,12 +78,14 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         mTextView = findViewById(R.id.textView);
         mTextView.setVisibility(View.INVISIBLE);
 
-        final Button buttonTest = findViewById(R.id.testButton);
-        buttonTest.setText(String.format("Video 1/%d", mTestVideos.length));
-        buttonTest.setOnClickListener(new View.OnClickListener() {
+        mButtonTest = findViewById(R.id.testButton);
+        mButtonTest.setText(String.format("Test Video 1/%d", mTestVideos.length));
+        mButtonTest.setEnabled(false);
+        mButtonTest.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mTestVideoIndex = (mTestVideoIndex + 1) % mTestVideos.length;
-                buttonTest.setText(String.format("Video %d/%d", mTestVideoIndex + 1, mTestVideos.length));
+                mButtonTest.setText(String.format("Test Video %d/%d", mTestVideoIndex + 1, mTestVideos.length));
+                mButtonTest.setEnabled(false);
                 mTextView.setText("");
                 mTextView.setVisibility(View.INVISIBLE);
                 mStopThread = true;
@@ -140,11 +143,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         mThread.start();
     }
 
-
-    private void releasePlayer() {
-        mVideoView.stopPlayback();
-    }
-
     private Uri getMedia(String mediaName) {
         return Uri.parse("android.resource://" + getPackageName() + "/raw/" + mediaName);
     }
@@ -153,7 +151,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     protected void onStop() {
         super.onStop();
 
-        releasePlayer();
+        mVideoView.stopPlayback();
     }
 
     @Override
@@ -214,7 +212,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 public void run() {
                     mTextView.setVisibility(View.VISIBLE);
                     mTextView.setText(String.format("%ds: %s - %dms", finalI +1, result, inferenceTime));
-
                 }
             });
             mResults.add(result);
@@ -222,6 +219,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         if (!mStopThread) {
             runOnUiThread(() -> mButtonPauseResume.setVisibility(View.INVISIBLE));
+            runOnUiThread(() -> mButtonTest.setEnabled(true));
         }
     }
 
@@ -274,21 +272,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             if (selectedMediaUri.toString().contains("video")) {
                 mVideoUri = selectedMediaUri;
                 setVideo();
-
-//
-//
-//                String[] filePathColumn = {MediaStore.Images.Media.DATA};
-//                if (selectedMediaUri != null) {
-//                    Cursor cursor = getContentResolver().query(selectedMediaUri,
-//                            filePathColumn, null, null, null);
-//                    if (cursor != null) {
-//                        cursor.moveToFirst();
-//                        int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
-//                        String picturePath = cursor.getString(columnIndex);
-//                        cursor.close();
-//                    }
-//                }
-
             }
         }
     }
