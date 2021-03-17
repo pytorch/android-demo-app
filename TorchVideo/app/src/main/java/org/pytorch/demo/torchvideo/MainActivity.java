@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private Module mModule = null;
     private int mTestVideoIndex = 0;
     private final String[] mTestVideos = {"video1", "video2", "video3"};
-    private String[] mClasses;
+    private static String[] mClasses;
     private List<String> mResults = new ArrayList<>();
     private VideoView mVideoView;
     private TextView mTextView;
@@ -47,11 +47,11 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private Thread mThread;
     private boolean mStopThread;
 
-    private final static float[] MEAN_RGB = new float[] {0.45f, 0.45f, 0.45f};
-    private final static float[] STD_RGB = new float[] {0.225f, 0.225f, 0.225f};
-    private final static int COUNT_OF_FRAMES_PER_INFERENCE = 4;
-    private final static int TARGET_VIDEO_SIZE = 160;
-    private final static int MODEL_INPUT_SIZE = COUNT_OF_FRAMES_PER_INFERENCE * 3 * TARGET_VIDEO_SIZE * TARGET_VIDEO_SIZE;
+    public final static float[] MEAN_RGB = new float[] {0.45f, 0.45f, 0.45f};
+    public final static float[] STD_RGB = new float[] {0.225f, 0.225f, 0.225f};
+    public final static int COUNT_OF_FRAMES_PER_INFERENCE = 4;
+    public final static int TARGET_VIDEO_SIZE = 160;
+    public final static int MODEL_INPUT_SIZE = COUNT_OF_FRAMES_PER_INFERENCE * 3 * TARGET_VIDEO_SIZE * TARGET_VIDEO_SIZE;
 
 
     @Override
@@ -79,12 +79,12 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         mTextView.setVisibility(View.INVISIBLE);
 
         mButtonTest = findViewById(R.id.testButton);
-        mButtonTest.setText(String.format("Test Video 1/%d", mTestVideos.length));
+        mButtonTest.setText(String.format("Test 1/%d", mTestVideos.length));
         mButtonTest.setEnabled(false);
         mButtonTest.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mTestVideoIndex = (mTestVideoIndex + 1) % mTestVideos.length;
-                mButtonTest.setText(String.format("Test Video %d/%d", mTestVideoIndex + 1, mTestVideos.length));
+                mButtonTest.setText(String.format("Test %d/%d", mTestVideoIndex + 1, mTestVideos.length));
                 mButtonTest.setEnabled(false);
                 mTextView.setText("");
                 mTextView.setVisibility(View.INVISIBLE);
@@ -117,6 +117,15 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 startActivityForResult(pickIntent, 1);
             }
         });
+
+        final Button buttonLive = findViewById(R.id.liveButton);
+        buttonLive.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                final Intent intent = new Intent(MainActivity.this, LiveVideoClassificationActivity.class);
+                startActivity(intent);
+            }
+        });
+
 
         mVideoView = findViewById(R.id.videoView);
         mVideoUri = getMedia(mTestVideos[mTestVideoIndex]);
@@ -274,5 +283,9 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 setVideo();
             }
         }
+    }
+
+    public static String[] getClasses() {
+        return mClasses;
     }
 }

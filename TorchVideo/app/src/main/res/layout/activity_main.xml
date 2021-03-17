@@ -34,22 +34,33 @@
         android:layout_marginTop="20dp"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/pauseResumeButton"
+        app:layout_constraintEnd_toStartOf="@+id/selectButton"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/videoView" />
+        app:layout_constraintTop_toBottomOf="@+id/pauseResumeButton" />
 
     <Button
         android:id="@+id/selectButton"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
         android:text="@string/select"
         android:textAllCaps="false"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/liveButton"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/pauseResumeButton"
-        app:layout_constraintTop_toBottomOf="@+id/videoView" />
+        app:layout_constraintStart_toEndOf="@+id/testButton"
+        app:layout_constraintTop_toTopOf="@+id/testButton" />
+
+    <Button
+        android:id="@+id/liveButton"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="@string/live"
+        android:textAllCaps="false"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/selectButton"
+        app:layout_constraintTop_toTopOf="@+id/selectButton" />
 
     <TextView
         android:id="@+id/textView"

@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="org.pytorch.demo.torchvideo">
 
+    <uses-permission android:name="android.permission.CAMERA" />
+
     <application
         android:requestLegacyExternalStorage="true"
         android:allowBackup="true"
@@ -16,6 +18,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".LiveVideoClassificationActivity"
+            android:configChanges="orientation"
+            android:screenOrientation="portrait">
         </activity>
     </application>
 
