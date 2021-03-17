@@ -8,7 +8,6 @@ import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.media.Image;
 import android.os.SystemClock;
-import android.util.Log;
 import android.view.TextureView;
 import android.view.ViewStub;
 import android.widget.TextView;
@@ -28,8 +27,6 @@ import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.Arrays;
 import java.util.Comparator;
-
-import static org.pytorch.demo.torchvideo.MainActivity.MODEL_INPUT_SIZE;
 
 
 public class LiveVideoClassificationActivity extends AbstractCameraXActivity<LiveVideoClassificationActivity.AnalysisResult> {
@@ -94,14 +91,12 @@ public class LiveVideoClassificationActivity extends AbstractCameraXActivity<Liv
         @WorkerThread
         @Nullable
         protected AnalysisResult analyzeImage(ImageProxy image, int rotationDegrees) {
-            Log.d(">>>>", "analyzeImage");
-
             if (mModule == null) {
                 mModule = PyTorchAndroid.loadModuleFromAsset(getAssets(), "video_classification.pt");
             }
 
             if (mFrameCount == 0)
-                inTensorBuffer = Tensor.allocateFloatBuffer(MODEL_INPUT_SIZE);
+                inTensorBuffer = Tensor.allocateFloatBuffer(Constants.MODEL_INPUT_SIZE);
 
             Bitmap bitmap = imgToBitmap(image.getImage());
             Matrix matrix = new Matrix();
@@ -113,12 +108,11 @@ public class LiveVideoClassificationActivity extends AbstractCameraXActivity<Liv
             Bitmap centerCroppedBitmap = Bitmap.createBitmap(resizedBitmap,
                     resizedBitmap.getWidth() > resizedBitmap.getHeight() ? (resizedBitmap.getWidth() - resizedBitmap.getHeight()) / 2 : 0,
                     resizedBitmap.getHeight() > resizedBitmap.getWidth() ? (resizedBitmap.getHeight() - resizedBitmap.getWidth()) / 2 : 0,
-                    MainActivity.TARGET_VIDEO_SIZE, MainActivity.TARGET_VIDEO_SIZE);
+                    Constants.TARGET_VIDEO_SIZE, Constants.TARGET_VIDEO_SIZE);
 
-            // TODO: replace MainActivity.TARGET_VIDEO_SIZE etc
             TensorImageUtils.bitmapToFloatBuffer(centerCroppedBitmap, 0, 0,
-                    MainActivity.TARGET_VIDEO_SIZE, MainActivity.TARGET_VIDEO_SIZE, MainActivity.MEAN_RGB, MainActivity.STD_RGB, inTensorBuffer,
-                    (MainActivity.COUNT_OF_FRAMES_PER_INFERENCE - 1) * mFrameCount * MainActivity.TARGET_VIDEO_SIZE * MainActivity.TARGET_VIDEO_SIZE);
+                    Constants.TARGET_VIDEO_SIZE, Constants.TARGET_VIDEO_SIZE, Constants.MEAN_RGB, Constants.STD_RGB, inTensorBuffer,
+                    (Constants.COUNT_OF_FRAMES_PER_INFERENCE - 1) * mFrameCount * Constants.TARGET_VIDEO_SIZE * Constants.TARGET_VIDEO_SIZE);
 
             mFrameCount++;
             if (mFrameCount < 4) {
@@ -126,8 +120,7 @@ public class LiveVideoClassificationActivity extends AbstractCameraXActivity<Liv
             }
 
             mFrameCount = 0;
-
-            Tensor inputTensor = Tensor.fromBlob(inTensorBuffer, new long[]{1, 3, MainActivity.COUNT_OF_FRAMES_PER_INFERENCE, 160, 160});
+            Tensor inputTensor = Tensor.fromBlob(inTensorBuffer, new long[]{1, 3, Constants.COUNT_OF_FRAMES_PER_INFERENCE, 160, 160});
 
             final long startTime = SystemClock.elapsedRealtime();
             Tensor outputTensor = mModule.forward(IValue.from(inputTensor)).toTensor();
@@ -144,10 +137,10 @@ public class LiveVideoClassificationActivity extends AbstractCameraXActivity<Liv
                 }
             });
 
-            String top5[] = new String[5];
-            for (int j = 0; j < 5; j++)
-                top5[j] = MainActivity.getClasses()[scoresIdx[j]];
-            final String result = String.join(", ", top5);
+            String tops[] = new String[Constants.TOP_COUNT];
+            for (int j = 0; j < Constants.TOP_COUNT; j++)
+                tops[j] = MainActivity.getClasses()[scoresIdx[j]];
+            final String result = String.join(", ", tops);
             return new AnalysisResult(String.format("%s - %dms", result, inferenceTime));
         }
     }

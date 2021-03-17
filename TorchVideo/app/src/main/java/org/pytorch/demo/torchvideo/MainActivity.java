@@ -31,27 +31,22 @@ import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 
+
 public class MainActivity extends AppCompatActivity implements Runnable {
     private final String TAG = MainActivity.class.getSimpleName();
+    private final String[] mTestVideos = {"video1", "video2", "video3"};
+
     private Button mButtonPauseResume;
     private Button mButtonTest;
     private Module mModule = null;
     private int mTestVideoIndex = 0;
-    private final String[] mTestVideos = {"video1", "video2", "video3"};
     private static String[] mClasses;
     private List<String> mResults = new ArrayList<>();
     private VideoView mVideoView;
     private TextView mTextView;
     private Uri mVideoUri;
-
     private Thread mThread;
     private boolean mStopThread;
-
-    public final static float[] MEAN_RGB = new float[] {0.45f, 0.45f, 0.45f};
-    public final static float[] STD_RGB = new float[] {0.225f, 0.225f, 0.225f};
-    public final static int COUNT_OF_FRAMES_PER_INFERENCE = 4;
-    public final static int TARGET_VIDEO_SIZE = 160;
-    public final static int MODEL_INPUT_SIZE = COUNT_OF_FRAMES_PER_INFERENCE * 3 * TARGET_VIDEO_SIZE * TARGET_VIDEO_SIZE;
 
 
     @Override
@@ -112,6 +107,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         final Button buttonSelect = findViewById(R.id.selectButton);
         buttonSelect.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                mStopThread = true;
                 Intent pickIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 pickIntent.setType("video/*");
                 startActivityForResult(pickIntent, 1);
@@ -121,6 +117,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         final Button buttonLive = findViewById(R.id.liveButton);
         buttonLive.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
+                mStopThread = true;
                 final Intent intent = new Intent(MainActivity.this, LiveVideoClassificationActivity.class);
                 startActivity(intent);
             }
@@ -192,10 +189,10 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
             final Pair<Integer[], Long> pair = getResult(from, to, mmr);
             final Integer[] scoresIdx = pair.first;
-            String top5[] = new String[5];
-            for (int j = 0; j < 5; j++)
-                top5[j] = mClasses[scoresIdx[j]];
-            final String result = String.join(", ", top5);
+            String tops[] = new String[Constants.TOP_COUNT];
+            for (int j = 0; j < Constants.TOP_COUNT; j++)
+                tops[j] = mClasses[scoresIdx[j]];
+            final String result = String.join(", ", tops);
             final long inferenceTime = pair.second;
 
             if (i * 1000 > mVideoView.getCurrentPosition()) {
@@ -226,6 +223,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             mResults.add(result);
         }
 
+        // video playing is completed
         if (!mStopThread) {
             runOnUiThread(() -> mButtonPauseResume.setVisibility(View.INVISIBLE));
             runOnUiThread(() -> mButtonTest.setEnabled(true));
@@ -235,24 +233,25 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
     private Pair<Integer[], Long> getResult(int fromMs, int toMs, MediaMetadataRetriever mmr) {
 
-        FloatBuffer inTensorBuffer = Tensor.allocateFloatBuffer(MODEL_INPUT_SIZE);
+        FloatBuffer inTensorBuffer = Tensor.allocateFloatBuffer(Constants.MODEL_INPUT_SIZE);
 
-        for (int i = 0; i < COUNT_OF_FRAMES_PER_INFERENCE; i++) {
-            long timeUs = 1000 * (fromMs + (int) ((toMs - fromMs) * i / (COUNT_OF_FRAMES_PER_INFERENCE - 1.)));
+        // extract 4 frames for each second of the video and pack them to a float buffer to be converted to the model input tensor
+        for (int i = 0; i < Constants.COUNT_OF_FRAMES_PER_INFERENCE; i++) {
+            long timeUs = 1000 * (fromMs + (int) ((toMs - fromMs) * i / (Constants.COUNT_OF_FRAMES_PER_INFERENCE - 1.)));
             Bitmap bitmap = mmr.getFrameAtTime(timeUs, MediaMetadataRetriever.OPTION_CLOSEST_SYNC);
-            float ratio = Math.min(bitmap.getWidth(), bitmap.getHeight()) / (float)TARGET_VIDEO_SIZE;
+            float ratio = Math.min(bitmap.getWidth(), bitmap.getHeight()) / (float)Constants.TARGET_VIDEO_SIZE;
             Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth() / ratio), (int)(bitmap.getHeight() / ratio), true);
             Bitmap centerCroppedBitmap = Bitmap.createBitmap(resizedBitmap,
                     resizedBitmap.getWidth() > resizedBitmap.getHeight() ? (resizedBitmap.getWidth() - resizedBitmap.getHeight()) / 2 : 0,
                     resizedBitmap.getHeight() > resizedBitmap.getWidth() ? (resizedBitmap.getHeight() - resizedBitmap.getWidth()) / 2 : 0,
-                    TARGET_VIDEO_SIZE, TARGET_VIDEO_SIZE);
+                    Constants.TARGET_VIDEO_SIZE, Constants.TARGET_VIDEO_SIZE);
 
             TensorImageUtils.bitmapToFloatBuffer(centerCroppedBitmap, 0, 0,
-                    TARGET_VIDEO_SIZE, TARGET_VIDEO_SIZE, MEAN_RGB, STD_RGB, inTensorBuffer,
-                    (COUNT_OF_FRAMES_PER_INFERENCE - 1) * i * TARGET_VIDEO_SIZE * TARGET_VIDEO_SIZE);
+                    Constants.TARGET_VIDEO_SIZE, Constants.TARGET_VIDEO_SIZE, Constants.MEAN_RGB, Constants.STD_RGB, inTensorBuffer,
+                    (Constants.COUNT_OF_FRAMES_PER_INFERENCE - 1) * i * Constants.TARGET_VIDEO_SIZE * Constants.TARGET_VIDEO_SIZE);
         }
 
-        Tensor inputTensor = Tensor.fromBlob(inTensorBuffer, new long[]{1, 3, COUNT_OF_FRAMES_PER_INFERENCE, 160, 160});
+        Tensor inputTensor = Tensor.fromBlob(inTensorBuffer, new long[]{1, 3, Constants.COUNT_OF_FRAMES_PER_INFERENCE, 160, 160});
 
         final long startTime = SystemClock.elapsedRealtime();
         Tensor outputTensor = mModule.forward(IValue.from(inputTensor)).toTensor();
@@ -271,7 +270,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         return new Pair<>(scoresIdx, inferenceTime);
     }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
