@@ -21,16 +21,21 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import org.pytorch.demo.AccountLoginActivity;
 import org.pytorch.demo.SettingContent;
 import org.pytorch.demo.Utils;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -38,6 +43,21 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Random;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.FutureTask;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.FormBody;
+import okhttp3.Headers;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+import okhttp3.ResponseBody;
 
 
 public class Util {
@@ -276,6 +296,233 @@ public class Util {
         return "success";
     }
 
+    public String DownloadDatagramByName1(String s) {
+
+
+        String server_addr = settingContent.getServer_addr();
+//        String url = "http://"+server_addr+":8080/api/download_datagram";
+        String url = "http://publicobject.com/helloworld.txt";
+        System.out.println("in ala url is " + url);
+        String res = httpDatagramDownload(url, "u", "p", s);
+
+        return "success";
+
+    }
+
+
+    public String httpDatagramDownload(String url, String u, String p, String n) {
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody formBody = new FormBody.Builder()
+                .add("username", u)
+                .add("password", p)
+                .add("filename", n)
+                .build();
+
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
+
+        String res = null;
+        client.newCall(request).enqueue(new Callback() {
+            @Override public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override public void onResponse(Call call, Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    InputStream in = responseBody.byteStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+                    String result, line = reader.readLine();
+                    result = line;
+
+                    while((line = reader.readLine()) != null) {
+                        result += line;
+                    }
+                    System.out.println(result);
+                    response.body().close();
+
+
+                    try {
+                        File project_dir = new File(project_path);
+                        if (!project_dir.exists()){
+                            project_dir.mkdir();
+                        }
+                        File datagram_dir = new File(datagram_path);
+                        if (!datagram_dir.exists())
+                            datagram_dir.mkdir();
+                        File datagram_file = new File(datagram_dir, n +".json");
+                        if (!datagram_file.exists()){
+                            datagram_file.createNewFile();
+                        }
+
+                        FileOutputStream fileOutputStream = new FileOutputStream(datagram_file);
+                        fileOutputStream.write(result.getBytes());
+                        fileOutputStream.close();
+                    } catch (IOException exception) {
+                        exception.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        return null;
+    }
+
+    private static final String IMGUR_CLIENT_ID = "...";
+    private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
+    private static final MediaType MEDIA_TYPE_JPG = MediaType.parse("image/jpeg");
+    private static final MediaType MEDIA_TYPE_MP4 = MediaType.parse("video/mp4");
+    private static final MediaType MEDIA_TYPE_JSON = MediaType.parse("text/plain");
+    public String UploadVideoByName(String user, String pass, String filename){
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("user_id", user)
+                .addFormDataPart("date", "2021-03-16")
+                .addFormDataPart("file", filename,
+                        RequestBody.create(MEDIA_TYPE_MP4, new File(video_path, filename)))
+                .build();
+
+        String server_addr = settingContent.getServer_addr();
+        String url = "http://"+server_addr+":8080/api/photos/upload_video";
+        String token = GetToken();
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Authorization", "Bearer " + token)
+//                .header("Content-Type", "multipart/form-data")
+//                .header("accept", "application/json")
+                .post(requestBody)
+                .build();
+        System.out.println("request " + request);
+
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override public void onResponse(Call call, Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    System.out.println("successsssssssss");
+                }
+            }
+        });
+
+        return "success";
+    }
+
+    public String deleteCrewByName(String name){
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = new FormBody.Builder()
+                .add("sailorname", name)
+                .build();
+
+        String server_addr = settingContent.getServer_addr();
+        String url = "http://"+server_addr+":8080/api/sailors";
+        String token = GetToken();
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Authorization", "Bearer " + token)
+//                .header("Content-Type", "multipart/form-data")
+//                .header("accept", "application/json")
+                .delete(requestBody)
+                .build();
+        System.out.println("request " + request);
+
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override public void onResponse(Call call, Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    System.out.println("successsssssssss");
+                }
+            }
+        });
+
+        return "success";
+    }
+
+
+    public void resetPassword(String oldp, String newp){
+        OkHttpClient client = new OkHttpClient();
+        RequestBody formBody = new FormBody.Builder()
+                .add("old_password ", oldp)
+                .add("new_password ", newp)
+                .build();
+
+        Request request = new Request.Builder()
+                .header("Authorization", "Bearer " + GetToken())
+                .url("http://10.138.100.154:8080/api/account/reset-password")
+                .post(formBody)
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override public void onResponse(Call call, Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    System.out.println("successsssssssss");
+                }
+            }
+        });
+    }
+
+    public String UploadNewCrewInfo(String chinese_name, String english_name, String position, String phone_number, File photo){
+        OkHttpClient client = new OkHttpClient();
+        RequestBody requestBody = new MultipartBody.Builder()
+                .setType(MultipartBody.FORM)
+                .addFormDataPart("chinese_name", chinese_name)
+                .addFormDataPart("english_name", english_name)
+                .addFormDataPart("position", position)
+                .addFormDataPart("phone_number", phone_number)
+                .addFormDataPart("file", photo.getName(),
+                        RequestBody.create(MEDIA_TYPE_JPG, photo))
+                .build();
+
+        String server_addr = settingContent.getServer_addr();
+        String url = "http://"+server_addr+":8080/api/sailors";
+        String token = GetToken();
+        Request request = new Request.Builder()
+                .url(url)
+                .header("Authorization", "Bearer " + token)
+//                .header("Content-Type", "multipart/form-data")
+//                .header("accept", "application/json")
+                .post(requestBody)
+                .build();
+        System.out.println("request " + request);
+
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override public void onResponse(Call call, Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    System.out.println("successsssssssss");
+                }
+            }
+        });
+
+        return "success";
+    }
     public void SetLocalJson(String str) throws IOException {
 //        File Directory = Environment.getExternalStorageDirectory();
 //        File project_dir = new File(Directory, "FaceRecogAppConfig");

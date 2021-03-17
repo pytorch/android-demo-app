@@ -57,6 +57,8 @@ public class DatagramSelectAdapter extends RecyclerView.Adapter<DatagramSelectAd
                 @Override
                 public void onRefresh() {
                     refresh_lv0();
+//                    new Util().DownloadDatagramByName1("abccc");
+//                    System.out.println("download abccc");
                     swipeRefreshLayout.setRefreshing(false);
                 }
             });
@@ -100,7 +102,7 @@ public class DatagramSelectAdapter extends RecyclerView.Adapter<DatagramSelectAd
                     new AsyncTask<String, Integer, String>(){
                         @Override
                         protected String doInBackground(String... arg0){
-                            String res = new Util().DownloadDatagramByName(arg0[0]);
+                            String res = new Util().DownloadDatagramByName1(arg0[0]);
                             return res;
                         }
                         protected void onPostExecute(String result) {

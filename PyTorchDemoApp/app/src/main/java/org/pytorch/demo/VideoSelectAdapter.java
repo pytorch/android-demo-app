@@ -161,7 +161,8 @@ public class VideoSelectAdapter extends RecyclerView.Adapter<VideoSelectAdapter.
                     new AsyncTask<String, Integer, String>(){
                         @Override
                         protected String doInBackground(String... arg0){
-                            String res = util.UploadVideoByName(arg0[0]);
+//                            String res = util.UploadVideoByName(arg0[0]);
+                            String res = util.UploadVideoByName("abc", "abc", filename);
                             return res;
                         }
 
@@ -178,16 +179,16 @@ public class VideoSelectAdapter extends RecyclerView.Adapter<VideoSelectAdapter.
                         }
                     }.execute(filename);
 
-                    System.out.println("before while");
-                    while(util.upload_progress < 0.99){
-                        System.out.println("in while up is "+ util.upload_progress);
-                        dialog.setProgress((int)(100 * util.upload_progress));
-                        try {
-                            Thread.sleep(400);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                    }
+//                    System.out.println("before while");
+//                    while(util.upload_progress < 0.99){
+//                        System.out.println("in while up is "+ util.upload_progress);
+//                        dialog.setProgress((int)(100 * util.upload_progress));
+//                        try {
+//                            Thread.sleep(400);
+//                        } catch (InterruptedException e) {
+//                            e.printStackTrace();
+//                        }
+//                    }
 //                    Toast.makeText(parent.getContext(),"上传成功", Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
 

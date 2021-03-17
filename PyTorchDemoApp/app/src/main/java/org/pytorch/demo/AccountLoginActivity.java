@@ -389,8 +389,10 @@ public class AccountLoginActivity extends Activity
         }
 
         public String call() throws Exception {
-            String result = null;
             return whenSendPostRequest_thenCorrect(url, u, p);
+//            System.out.println("download file abc");
+//            return new Util().DownloadDatagramByName1("abc");
+
         }
 
     }

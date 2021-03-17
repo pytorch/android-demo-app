@@ -15,7 +15,7 @@
         android:layout_height="50dp"
         android:layout_marginTop="80dp"
         android:gravity="center"
-        android:text="人脸识别"
+        android:text="船员面部身份识别系统"
         android:textColor="@android:color/black"
         android:textSize="30sp"
         tools:ignore="MissingConstraints" />

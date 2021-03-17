@@ -16,6 +16,7 @@ import android.widget.RadioButton;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import org.pytorch.demo.util.Util;
 
 
 public class ContentfuncActivity extends Fragment {
@@ -74,6 +75,13 @@ public class ContentfuncActivity extends Fragment {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(ContentfuncActivity.this.getActivity(), AddNewCrew.class));
+            }
+        });
+        shipname_detect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+//                new Util().resetPassword("001", "00x");
+                new Util().deleteCrewByName("name");
             }
         });
 

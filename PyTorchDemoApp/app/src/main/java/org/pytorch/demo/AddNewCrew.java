@@ -174,10 +174,13 @@ public class AddNewCrew extends AppCompatActivity {
                                 bitmap_c.compress(Bitmap.CompressFormat.JPEG, 100, fileOutputStream);
                                 fileOutputStream.flush();
                                 fileOutputStream.close();
+
+
                             } catch (IOException exception) {
                                 exception.printStackTrace();
                             }
                         }
+                        new Util().UploadNewCrewInfo("hj", "hj", "ls", "111", bitmap_file);
 
 
 
@@ -187,10 +190,10 @@ public class AddNewCrew extends AppCompatActivity {
                         // 3. save embedding and id to local file
                         boolean result = new Util().save_embedding_local_file(unnamed);
                         if (result){
-                            Toast.makeText(AddNewCrew.this,"已添加到本地库中"+crewID, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddNewCrew.this,"已添加到本地库中："+crewID, Toast.LENGTH_SHORT).show();
                         }
                         else{
-                            Toast.makeText(AddNewCrew.this,"添加到本地库失败"+crewID, Toast.LENGTH_SHORT).show();
+                            Toast.makeText(AddNewCrew.this,"添加到本地库失败："+crewID, Toast.LENGTH_SHORT).show();
                         }
                     }
                     else{
