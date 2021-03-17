@@ -51,6 +51,7 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.FormBody;
 import okhttp3.Headers;
+import okhttp3.HttpUrl;
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
@@ -300,8 +301,9 @@ public class Util {
 
 
         String server_addr = settingContent.getServer_addr();
-//        String url = "http://"+server_addr+":8080/api/download_datagram";
-        String url = "http://publicobject.com/helloworld.txt";
+        String url = "http://"+server_addr+":8080/api/datagram" +
+                "/download_datagram";
+//        String url = "http://publicobject.com/helloworld.txt";
         System.out.println("in ala url is " + url);
         String res = httpDatagramDownload(url, "u", "p", s);
 
@@ -315,8 +317,8 @@ public class Util {
         OkHttpClient client = new OkHttpClient();
         RequestBody formBody = new FormBody.Builder()
                 .add("username", u)
-                .add("password", p)
-                .add("filename", n)
+//                .add("password", p)
+                .add("datagram_name", n)
                 .build();
 
         Request request = new Request.Builder()
@@ -354,7 +356,7 @@ public class Util {
                         File datagram_dir = new File(datagram_path);
                         if (!datagram_dir.exists())
                             datagram_dir.mkdir();
-                        File datagram_file = new File(datagram_dir, n +".json");
+                        File datagram_file = new File(datagram_dir, n);
                         if (!datagram_file.exists()){
                             datagram_file.createNewFile();
                         }
@@ -371,6 +373,64 @@ public class Util {
 
         return null;
     }
+
+    public String getAvailableDatagrams(String username){
+        String server_addr = settingContent.getServer_addr();
+        String url = "http://"+server_addr+":8080/api/datagram/get_available_datagram";
+//        String url = "http://publicobject.com/helloworld.txt";
+        System.out.println("in ala url is " + url);
+        jsonAvailableDatagram = null;
+        httPGetAvailableDatagram(url, username);
+
+        int try_count = 0;
+        while(jsonAvailableDatagram == null){
+            try {
+                System.out.println("waiting jsonAvailableDatagram");
+                Thread.sleep(200);
+                try_count += 1;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (try_count > 5)
+            {
+                System.out.println("stop waiting jsonAvailableDatagram after 1s");
+                break;
+            }
+        }
+        return jsonAvailableDatagram;
+    }
+
+    private String jsonAvailableDatagram;
+    private String httPGetAvailableDatagram(String url, String username) {
+        OkHttpClient client = new OkHttpClient();
+        Request.Builder reqBuild = new Request.Builder();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(url)
+                .newBuilder();
+        urlBuilder.addQueryParameter("username", username);
+        reqBuild.url(urlBuilder.build());
+        Request request = reqBuild.build();
+
+        String res = null;
+        client.newCall(request).enqueue(new Callback() {
+            @Override public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override public void onResponse(Call call, Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    String res = responseBody.string();
+                    jsonAvailableDatagram = res;
+                    System.out.println(res);
+                    response.body().close();
+                }
+            }
+        });
+
+        return null;
+    }
+
 
     private static final String IMGUR_CLIENT_ID = "...";
     private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
@@ -576,8 +636,9 @@ public class Util {
 
 
     public JSONObject GetLocalJson(){
-//        File Directory = Environment.getExternalStorageDirectory();
-//        File project_dir = new File(Directory, "FaceRecogAppConfig");
+        File project_directory = new File(project_path);
+        if (!project_directory.exists())
+            project_directory.mkdir();
         File project_dir = new File(config_path);
         if (!project_dir.exists()){
             project_dir.mkdir();

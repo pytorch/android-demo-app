@@ -1,8 +1,6 @@
 package org.pytorch.demo;
 
 import android.Manifest;
-import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;
@@ -20,8 +18,6 @@ import androidx.core.app.ActivityCompat;
 //import android.support.v7.app.AppCompatActivity;
 //import android.support.v7.content.ContextCompat;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -29,14 +25,13 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.github.faucamp.simplertmp.RtmpHandler;
+import com.github.faucamp.simplertmp_1.FaucampRtmpHandler;
 import com.neovisionaries.ws.client.HostnameUnverifiedException;
 import com.neovisionaries.ws.client.OpeningHandshakeException;
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
-import com.seu.magicfilter.utils.MagicFilterType;
 import com.valdesekamdem.library.mdtoast.MDToast;
 
 import net.ossrs.yasea.SrsCameraView;
@@ -50,19 +45,15 @@ import org.json.JSONObject;
 import org.pytorch.demo.util.Util;
 import org.pytorch.demo.vision.Helper.GraphicOverlay;
 import org.pytorch.demo.vision.Helper.RectOverlay;
-import org.pytorch.demo.R;
 import org.pytorch.demo.vision.view.ResultRowView;
 
 import java.io.IOException;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Random;
-
-import static org.pytorch.demo.Utils.token;
 
 
-public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpHandler.RtmpListener,
+public class RemoteFaceDetectActivity extends AppCompatActivity implements FaucampRtmpHandler.RtmpListener,
         SrsRecordHandler.SrsRecordListener, SrsEncodeHandler.SrsEncodeListener {
     private static final String TAG = "Yasea";
     public final static int RC_CAMERA = 100;
@@ -232,7 +223,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements RtmpH
 
         mPublisher = new SrsPublisher(mCameraView);
         mPublisher.setEncodeHandler(new SrsEncodeHandler(this));
-        mPublisher.setRtmpHandler(new RtmpHandler(this));
+        mPublisher.setRtmpHandler(new FaucampRtmpHandler(this));
         mPublisher.setRecordHandler(new SrsRecordHandler(this));
 //        mPublisher.setPreviewResolution(mWidth, mHeight);
 //        mPublisher.setOutputResolution(mHeight, mWidth); // 这里要和preview反过来

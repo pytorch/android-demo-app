@@ -4,8 +4,8 @@ import android.media.MediaCodec;
 import android.media.MediaFormat;
 import android.util.Log;
 
-import com.github.faucamp.simplertmp.DefaultRtmpPublisher;
-import com.github.faucamp.simplertmp.RtmpHandler;
+import com.github.faucamp.simplertmp_1.DefaultRtmpPublisher;
+import com.github.faucamp.simplertmp_1.FaucampRtmpHandler;
 
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
@@ -46,7 +46,7 @@ public class SrsFlvMuxer {
      * constructor.
      * @param handler the rtmp event handler.
      */
-    public SrsFlvMuxer(RtmpHandler handler) {
+    public SrsFlvMuxer(FaucampRtmpHandler handler) {
         publisher = new DefaultRtmpPublisher(handler);
     }
 

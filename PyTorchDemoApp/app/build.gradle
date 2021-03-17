@@ -94,7 +94,7 @@ dependencies {
     implementation 'com.github.FaceRecogApp.rtmp-rtsp-stream-client-java:rtplibrary:3.0.0'
     implementation 'com.squareup.okio:okio:2.1.0'
 
-    implementation("com.serenegiant:common:1.5.20")
+    implementation("com.serenegiant:common:1.5.20")//C
     implementation project(':libuvccamera')
     implementation project(':usbserial-release')
     implementation project(':x5s-developmentkit')

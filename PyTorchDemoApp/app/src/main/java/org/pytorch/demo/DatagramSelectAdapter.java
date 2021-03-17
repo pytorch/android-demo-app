@@ -272,13 +272,13 @@ public class DatagramSelectAdapter extends RecyclerView.Adapter<DatagramSelectAd
 
     @SuppressLint("StaticFieldLeak")
     private void refresh_lv0() {
-        String login_id = Utils.token;
+        String login_id = "admin";
         new AsyncTask<String, Integer, String>() {
 
 
             @Override
             protected String doInBackground(String... arg0) {
-                String res = new Util().GetAvailableDatagrams(arg0[0]);
+                String res = new Util().getAvailableDatagrams(arg0[0]);
                 return res;
             }
 
@@ -326,16 +326,19 @@ public class DatagramSelectAdapter extends RecyclerView.Adapter<DatagramSelectAd
         ArrayList<Map<String,String>> list = new ArrayList<>();
         try{
             JSONObject jsonObject = new JSONObject(jsonString);
-            int count = jsonObject.getInt("datagram len");
-            JSONArray jsonArrayn = jsonObject.getJSONArray("datagram name");
-            JSONArray jsonArraym = jsonObject.getJSONArray("datagram mission");
-            JSONArray jsonArrays = jsonObject.getJSONArray("datagram site");
+//            int count = jsonObject.getInt("datagram_len");
+//            int count = jsonObject.length();
+
+            JSONArray jsonArrayn = jsonObject.getJSONArray("datagram_name");
+            JSONArray jsonArraym = jsonObject.getJSONArray("datagram_describe");
+            int count = jsonArrayn.length();
+//            JSONArray jsonArrays = jsonObject.getJSONArray("datagram site");
 
             for (int i = 0; i < count; i++){
                 Map<String, String> map= new HashMap<>();
                 map.put("name", jsonArrayn.getString(i));
-                map.put("mission", jsonArraym.getString(i));
-                map.put("site", jsonArrays.getString(i));
+                map.put("describe", jsonArraym.getString(i));
+//                map.put("site", jsonArrays.getString(i));
                 list.add(map);
             }
         }catch (JSONException jsonException){
@@ -345,7 +348,7 @@ public class DatagramSelectAdapter extends RecyclerView.Adapter<DatagramSelectAd
         SimpleAdapter adapter = new SimpleAdapter(parent.getContext(),
                 list,
                 R.layout.datagram_list_item,
-                new String[]{"name", "mission"},
+                new String[]{"name", "describe"},
                 new int[]{R.id.text1, R.id.text2});
 
         listView.setAdapter(adapter);

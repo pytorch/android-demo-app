@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/black"
@@ -15,8 +16,7 @@
         android:layout_marginBottom="8dp"
         android:elevation="1dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@id/image_classification_texture_view"
-        app:layout_constraintRight_toRightOf="@id/image_classification_texture_view" />
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/image_classification_fps_text"
@@ -27,8 +27,8 @@
         android:layout_marginBottom="8dp"
         android:elevation="1dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@id/image_classification_texture_view"
-        app:layout_constraintRight_toLeftOf="@id/image_classification_ms_text" />
+        app:layout_constraintRight_toLeftOf="@id/image_classification_ms_text"
+        tools:ignore="MissingConstraints" />
 
     <TextView
         android:id="@+id/image_classification_ms_avg_text"
@@ -39,8 +39,8 @@
         android:layout_marginBottom="8dp"
         android:elevation="1dp"
         android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="@id/image_classification_texture_view"
-        app:layout_constraintRight_toLeftOf="@id/image_classification_fps_text" />
+        app:layout_constraintRight_toLeftOf="@id/image_classification_fps_text"
+        tools:ignore="MissingConstraints" />
 
     <ViewStub
         android:id="@+id/image_classification_texture_view_stub"

@@ -1,3 +1,5 @@
+package org.pytorch.demo;
+
 //package org.pytorch.demo;
 //
 //import android.Manifest;
@@ -97,6 +99,9 @@
 //import org.pytorch.demo.Utils.NamedEmbedding;
 //import org.pytorch.demo.Utils.NamedBox;
 //
+public class FaceDetectionActivity{
+
+}
 //
 //public class FaceDetectionActivity extends AbstractCameraXActivity<FaceDetectionActivity.AnalysisResult> {
 //

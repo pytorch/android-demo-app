@@ -6,7 +6,7 @@ import android.media.AudioRecord;
 import android.media.audiofx.AcousticEchoCanceler;
 import android.media.audiofx.AutomaticGainControl;
 
-import com.github.faucamp.simplertmp.RtmpHandler;
+import com.github.faucamp.simplertmp_1.FaucampRtmpHandler;
 import com.seu.magicfilter.utils.MagicFilterType;
 
 import java.io.File;
@@ -329,7 +329,7 @@ public class SrsPublisher {
         mCameraView.startCamera();
     }
 
-    public void setRtmpHandler(RtmpHandler handler) {
+    public void setRtmpHandler(FaucampRtmpHandler handler) {
         mFlvMuxer = new SrsFlvMuxer(handler);
         if (mEncoder != null) {
             mEncoder.setFlvMuxer(mFlvMuxer);

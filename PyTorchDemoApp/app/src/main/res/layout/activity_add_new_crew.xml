@@ -293,7 +293,7 @@
             android:layout_marginEnd="70dp"
             android:text="返回"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintLeft_toRightOf="@+id/Save"
+            app:layout_constraintLeft_toRightOf="@+id/btn_submit"
             tools:layout_editor_absoluteY="0dp" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
