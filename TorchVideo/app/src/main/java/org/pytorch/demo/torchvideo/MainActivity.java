@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.media.MediaMetadataRetriever;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
@@ -85,7 +84,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 mTextView.setVisibility(View.INVISIBLE);
                 mStopThread = true;
                 mVideoUri = getMedia(mTestVideos[mTestVideoIndex]);
-                setVideo();
+                startVideo();
             }
         });
 
@@ -123,13 +122,12 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             }
         });
 
-
         mVideoView = findViewById(R.id.videoView);
         mVideoUri = getMedia(mTestVideos[mTestVideoIndex]);
-        setVideo();
+        startVideo();
     }
 
-    private void setVideo() {
+    private void startVideo() {
         mVideoView.setVideoURI(mVideoUri);
         mVideoView.start();
         mButtonPauseResume.setVisibility(View.VISIBLE);
@@ -149,24 +147,29 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         mThread.start();
     }
 
-    private Uri getMedia(String mediaName) {
-        return Uri.parse("android.resource://" + getPackageName() + "/raw/" + mediaName);
+    private void stopVideo() {
+        mVideoView.stopPlayback();
+        mButtonPauseResume.setVisibility(View.INVISIBLE);
+        mButtonTest.setEnabled(true);
+        mStopThread = true;
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-
-        mVideoView.stopPlayback();
+    private Uri getMedia(String mediaName) {
+        return Uri.parse("android.resource://" + getPackageName() + "/raw/" + mediaName);
     }
 
     @Override
     protected void onPause() {
         super.onPause();
 
-        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.N) {
-            mVideoView.pause();
-        }
+        mVideoView.pause();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+
+        stopVideo();
     }
 
     @Override
@@ -278,7 +281,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             Uri selectedMediaUri = data.getData();
             if (selectedMediaUri.toString().contains("video")) {
                 mVideoUri = selectedMediaUri;
-                setVideo();
+                startVideo();
             }
         }
     }
