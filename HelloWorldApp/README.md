@@ -1,28 +1,30 @@
 ## Quickstart
 
 [HelloWorld](https://github.com/pytorch/android-demo-app/tree/master/HelloWorldApp) is a simple image classification application that demonstrates how to use PyTorch Android API.
-This application runs TorchScript serialized TorchVision pretrained resnet18 model on static image which is packaged inside the app as android asset.
+This application runs TorchScript serialized TorchVision pretrained [MobileNet v3 model](https://pytorch.org/vision/stable/models.html) on static image which is packaged inside the app as android asset.
 
 #### 1. Model Preparation
 
-Let’s start with model preparation. If you are familiar with PyTorch, you probably should already know how to train and save your model. In case you don’t, we are going to use a pre-trained image classification model(Resnet18), which is packaged in [TorchVision](https://pytorch.org/docs/stable/torchvision/index.html).
+Let’s start with model preparation. If you are familiar with PyTorch, you probably should already know how to train and save your model. In case you don’t, we are going to use a pre-trained image classification model(MobileNet v3), which is packaged in [TorchVision](https://pytorch.org/docs/stable/torchvision/index.html).
 To install it, run the command below:
 ```
 pip install torchvision
 ```
 
-To serialize the model you can use python [script](https://github.com/pytorch/android-demo-app/blob/master/HelloWorldApp/trace_model.py) in the root folder of HelloWorld app:
+To serialize and optimize the model for Android, you can use the Python [script](https://github.com/pytorch/android-demo-app/blob/master/HelloWorldApp/trace_model.py) in the root folder of HelloWorld app:
 ```
 import torch
 import torchvision
+from torch.utils.mobile_optimizer import optimize_for_mobile
 
-model = torchvision.models.resnet18(pretrained=True)
+model = torchvision.models.mobilenet_v3_small(pretrained=True)
 model.eval()
 example = torch.rand(1, 3, 224, 224)
 traced_script_module = torch.jit.trace(model, example)
-traced_script_module.save("app/src/main/assets/model.pt")
+optimized_traced_model = optimize_for_mobile(traced_script_module)
+optimized_traced_model.save("app/src/main/assets/model.pt")
 ```
-If everything works well, we should have our model - `model.pt` generated in the assets folder of android application.
+If everything works well, we should have our scripted and optimized model - `model.pt` generated in the assets folder of android application.
 That will be packaged inside android application as `asset` and can be used on the device.
 
 More details about TorchScript you can find in [tutorials on pytorch.org](https://pytorch.org/docs/stable/jit.html)
