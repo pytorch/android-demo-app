@@ -27,6 +27,8 @@ optimized_traced_model.save("app/src/main/assets/model.pt")
 If everything works well, we should have our scripted and optimized model - `model.pt` generated in the assets folder of android application.
 That will be packaged inside android application as `asset` and can be used on the device.
 
+By using the new MobileNet v3 model instead of the old Resnet18 model, and by calling the `optimize_for_mobile` method on the traced model, the model inference time on a Pixel 3 gets decreased from over 230ms to about 40ms. 
+
 More details about TorchScript you can find in [tutorials on pytorch.org](https://pytorch.org/docs/stable/jit.html)
 
 #### 2. Cloning from github
