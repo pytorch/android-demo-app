@@ -4,7 +4,7 @@ A list of Android demo apps built on the powerful [PyTorch Mobile](https://pytor
 
 ### HelloWorld
 
-[HelloWorld](https://github.com/pytorch/android-demo-app/tree/master/HelloWorld) is a simple image classification application that demonstrates how to use the PyTorch Android API.
+[HelloWorld](https://github.com/pytorch/android-demo-app/tree/master/HelloWorldApp) is a simple image classification application that demonstrates how to use the PyTorch Android API.
 
 ### PyTorch demo app
 
