@@ -62,6 +62,7 @@ public class VideoSelectAdapter extends RecyclerView.Adapter<VideoSelectAdapter.
             });
             System.out.println("in onbindviewholder position is "+position);
             listView = holder.itemView.findViewById(R.id.list);
+            refresh_lv0();
             //TODO implement server api to get all uploaded videos
 //            Button button = holder.itemView.findViewById(R.id.button);
 //
@@ -92,31 +93,31 @@ public class VideoSelectAdapter extends RecyclerView.Adapter<VideoSelectAdapter.
 //            });
 
 
-            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                @SuppressLint("StaticFieldLeak")
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    System.out.println("position "+position);
-                    String name = ((HashMap<String, String>)(listView.getItemAtPosition(position))).get("name");
-                    System.out.println(name);
-                    new AsyncTask<String, Integer, String>(){
-                        @Override
-                        protected String doInBackground(String... arg0){
-                            String res = new Util().DownloadDatagramByName(arg0[0]);
-                            return res;
-                        }
-                        protected void onPostExecute(String result) {
-                            if (result != null) {
-                                MDToast.makeText(parent.getContext(), "下载完成", Utils.dura_short, Utils.Type_success).show();
-                                System.out.println(result);
-                            }else{
-//                                Toast.makeText(parent.getContext(), "下载失败，网络或服务器出错",Toast.LENGTH_SHORT).show();
-                                MDToast.makeText(parent.getContext(), "下载失败，网络或服务器出错", Utils.dura_short, Utils.Type_info).show();
-                            }
-                        }
-                    }.execute(name);
-                }
-            });
+//            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                @Override
+//                @SuppressLint("StaticFieldLeak")
+//                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+//                    System.out.println("position "+position);
+//                    String name = ((HashMap<String, String>)(listView.getItemAtPosition(position))).get("name");
+//                    System.out.println(name);
+//                    new AsyncTask<String, Integer, String>(){
+//                        @Override
+//                        protected String doInBackground(String... arg0){
+//                            String res = new Util().DownloadDatagramByName(arg0[0]);
+//                            return res;
+//                        }
+//                        protected void onPostExecute(String result) {
+//                            if (result != null) {
+//                                MDToast.makeText(parent.getContext(), "下载完成", Utils.dura_short, Utils.Type_success).show();
+//                                System.out.println(result);
+//                            }else{
+////                                Toast.makeText(parent.getContext(), "下载失败，网络或服务器出错",Toast.LENGTH_SHORT).show();
+//                                MDToast.makeText(parent.getContext(), "下载失败，网络或服务器出错", Utils.dura_short, Utils.Type_info).show();
+//                            }
+//                        }
+//                    }.execute(name);
+//                }
+//            });
         }
         else {
             swipeRefreshLayout = holder.itemView.findViewById(R.id.swiperFresh);
@@ -257,6 +258,29 @@ public class VideoSelectAdapter extends RecyclerView.Adapter<VideoSelectAdapter.
 
     private void refresh_lv0() {
         //TODO implement server code and retrieve server videos here
+
+        String login_id = "admin";
+        new AsyncTask<String, Integer, String>() {
+
+
+            @Override
+            protected String doInBackground(String... arg0) {
+                String res = new Util().getAvailableVideos(arg0[0]);
+                return res;
+            }
+
+            protected void onPostExecute(String result) {
+                if (result != null) {
+                    MDToast.makeText(parent.getContext(), "刷新完成", MDToast.LENGTH_SHORT, MDToast.TYPE_SUCCESS).show();
+                    updateListView0(result);
+                } else {
+                    MDToast.makeText(parent.getContext(), "刷新失败，网络或远程服务器故障", MDToast.LENGTH_SHORT, MDToast.TYPE_ERROR).show();
+                }
+            }
+        }.execute(login_id);
+
+
+
         MDToast.makeText(parent.getContext(), "刷新失败",Utils.dura_short, Utils.Type_info).show();
         swipeRefreshLayout.setRefreshing(false);
     }
@@ -296,16 +320,16 @@ public class VideoSelectAdapter extends RecyclerView.Adapter<VideoSelectAdapter.
         ArrayList<Map<String,String>> list = new ArrayList<>();
         try{
             JSONObject jsonObject = new JSONObject(jsonString);
-            int count = jsonObject.getInt("datagram len");
-            JSONArray jsonArrayn = jsonObject.getJSONArray("datagram name");
-            JSONArray jsonArraym = jsonObject.getJSONArray("datagram mission");
-            JSONArray jsonArrays = jsonObject.getJSONArray("datagram site");
 
+            JSONArray jsonArrayn = jsonObject.getJSONArray("video_name");
+            JSONArray jsonArraym = jsonObject.getJSONArray("video_describe");
+//            JSONArray jsonArrays = jsonObject.getJSONArray("datagram site");
+            int count = jsonArrayn.length();
             for (int i = 0; i < count; i++){
                 Map<String, String> map= new HashMap<>();
                 map.put("name", jsonArrayn.getString(i));
                 map.put("mission", jsonArraym.getString(i));
-                map.put("site", jsonArrays.getString(i));
+//                map.put("site", jsonArrays.getString(i));
                 list.add(map);
             }
         }catch (JSONException jsonException){

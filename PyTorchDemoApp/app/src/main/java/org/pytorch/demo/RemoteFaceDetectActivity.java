@@ -262,7 +262,7 @@ public class RemoteFaceDetectActivity extends AppCompatActivity implements Fauca
             @Override
             public void onClick(View v) {
                 if (btnPublish.getText().toString().contentEquals("推流")) {
-                    rtmpUrl = efu.getText().toString() + "?token=" + new Util().GetToken();
+                    rtmpUrl = efu.getText().toString();
 //                    SharedPreferences.Editor editor = sp.edit();
 //                    editor.putString("rtmpUrl", rtmpUrl);
 //                    editor.apply();

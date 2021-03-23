@@ -432,6 +432,62 @@ public class Util {
     }
 
 
+    public String getAvailableVideos(String username){
+        String server_addr = settingContent.getServer_addr();
+        String url = "http://"+server_addr+":8080/api/video/get_available_video";
+//        String url = "http://publicobject.com/helloworld.txt";
+        System.out.println("in ala url is " + url);
+        jsonAvailableVideo = null;
+        httPGetAvailableVideo(url, username);
+
+        int try_count = 0;
+        while(jsonAvailableVideo == null){
+            try {
+                System.out.println("waiting jsonav");
+                Thread.sleep(200);
+                try_count += 1;
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            if (try_count > 5)
+            {
+                System.out.println("stop waiting jsonav after 1s");
+                break;
+            }
+        }
+        return jsonAvailableVideo;
+    }
+    private String jsonAvailableVideo;
+    private String httPGetAvailableVideo(String url, String username) {
+        OkHttpClient client = new OkHttpClient();
+        Request.Builder reqBuild = new Request.Builder();
+        HttpUrl.Builder urlBuilder = HttpUrl.parse(url)
+                .newBuilder();
+        urlBuilder.addQueryParameter("username", username);
+        reqBuild.url(urlBuilder.build());
+        Request request = reqBuild.build();
+
+        String res = null;
+        client.newCall(request).enqueue(new Callback() {
+            @Override public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override public void onResponse(Call call, Response response) throws IOException {
+                try (ResponseBody responseBody = response.body()) {
+                    if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
+
+                    String res = responseBody.string();
+                    jsonAvailableVideo = res;
+                    System.out.println(res);
+                    response.body().close();
+                }
+            }
+        });
+
+        return null;
+    }
+
     private static final String IMGUR_CLIENT_ID = "...";
     private static final MediaType MEDIA_TYPE_PNG = MediaType.parse("image/png");
     private static final MediaType MEDIA_TYPE_JPG = MediaType.parse("image/jpeg");
@@ -441,14 +497,14 @@ public class Util {
         OkHttpClient client = new OkHttpClient();
         RequestBody requestBody = new MultipartBody.Builder()
                 .setType(MultipartBody.FORM)
-                .addFormDataPart("user_id", user)
+                .addFormDataPart("username", user)
                 .addFormDataPart("date", "2021-03-16")
                 .addFormDataPart("file", filename,
                         RequestBody.create(MEDIA_TYPE_MP4, new File(video_path, filename)))
                 .build();
 
         String server_addr = settingContent.getServer_addr();
-        String url = "http://"+server_addr+":8080/api/photos/upload_video";
+        String url = "http://"+server_addr+":8080/api/video/upload_video";
         String token = GetToken();
         Request request = new Request.Builder()
                 .url(url)
@@ -924,7 +980,8 @@ public class Util {
 
     public String getRTMPURL(){
 //        return "rtmp://"+server_uri+"/" + getRandomAlphaString(3) + '/' + getRandomAlphaDigitString(5);
-        return "rtmp://" + rtmp_uri + "/live/livestream?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMCIsImV4cCI6MTYxNTQ1NDA3OCwic2NvcGVzIjpbImFwcHVzZXIiXX0.YaJewk07x36ThTgGlPh9M832CQtzJYDvq6HkJ7ynmTM";
+        String rtmp_code = getRandomAlphaDigitString(10);
+        return "rtmp://" + rtmp_uri + "/live/" + "livestreamk?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIyIiwiZXhwIjoxNjE2NjUzODY3LCJzY29wZXMiOlsiYXBwdXNlciJdfQ.u8DZA4ernTWW1J0_XE5zhrOSONpPEmiiMXoBN2n70Ho" ; //"?token=" + GetToken();
     }
 
     public String getWebsocket_TEMPLATE(){
@@ -948,7 +1005,12 @@ public class Util {
         StringBuilder sb = new StringBuilder();
         for (int i = 0; i < length; i++) {
             int number = random.nextInt(base.length());
-            sb.append(base.charAt(number));
+            if (number < 26){
+                if (random.nextBoolean()){
+                    sb.append(base.charAt(number));
+                }
+                else sb.append(Character.toUpperCase(base.charAt(number)));
+            }
         }
         return sb.toString();
     }
