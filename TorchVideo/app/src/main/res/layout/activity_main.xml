@@ -77,4 +77,18 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
+    <TextView
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="60dp"
+        android:lines="3"
+        android:minLines="3"
+        android:singleLine="false"
+        android:text="To play pre-recorded videos, tap Test\nTo select video from Camera Roll, tap Select\nTo see live video classification, tap Live"
+        android:textAlignment="viewStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/selectButton" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
