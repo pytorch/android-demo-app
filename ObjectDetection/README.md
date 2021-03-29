@@ -17,7 +17,7 @@ To Test Run the Object Detection Android App, follow the steps below:
 
 ### 1. Prepare the Model
 
-If you don't have the PyTorch environment set up to run the script, you can download the model file [here](https://drive.google.com/file/d/15FFbi1ajWh02Dqc4W4HdGI45Th3VhbkR/view?usp=sharing) to the `android-demo-app/ObjectDetection/app/src/main/assets` folder, then skip the rest of this step and go to step 2 directly.
+If you don't have the PyTorch environment set up to run the script, you can download the model file [here](https://drive.google.com/file/d/1QOxNfpy_j_1KbuhN8INw2AgAC82nEw0F/view?usp=sharing) to the `android-demo-app/ObjectDetection/app/src/main/assets` folder, then skip the rest of this step and go to step 2 directly.
 
 Be aware that the downloadable model file was created with PyTorch 1.7.0, matching the PyTorch Android library 1.7.0 specified in the project's `build.gradle` file as `implementation 'org.pytorch:pytorch_android:1.7.0'`. If you use a different version of PyTorch to create your model by following the instructions below, make sure you specify the same PyTorch Android library version in the `build.gradle` file to avoid possible errors caused by the version mismatch. Furthermore, if you want to use the latest PyTorch master code to create the model, follow the steps at [Building PyTorch Android from Source](https://pytorch.org/mobile/android/#building-pytorch-android-from-source) and [Using the PyTorch Android Libraries Built](https://pytorch.org/mobile/android/#using-the-pytorch-android-libraries-built-from-source-or-nightly) on how to use the model in Android.
 
