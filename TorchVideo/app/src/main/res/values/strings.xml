@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TorchVid</string>
+    <string name="app_name">PTVideo</string>
     <string name="pause">Pause</string>
     <string name="resume">Resume</string>
     <string name="restart">Restart</string>
