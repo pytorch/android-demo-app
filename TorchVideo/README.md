@@ -21,6 +21,7 @@ Be aware that the downloadable model file was created with PyTorch 1.8.0, matchi
 
 To create the model yourself, simply run the following commands:
 ```
+conda create -n pt181 python=3.8.5
 conda activate pt181
 pip install torch torchvision
 
