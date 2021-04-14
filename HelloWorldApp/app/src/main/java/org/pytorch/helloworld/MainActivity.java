@@ -12,6 +12,7 @@ import org.pytorch.IValue;
 import org.pytorch.Module;
 import org.pytorch.Tensor;
 import org.pytorch.torchvision.TensorImageUtils;
+import org.pytorch.MemoryFormat;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -48,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
     // preparing input tensor
     final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(bitmap,
-        TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);
+        TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB, MemoryFormat.CHANNELS_LAST);
 
     // running the model
     final Tensor outputTensor = module.forward(IValue.from(inputTensor)).toTensor();
