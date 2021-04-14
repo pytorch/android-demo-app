@@ -4,7 +4,7 @@ A list of Android demo apps built on the powerful [PyTorch Mobile](https://pytor
 
 ### HelloWorld
 
-[HelloWorld](https://github.com/pytorch/android-demo-app/tree/master/HelloWorld) is a simple image classification application that demonstrates how to use the PyTorch Android API.
+[HelloWorld](https://github.com/pytorch/android-demo-app/tree/master/HelloWorldApp) is a simple image classification application that demonstrates how to use the PyTorch Android API with the latest PyTorch 1.8, MobileNet v3, and [MemoryFormat.CHANNELS_LAST](https://pytorch.org/tutorials/intermediate/memory_format_tutorial.html).
 
 ### PyTorch demo app
 
@@ -29,6 +29,10 @@ The [PyTorch demo app](https://github.com/pytorch/android-demo-app/tree/master/P
 ### Question Answering
 
 [Question Answering](https://github.com/pytorch/android-demo-app/tree/master/QuestionAnswering) demonstrates how to convert a powerful transformer QA model and use the model in an Android app to answer questions about PyTorch Mobile and more.
+
+### Speech recognition
+
+[Speech Recognition](https://github.com/pytorch/android-demo-app/tree/master/SpeechRecognition) demonstrates how to convert Facebook AI's wav2vec 2.0, one of the leading models in speech recognition, to TorchScript and how to use the scripted model in an Android app to perform speech recognition.
 
 ### Vision Transformer
 
