@@ -2,7 +2,7 @@
 
 ## Introduction
 
-The just released open-sourced PyTorch Video adds video classification, among other things, to the popular torchvision. This PyTorch Video Classification on Android demo app shows how to use a pre-trained PyTorch Video classification model on Android to see real-time video classification results per second while the video plays.
+The newly released open-sourced [PyTorchVideo](https://github.com/facebookresearch/pytorchvideo) adds video understanding to the rapidly growing PyTorch ecosystem. This PyTorchVideo Classification on iOS demo app shows how to use a pre-trained PyTorchVideo classification model on iOS to see video classification results, updated per second while the video plays, on tested videos, videos from the Photos library, or even real-time videos.
 
 ## Prerequisites
 
