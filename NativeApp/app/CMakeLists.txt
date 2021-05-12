@@ -52,3 +52,5 @@ target_link_libraries(${TARGET}
   ${FBJNI_LIBRARY}
   ${OPENCV_LIBRARY}
   log)
+
+file(COPY ${OPENCV_LIB_DIR} DESTINATION ${CMAKE_SOURCE_DIR}/src/main/jniLibs/)
