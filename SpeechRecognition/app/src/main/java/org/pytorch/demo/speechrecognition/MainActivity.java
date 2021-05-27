@@ -35,13 +35,10 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private TextView mTextView;
     private Button mButton;
 
-    private final static String[] tokens = {"<s>", "<pad>", "</s>", "<unk>", "|", "E", "T", "A", "O", "N", "I", "H", "S", "R", "D", "L", "U", "M", "W", "C", "F", "G", "Y", "P", "B", "V", "K", "'", "X", "J", "Q", "Z"};
-    private final static int INPUT_SIZE = 65024;
-    private final static int AUDIO_LEN_LIMIT = 6;
-
     private final static int REQUEST_RECORD_AUDIO = 13;
+    private final static int AUDIO_LEN_IN_SECOND = 12;
     private final static int SAMPLE_RATE = 16000;
-    private final static int RECORDING_LENGTH = SAMPLE_RATE * AUDIO_LEN_LIMIT;
+    private final static int RECORDING_LENGTH = SAMPLE_RATE * AUDIO_LEN_IN_SECOND;
 
     private final static String LOG_TAG = MainActivity.class.getSimpleName();
 
@@ -55,7 +52,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
             MainActivity.this.runOnUiThread(
                     () -> {
-                        mButton.setText(String.format("Listening - %ds left", AUDIO_LEN_LIMIT - mStart));
+                        mButton.setText(String.format("Listening - %ds left", AUDIO_LEN_IN_SECOND - mStart));
                         mStart += 1;
                     });
         }
@@ -90,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         mButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mButton.setText(String.format("Listening - %ds left", AUDIO_LEN_LIMIT));
+                mButton.setText(String.format("Listening - %ds left", AUDIO_LEN_IN_SECOND));
                 mButton.setEnabled(false);
 
                 Thread thread = new Thread(MainActivity.this);
@@ -197,46 +194,21 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private String recognize(float[] floatInputBuffer) {
         if (mModuleEncoder == null) {
             final String moduleFileAbsoluteFilePath = new File(
-                    assetFilePath(this, "wav2vec_traced_quantized.pt")).getAbsolutePath();
+                    assetFilePath(this, "wav2vec2.pt")).getAbsolutePath();
             mModuleEncoder = Module.load(moduleFileAbsoluteFilePath);
         }
 
-        double wav2vecinput[] = new double[INPUT_SIZE];
-        for (int n = 0; n < INPUT_SIZE; n++)
+        double wav2vecinput[] = new double[RECORDING_LENGTH];
+        for (int n = 0; n < RECORDING_LENGTH; n++)
             wav2vecinput[n] = floatInputBuffer[n];
 
-        FloatBuffer inTensorBuffer = Tensor.allocateFloatBuffer(INPUT_SIZE);
+        FloatBuffer inTensorBuffer = Tensor.allocateFloatBuffer(RECORDING_LENGTH);
         for (double val : wav2vecinput)
             inTensorBuffer.put((float)val);
 
-        Tensor inTensor = Tensor.fromBlob(inTensorBuffer, new long[]{1, INPUT_SIZE});
+        Tensor inTensor = Tensor.fromBlob(inTensorBuffer, new long[]{1, RECORDING_LENGTH});
+        final String result = mModuleEncoder.forward(IValue.from(inTensor)).toStr();
 
-        final Map<String, IValue> map = mModuleEncoder.forward(IValue.from(inTensor)).toDictStringKey();
-        final Tensor logitsTensor = map.get("logits").toTensor();
-        final float[] values = logitsTensor.getDataAsFloatArray();
-
-        String result = "";
-        float row[] = new float[tokens.length];
-        for (int i = 0; i < values.length; i++) {
-            row[i % tokens.length] = values[i];
-            if (i > 0 && i % tokens.length == 0) {
-                int tid = argmax(row);
-                if (tid > 4) result = String.format("%s%s", result, tokens[tid]);
-                else if (tid == 4) result = String.format("%s ", result);
-            }
-        }
         return result;
-    }
-
-    private int argmax(float[] array) {
-        int maxIdx = 0;
-        double maxVal = -Double.MAX_VALUE;
-        for (int j=0; j<array.length; j++) {
-            if (array[j] > maxVal) {
-                maxVal = array[j];
-                maxIdx = j;
-            }
-        }
-        return maxIdx;
     }
 }
