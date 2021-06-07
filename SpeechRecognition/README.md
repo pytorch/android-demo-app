@@ -19,12 +19,10 @@ In this demo app, we'll show how to quantize and convert the wav2vec2 model to T
 
 If you don't have PyTorch installed or want to have a quick try of the demo app, you can download the quantized scripted wav2vec2 model  [here](https://drive.google.com/file/d/1wW6qs-OR76usbBXvEyqUH_mRqa0ShMfT/view?usp=sharing), then copy it to the `app/src/main/assets`  folder inside  `android-demo-app/SpeechRecognition`, and continue to Step 2.
 
-With PyTorch 1.9 installed, run the following commands on a Terminal:
+With PyTorch 1.9 and torchaudio 0.9 installed, run the following commands on a Terminal:
 ```
 git clone https://github.com/pytorch/android-demo-app
-git clone https://github.com/pytorch/audio
-cd audio
-cp ../android-demo-app/SpeechRecognition/create_wav2vec2.py .
+cd android-demo-app/SpeechRecognition
 python create_wav2vec2.py
 ```
 This will create the model file `wav2vec2.pt`. Copy it to the Android app:
