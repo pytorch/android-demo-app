@@ -6,6 +6,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -23,6 +24,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
+
+import org.pytorch.LiteModuleLoader;
 
 public class MainActivity extends AppCompatActivity implements Runnable {
     private ImageView mImageView;
@@ -104,12 +107,11 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         });
 
         try {
-            mModule = Module.load(MainActivity.assetFilePath(getApplicationContext(), "deeplabv3_scripted.pt"));
+            mModule = LiteModuleLoader.load(MainActivity.assetFilePath(getApplicationContext(), "deeplabv3_scripted_optimized.ptl"));
         } catch (IOException e) {
             Log.e("ImageSegmentation", "Error reading assets", e);
             finish();
         }
-
     }
 
     @Override
@@ -117,7 +119,12 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         final Tensor inputTensor = TensorImageUtils.bitmapToFloat32Tensor(mBitmap,
                 TensorImageUtils.TORCHVISION_NORM_MEAN_RGB, TensorImageUtils.TORCHVISION_NORM_STD_RGB);
         final float[] inputs = inputTensor.getDataAsFloatArray();
+
+        final long startTime = SystemClock.elapsedRealtime();
         Map<String, IValue> outTensors = mModule.forward(IValue.from(inputTensor)).toDictStringKey();
+        final long inferenceTime = SystemClock.elapsedRealtime() - startTime;
+        Log.d("ImageSegmentation",  "inference time (ms): " + inferenceTime);
+
         final Tensor outputTensor = outTensors.get("out").toTensor();
         final float[] scores = outputTensor.getDataAsFloatArray();
         int width = mBitmap.getWidth();

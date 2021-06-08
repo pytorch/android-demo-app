@@ -1,8 +1,8 @@
-# Semantic Image Segmentation DeepLabV3 on Android
+# Semantic Image Segmentation DeepLabV3 with Lite Interperter on Android
 
 ## Introduction
 
-This repo offers a Python script that converts the [PyTorch DeepLabV3 model](https://pytorch.org/hub/pytorch_vision_deeplabv3_resnet101) for mobile apps and an Android app that uses the model to segment images.
+This repo offers a Python script that converts the [PyTorch DeepLabV3 model](https://pytorch.org/hub/pytorch_vision_deeplabv3_resnet101) to the Lite Interpreter version of model, also optimized for mobile, and an Android app that uses the model to segment images.
 
 ## Quick Start
 
@@ -10,7 +10,9 @@ To Test Run the Image Segmentation Android App, follow the steps below:
 
 ### 1. Prepare the Model
 
-Open a terminal window, run the following commands:
+If you don't have the PyTorch 1.9 environment set up, you can download the optimized-for-mobile Lite Interpreter version of model file to the `android-demo-app/ImageSegmentation/app/src/main/assets` folder using the link [here](https://drive.google.com/file/d/1FCm-pHsLiPiiXBsJwookAa0VFS2zTgv-/view?usp=sharing).
+
+Otherwise, open a terminal window, run the following commands:
 
 ```
 git clone https://github.com/pytorch/android-demo-app
@@ -18,9 +20,7 @@ cd android-demo-app/ImageSegmentation
 python deeplabv3.py
 ```
 
-The Python script `deeplabv3.py` is used to generate the TorchScript-formatted model for mobile apps. If you don't have the PyTorch environment set up to run the script, you can download the model file to the `android-demo-app/ImageSegmentation` folder using the link [here](https://drive.google.com/file/d/1FHV9tN6-e3EWUgM_K3YvDoRLPBj7NHXO/view?usp=sharing).
-
-Then run `mv deeplabv3_scripted.pt app/src/main/assets` to move the model file to the Android project's `assets` folder.
+The Python script `deeplabv3.py` is used to generate the TorchScript-formatted models for mobile apps. For comparison, three versions of the model are generated: a full JIT version of the model, a Lite Interpreter version of the model which is not optimized for mobile, and a Lite Interpreter version of the model which is optimized for mobile, named as `deeplabv3_scripted_optimized.ptl`. The last one is what should be used in mobile apps, as its inference speed is over 60% faster than the non-optimized Lite Interpreter model, which is about 6% faster than the non-optimized full JIT model.
 
 ### 2. Use Android Studio
 
@@ -39,3 +39,5 @@ Note that the example image used in the repo is pretty large (400x400) so the se
 ## Tutorial
 
 Read the tutorial [here](https://pytorch.org/tutorials/beginner/deeplabv3_on_android.html) for detailed step-by-step instructions of how to prepare and run the [PyTorch DeepLabV3 model](https://pytorch.org/hub/pytorch_vision_deeplabv3_resnet101) on Android, as well as practical tips on how to successfully use a pre-trained PyTorch model on Android and avoid common pitfalls.
+
+For more information on using Lite Interpreter in Android, see the tutorial [here](https://pytorch.org/tutorials/prototype/lite_interpreter.html).
