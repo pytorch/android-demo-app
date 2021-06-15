@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import org.pytorch.IValue;
+import org.pytorch.LiteModuleLoader;
 import org.pytorch.Module;
 import org.pytorch.Tensor;
 import org.pytorch.torchvision.TensorImageUtils;
@@ -25,7 +26,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.Map;
 
-import org.pytorch.LiteModuleLoader;
 
 public class MainActivity extends AppCompatActivity implements Runnable {
     private ImageView mImageView;
