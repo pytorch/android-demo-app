@@ -18,7 +18,7 @@ class SpeechRecognizer(torch.nn.Module):
 
     def forward(self, waveforms: Tensor) -> str:
         """Given a single channel speech data, return transcription.
-        
+
         Args:
             waveforms (Tensor): Speech tensor. Shape `[1, num_frames]`.
 
