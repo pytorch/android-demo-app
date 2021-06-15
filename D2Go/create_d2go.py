@@ -50,10 +50,13 @@ def test_export_torchvision_format():
     h, w = size_divisibility, size_divisibility * 2
 
     runner = create_runner("d2go.runner.GeneralizedRCNNRunner")
+    cfg = model_zoo.get_config(cfg_name)
+    datasets = list(cfg.DATASETS.TRAIN)
+    
     data_loader = runner.build_detection_test_loader(cfg, datasets)
     
     predictor_path = convert_and_export_predictor(
-        model_zoo.get_config(cfg_name),
+        cfg,
         copy.deepcopy(pytorch_model),
         "torchscript_int8@tracing",
         './',
