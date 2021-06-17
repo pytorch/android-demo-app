@@ -8,6 +8,7 @@ import android.graphics.Rect;
 import android.graphics.YuvImage;
 import android.media.Image;
 import android.os.SystemClock;
+import android.util.Log;
 import android.view.TextureView;
 import android.view.ViewStub;
 import android.widget.TextView;
@@ -17,12 +18,14 @@ import androidx.annotation.WorkerThread;
 import androidx.camera.core.ImageProxy;
 
 import org.pytorch.IValue;
+import org.pytorch.LiteModuleLoader;
 import org.pytorch.Module;
 import org.pytorch.PyTorchAndroid;
 import org.pytorch.Tensor;
 import org.pytorch.torchvision.TensorImageUtils;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.util.Arrays;
@@ -92,7 +95,11 @@ public class LiveVideoClassificationActivity extends AbstractCameraXActivity<Liv
         @Nullable
         protected AnalysisResult analyzeImage(ImageProxy image, int rotationDegrees) {
             if (mModule == null) {
-                mModule = PyTorchAndroid.loadModuleFromAsset(getAssets(), "video_classification.pt");
+                try {
+                    mModule = LiteModuleLoader.load(MainActivity.assetFilePath(getApplicationContext(), "video_classification.ptl"));
+                } catch (IOException e) {
+                    return null;
+                }
             }
 
             if (mFrameCount == 0)
