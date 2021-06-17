@@ -1,12 +1,5 @@
 apply plugin: 'com.android.application'
 
-repositories {
-    jcenter()
-    maven {
-        url "https://oss.sonatype.org/content/repositories/snapshots"
-    }
-}
-
 android {
     compileSdkVersion 28
     buildToolsVersion "29.0.2"
@@ -26,6 +19,6 @@ android {
 
 dependencies {
     implementation 'androidx.appcompat:appcompat:1.1.0'
-    implementation 'org.pytorch:pytorch_android:1.8.0-SNAPSHOT'
-    implementation 'org.pytorch:pytorch_android_torchvision:1.8.0-SNAPSHOT'
+    implementation 'org.pytorch:pytorch_android_lite:1.9.0'
+    implementation 'org.pytorch:pytorch_android_torchvision:1.9.0'
 }

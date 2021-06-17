@@ -14,5 +14,5 @@ inputs = tokenizer(question, text, return_tensors='pt')
 model_dynamic_quantized = torch.quantization.quantize_dynamic(model, qconfig_spec={torch.nn.Linear}, dtype=torch.qint8)
 traced_model = torch.jit.trace(model_dynamic_quantized, inputs['input_ids'], strict=False)
 optimized_traced_model = optimize_for_mobile(traced_model)
-torch.jit.save(optimized_traced_model, "qa360_quantized.pt")
+optimized_traced_model._save_for_lite_interpreter("qa360_quantized.ptl")
 # 360 is the length of model input, i.e. the length of the tokenized ids of question+text

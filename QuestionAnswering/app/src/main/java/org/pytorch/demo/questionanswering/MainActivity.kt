@@ -8,6 +8,7 @@
 package org.pytorch.demo.questionanswering
 
 import android.app.Activity
+import android.content.Context
 import android.graphics.Typeface
 import android.os.Bundle
 import android.text.Spannable
@@ -19,12 +20,10 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import org.pytorch.IValue
+import org.pytorch.LiteModuleLoader
 import org.pytorch.Module
-import org.pytorch.PyTorchAndroid
 import org.pytorch.Tensor
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
+import java.io.*
 import java.lang.Double.MAX_VALUE
 import java.util.*
 import java.util.regex.Pattern
@@ -171,9 +170,27 @@ class MainActivity : AppCompatActivity(), Runnable {
         }
     }
 
+    fun assetFilePath(context: Context, assetName: String?): String? {
+        val file = File(context.filesDir, assetName)
+        if (file.exists() && file.length() > 0) {
+            return file.absolutePath
+        }
+        context.assets.open(assetName!!).use { `is` ->
+            FileOutputStream(file).use { os ->
+                val buffer = ByteArray(4 * 1024)
+                var read: Int
+                while (`is`.read(buffer).also { read = it } != -1) {
+                    os.write(buffer, 0, read)
+                }
+                os.flush()
+            }
+            return file.absolutePath
+        }
+    }
+
     private fun answer(question: String, text: String): String? {
         if (mModule == null) {
-            mModule = PyTorchAndroid.loadModuleFromAsset(assets, "qa360_quantized.pt")
+            mModule = LiteModuleLoader.load(this.assetFilePath(this, "qa360_quantized.ptl"))
         }
 
         try {
