@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import org.pytorch.IValue;
+import org.pytorch.LiteModuleLoader;
 import org.pytorch.Module;
 import org.pytorch.Tensor;
 import org.pytorch.torchvision.TensorImageUtils;
@@ -37,7 +38,7 @@ public class MainActivity extends AppCompatActivity {
       bitmap = BitmapFactory.decodeStream(getAssets().open("image.jpg"));
       // loading serialized torchscript module from packaged into app android asset model.pt,
       // app/src/model/assets/model.pt
-      module = Module.load(assetFilePath(this, "model.pt"));
+      module = LiteModuleLoader.load(assetFilePath(this, "model.pt"));
     } catch (IOException e) {
       Log.e("PytorchHelloWorld", "Error reading assets", e);
       finish();

@@ -20,3 +20,4 @@ model_efficient_x3d_xs_deploy = convert_to_deployable_form(model_efficient_x3d_x
 traced_model = torch.jit.trace(model_efficient_x3d_xs_deploy, input_tensor, strict=False)
 optimized_traced__model = optimize_for_mobile(traced_model)
 optimized_traced__model.save("app/src/main/assets/video_classification.pt")
+optimized_traced__model._save_for_lite_interpreter("app/src/main/assets/video_classification.ptl")
