@@ -135,8 +135,9 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 int maxi = 0, maxj = 0, maxk = 0;
                 double maxnum = -Double.MAX_VALUE;
                 for (int i = 0; i < CLASSNUM; i++) {
-                    if (scores[i * (width * height) + j * width + k] > maxnum) {
-                        maxnum = scores[i * (width * height) + j * width + k];
+                    float score = scores[i * (width * height) + j * width + k];
+                    if (score > maxnum) {
+                        maxnum = score;
                         maxi = i; maxj = j; maxk = k;
                     }
                 }
