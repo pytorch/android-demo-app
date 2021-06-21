@@ -8,7 +8,7 @@ This application runs TorchScript serialized TorchVision pretrained [MobileNet v
 Let’s start with model preparation. If you are familiar with PyTorch, you probably should already know how to train and save your model. In case you don’t, we are going to use a pre-trained image classification model(MobileNet v3), which is packaged in [TorchVision](https://pytorch.org/docs/stable/torchvision/index.html).
 To install it, run the command below:
 ```
-pip install torchvision
+pip install torch torchvision
 ```
 
 To serialize and optimize the model for Android, you can use the Python [script](https://github.com/pytorch/android-demo-app/blob/master/HelloWorldApp/trace_model.py) in the root folder of HelloWorld app:
@@ -22,12 +22,12 @@ model.eval()
 example = torch.rand(1, 3, 224, 224)
 traced_script_module = torch.jit.trace(model, example)
 optimized_traced_model = optimize_for_mobile(traced_script_module)
-optimized_traced_model.save("app/src/main/assets/model.pt")
+optimized_traced_model._save_for_lite_interpreter("app/src/main/assets/model.ptl")
 ```
 If everything works well, we should have our scripted and optimized model - `model.pt` generated in the assets folder of android application.
 That will be packaged inside android application as `asset` and can be used on the device.
 
-By using the new MobileNet v3 model instead of the old Resnet18 model, and by calling the `optimize_for_mobile` method on the traced model, the model inference time on a Pixel 3 gets decreased from over 230ms to about 40ms. 
+By using the new MobileNet v3 model instead of the old Resnet18 model, and by calling the `optimize_for_mobile` method on the traced model, the model inference time on a Pixel 3 gets decreased from over 230ms to about 40ms.
 
 More details about TorchScript you can find in [tutorials on pytorch.org](https://pytorch.org/docs/stable/jit.html)
 
@@ -54,8 +54,8 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.pytorch:pytorch_android:1.4.0'
-    implementation 'org.pytorch:pytorch_android_torchvision:1.4.0'
+    implementation 'org.pytorch:pytorch_android_lite:1.9.0'
+    implementation 'org.pytorch:pytorch_android_torchvision:1.9.0'
 }
 ```
 Where `org.pytorch:pytorch_android` is the main dependency with PyTorch Android API, including libtorch native library for all 4 android abis (armeabi-v7a, arm64-v8a, x86, x86_64).
@@ -73,7 +73,7 @@ Bitmap bitmap = BitmapFactory.decodeStream(getAssets().open("image.jpg"));
 
 #### 5. Loading TorchScript Module
 ```
-Module module = Module.load(assetFilePath(this, "model.pt"));
+Module module = LiteModuleLoader.load(assetFilePath(this, "model.pt"));
 ```
 `org.pytorch.Module` represents `torch::jit::script::Module` that can be loaded with `load` method specifying file path to the serialized to file model.
 
