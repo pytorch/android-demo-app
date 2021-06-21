@@ -140,7 +140,7 @@ public class PrePostProcessor {
                 }
 
                 Rect rect = new Rect((int)(startX+ivScaleX*left), (int)(startY+top*ivScaleY), (int)(startX+ivScaleX*right), (int)(startY+ivScaleY*bottom));
-                Result result = new Result(cls, outputs[i*85+4], rect);
+                Result result = new Result(cls, outputs[i*mOutputColumn+4], rect);
                 results.add(result);
             }
         }
