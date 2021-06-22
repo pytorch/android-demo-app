@@ -13,7 +13,7 @@ from d2go.runner import create_runner, GeneralizedRCNNRunner
 from d2go.model_zoo import model_zoo
 
 from mobile_cv.common.misc.file_utils import make_temp_directory
-from d2go.tests.data_loader_helper import LocalImageGenerator, register_toy_dataset
+from d2go.utils.testing.data_loader_helper import LocalImageGenerator, _register_toy_dataset
 
 
 patch_d2_meta_arch()
@@ -33,13 +33,13 @@ def create_fake_detection_data_loader(height, width, is_train):
             image_generator = LocalImageGenerator(image_dir, width=width, height=height)
 
             if is_train:
-                with register_toy_dataset(
+                with _register_toy_dataset(
                     "default_dataset_train", image_generator, num_images=3
                 ):
                     train_loader = runner.build_detection_train_loader(cfg)
                     yield train_loader
             else:
-                with register_toy_dataset(
+                with _register_toy_dataset(
                     "default_dataset_test", image_generator, num_images=3
                 ):
                     test_loader = runner.build_detection_test_loader(
