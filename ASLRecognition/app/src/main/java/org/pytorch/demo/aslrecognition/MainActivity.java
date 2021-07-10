@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import org.pytorch.IValue;
 import org.pytorch.LiteModuleLoader;
@@ -29,10 +30,11 @@ import java.nio.FloatBuffer;
 public class MainActivity extends AppCompatActivity implements Runnable {
     private ImageView mImageView;
     private Button mButtonRecognize;
+    private TextView mTvResult;
     private ProgressBar mProgressBar;
     private Bitmap mBitmap = null;
     private Module mModule = null;
-    private String mImagename = "A1.jpg";
+    private int mStartLetterPos = 1;
 
     public static String assetFilePath(Context context, String assetName) throws IOException {
         File file = new File(context.getFilesDir(), assetName);
@@ -59,7 +61,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         setContentView(R.layout.activity_main);
 
         try {
-            mBitmap = BitmapFactory.decodeStream(getAssets().open(mImagename));
+            mBitmap = BitmapFactory.decodeStream(getAssets().open("A1.jpg"));
         } catch (IOException e) {
             Log.e("ASLRecognition", "Error reading assets", e);
             finish();
@@ -68,15 +70,19 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         mImageView = findViewById(R.id.imageView);
         mImageView.setImageBitmap(mBitmap);
 
-        final Button buttonRestart = findViewById(R.id.restartButton);
-        buttonRestart.setOnClickListener(new View.OnClickListener() {
+        mTvResult = findViewById(R.id.tvResult);
+        mTvResult.setText("A");
+
+        final Button btnNext = findViewById(R.id.nextButton);
+        btnNext.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (mImagename == "A1.jpg")
-                    mImagename = "B1.jpg";
-                else
-                    mImagename = "A1.jpg";
+                mStartLetterPos = (mStartLetterPos + 1) % 26;
+                if (mStartLetterPos == 0) mStartLetterPos = 26;
+                String letter = String.valueOf((char)(mStartLetterPos + 64));
+                String imageName = String.format("%s1.jpg", letter);
+                mTvResult.setText(letter);
                 try {
-                    mBitmap = BitmapFactory.decodeStream(getAssets().open(mImagename));
+                    mBitmap = BitmapFactory.decodeStream(getAssets().open(imageName));
                     mImageView.setImageBitmap(mBitmap);
                 } catch (IOException e) {
                     Log.e("ASLRecognition", "Error reading assets", e);
@@ -118,9 +124,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 int blue = Color.blue(colour);
                 int green = Color.green(colour);
                 inTensorBuffer.put(x + 200*y, (float) blue);
-
                 inTensorBuffer.put(200*200 + x + 200*y, (float) green);
-
                 inTensorBuffer.put(2*200*200 + x + 200*y, (float) red);
             }
         }
@@ -128,13 +132,24 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         Tensor inputTensor = Tensor.fromBlob(inTensorBuffer, new long[]{1, 3, 200, 200});
         final float[] inputs = inputTensor.getDataAsFloatArray();
 
-
         final long startTime = SystemClock.elapsedRealtime();
         Tensor outTensor = mModule.forward(IValue.from(inputTensor)).toTensor();
         final long inferenceTime = SystemClock.elapsedRealtime() - startTime;
         Log.d("ASLRecognition",  "inference time (ms): " + inferenceTime);
 
         final float[] scores = outTensor.getDataAsFloatArray();
+        float maxScore = -Float.MAX_VALUE;
+        int maxScoreIdx = -1;
+        for (int i = 0; i < scores.length; i++) {
+            if (scores[i] > maxScore) {
+                maxScore = scores[i];
+                maxScoreIdx = i;
+            }
+        }
+        mTvResult.setText(String.format("%s - %s", mTvResult.getText(),
+                String.valueOf((char)(1 + maxScoreIdx + 64))));
+
+
 
         runOnUiThread(new Runnable() {
             @Override
