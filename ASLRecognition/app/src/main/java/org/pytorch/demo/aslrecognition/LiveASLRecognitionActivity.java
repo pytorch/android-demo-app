@@ -57,7 +57,7 @@ public class LiveASLRecognitionActivity extends org.pytorch.demo.aslrecognition.
         @Override
         protected TextureView getCameraPreviewTextureView() {
             mResultView = findViewById(R.id.resultView);
-            return ((ViewStub) findViewById(R.id.object_detection_texture_view_stub))
+            return ((ViewStub) findViewById(R.id.asl_recognition_texture_view_stub))
                     .inflate()
                     .findViewById(R.id.object_detection_texture_view);
         }

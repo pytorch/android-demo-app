@@ -3,6 +3,7 @@ package org.pytorch.demo.aslrecognition;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
@@ -31,10 +32,10 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private ImageView mImageView;
     private Button mButtonRecognize;
     private TextView mTvResult;
-    private ProgressBar mProgressBar;
     private Bitmap mBitmap = null;
     private Module mModule = null;
     private int mStartLetterPos = 1;
+    private String mLetter = "A";
 
     public static String assetFilePath(Context context, String assetName) throws IOException {
         File file = new File(context.getFilesDir(), assetName);
@@ -71,16 +72,16 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         mImageView.setImageBitmap(mBitmap);
 
         mTvResult = findViewById(R.id.tvResult);
-        mTvResult.setText("A");
+        mTvResult.setText(mLetter);
 
         final Button btnNext = findViewById(R.id.nextButton);
         btnNext.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mStartLetterPos = (mStartLetterPos + 1) % 26;
                 if (mStartLetterPos == 0) mStartLetterPos = 26;
-                String letter = String.valueOf((char)(mStartLetterPos + 64));
-                String imageName = String.format("%s1.jpg", letter);
-                mTvResult.setText(letter);
+                mLetter = String.valueOf((char)(mStartLetterPos + 64));
+                String imageName = String.format("%s1.jpg", mLetter);
+                mTvResult.setText(mLetter);
                 try {
                     mBitmap = BitmapFactory.decodeStream(getAssets().open(imageName));
                     mImageView.setImageBitmap(mBitmap);
@@ -92,16 +93,22 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         });
 
 
-        mButtonRecognize = findViewById(R.id.segmentButton);
-        mProgressBar = (ProgressBar) findViewById(R.id.progressBar);
+        mButtonRecognize = findViewById(R.id.recognizeButton);
         mButtonRecognize.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                mButtonRecognize.setEnabled(false);
-                mProgressBar.setVisibility(ProgressBar.VISIBLE);
-                mButtonRecognize.setText(getString(R.string.run_model));
+                //mButtonRecognize.setEnabled(false);
+                //mButtonRecognize.setText(getString(R.string.run_model));
 
                 Thread thread = new Thread(MainActivity.this);
                 thread.start();
+            }
+        });
+
+        final Button buttonLive = findViewById(R.id.liveButton);
+        buttonLive.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                final Intent intent = new Intent(MainActivity.this, LiveASLRecognitionActivity.class);
+                startActivity(intent);
             }
         });
 
@@ -146,18 +153,14 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 maxScoreIdx = i;
             }
         }
-        mTvResult.setText(String.format("%s - %s", mTvResult.getText(),
+        mTvResult.setText(String.format("%s - %s", mLetter,
                 String.valueOf((char)(1 + maxScoreIdx + 64))));
-
-
 
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 mButtonRecognize.setEnabled(true);
                 mButtonRecognize.setText(getString(R.string.recognize));
-                mProgressBar.setVisibility(ProgressBar.INVISIBLE);
-
             }
         });
     }

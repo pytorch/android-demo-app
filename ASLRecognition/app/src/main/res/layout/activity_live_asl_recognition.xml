@@ -7,7 +7,7 @@
     android:fitsSystemWindows="true">
 
     <ViewStub
-        android:id="@+id/object_detection_texture_view_stub"
+        android:id="@+id/asl_recognition_texture_view_stub"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout="@layout/texture_view"
@@ -15,7 +15,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <org.pytorch.demo.objectdetection.ResultView
+    <TextView
         android:id="@+id/resultView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
