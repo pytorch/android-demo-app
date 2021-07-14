@@ -10,6 +10,7 @@ import android.graphics.Color;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private Module mModule = null;
     private int mStartLetterPos = 1;
     private String mLetter = "A";
+    public final static int SIZE = 200;
 
     public static String assetFilePath(Context context, String assetName) throws IOException {
         File file = new File(context.getFilesDir(), assetName);
@@ -92,13 +94,9 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             }
         });
 
-
         mButtonRecognize = findViewById(R.id.recognizeButton);
         mButtonRecognize.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                //mButtonRecognize.setEnabled(false);
-                //mButtonRecognize.setText(getString(R.string.run_model));
-
                 Thread thread = new Thread(MainActivity.this);
                 thread.start();
             }
@@ -115,34 +113,30 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         try {
             mModule = LiteModuleLoader.load(MainActivity.assetFilePath(getApplicationContext(), "asl.ptl"));
         } catch (IOException e) {
-            Log.e("ASLRecognition", "Error reading assets", e);
+            Log.e("ASLRecognition", "Error reading model file", e);
             finish();
         }
     }
 
-    @Override
-    public void run() {
-        FloatBuffer inTensorBuffer = Tensor.allocateFloatBuffer(3*200*200);
-        for (int x = 0; x < 200; x++) {
-            for (int y = 0; y < 200; y++) {
-                int colour = mBitmap.getPixel(x, y);
+    public static Pair<Integer, Long> bitmapRecognition(Bitmap bitmap, Module module) {
+        FloatBuffer inTensorBuffer = Tensor.allocateFloatBuffer(3 * SIZE * SIZE);
+        for (int x = 0; x < SIZE; x++) {
+            for (int y = 0; y < SIZE; y++) {
+                int colour = bitmap.getPixel(x, y);
 
                 int red = Color.red(colour);
                 int blue = Color.blue(colour);
                 int green = Color.green(colour);
-                inTensorBuffer.put(x + 200*y, (float) blue);
-                inTensorBuffer.put(200*200 + x + 200*y, (float) green);
-                inTensorBuffer.put(2*200*200 + x + 200*y, (float) red);
+                inTensorBuffer.put(x + SIZE * y, (float) blue);
+                inTensorBuffer.put(SIZE * SIZE + x + SIZE * y, (float) green);
+                inTensorBuffer.put(2 * SIZE * SIZE + x + SIZE * y, (float) red);
             }
         }
 
-        Tensor inputTensor = Tensor.fromBlob(inTensorBuffer, new long[]{1, 3, 200, 200});
-        final float[] inputs = inputTensor.getDataAsFloatArray();
-
+        Tensor inputTensor = Tensor.fromBlob(inTensorBuffer, new long[]{1, 3, SIZE, SIZE});
         final long startTime = SystemClock.elapsedRealtime();
-        Tensor outTensor = mModule.forward(IValue.from(inputTensor)).toTensor();
+        Tensor outTensor = module.forward(IValue.from(inputTensor)).toTensor();
         final long inferenceTime = SystemClock.elapsedRealtime() - startTime;
-        Log.d("ASLRecognition",  "inference time (ms): " + inferenceTime);
 
         final float[] scores = outTensor.getDataAsFloatArray();
         float maxScore = -Float.MAX_VALUE;
@@ -153,12 +147,19 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 maxScoreIdx = i;
             }
         }
-        mTvResult.setText(String.format("%s - %s", mLetter,
-                String.valueOf((char)(1 + maxScoreIdx + 64))));
+        return new Pair<>(maxScoreIdx, inferenceTime);
+    }
 
+    @Override
+    public void run() {
+        Pair<Integer, Long> idxTm = bitmapRecognition(mBitmap, mModule);
+
+        int finalMaxScoreIdx = idxTm.first;
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
+                mTvResult.setText(String.format("%s - %s", mLetter,
+                        String.valueOf((char)(1 + finalMaxScoreIdx + 64))));
                 mButtonRecognize.setEnabled(true);
                 mButtonRecognize.setText(getString(R.string.recognize));
             }

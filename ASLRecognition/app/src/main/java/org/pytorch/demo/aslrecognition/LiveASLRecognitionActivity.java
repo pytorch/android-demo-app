@@ -2,6 +2,7 @@ package org.pytorch.demo.aslrecognition;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.ImageFormat;
 import android.graphics.Matrix;
 import android.graphics.Rect;
@@ -9,6 +10,7 @@ import android.graphics.YuvImage;
 import android.media.Image;
 import android.os.SystemClock;
 import android.util.Log;
+import android.util.Pair;
 import android.view.TextureView;
 import android.view.ViewStub;
 import android.widget.TextView;
@@ -35,18 +37,19 @@ import java.util.Comparator;
 
 
 public class LiveASLRecognitionActivity extends org.pytorch.demo.aslrecognition.AbstractCameraXActivity<LiveASLRecognitionActivity.AnalysisResult> {
-        private Module mModule = null;
-        private TextView mResultView;
-        private int mFrameCount = 0;
-        private FloatBuffer inTensorBuffer;
+    private Module mModule = null;
+    private TextView mResultView;
 
+    private final static int DELETE = 26;
+    private final static int NOTHING = 27;
+    private final static int SPACE = 28;
 
     static class AnalysisResult {
-            private final String mResults;
+        private final String mResults;
 
-            public AnalysisResult(String results) {
-                mResults = results;
-            }
+        public AnalysisResult(String results) {
+            mResults = results;
+        }
         }
 
         @Override
@@ -98,44 +101,26 @@ public class LiveASLRecognitionActivity extends org.pytorch.demo.aslrecognition.
         protected AnalysisResult analyzeImage(ImageProxy image, int rotationDegrees) {
             if (mModule == null) {
                 try {
-                    mModule = LiteModuleLoader.load(MainActivity.assetFilePath(getApplicationContext(), "video_classification.ptl"));
+                    mModule = LiteModuleLoader.load(MainActivity.assetFilePath(getApplicationContext(), "asl.ptl"));
                 } catch (IOException e) {
                     return null;
                 }
             }
 
-            if (mFrameCount == 0)
-                inTensorBuffer = Tensor.allocateFloatBuffer(111111);
-
             Bitmap bitmap = imgToBitmap(image.getImage());
             Matrix matrix = new Matrix();
             matrix.postRotate(90.0f);
             bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(), bitmap.getHeight(), matrix, true);
+            bitmap = Bitmap.createScaledBitmap(bitmap, MainActivity.SIZE, MainActivity.SIZE, true);
 
-            float ratio = Math.min(bitmap.getWidth(), bitmap.getHeight()) / 160.0f;
-            Bitmap resizedBitmap = Bitmap.createScaledBitmap(bitmap, (int)(bitmap.getWidth() / ratio), (int)(bitmap.getHeight() / ratio), true);
+            Pair<Integer, Long> idxTm = MainActivity.bitmapRecognition(bitmap, mModule);
+            int maxScoreIdx = idxTm.first;
+            long inferenceTime = idxTm.second;
 
-            Tensor inputTensor = Tensor.fromBlob(inTensorBuffer, new long[]{1, 3, 160, 160});
-
-            final long startTime = SystemClock.elapsedRealtime();
-            Tensor outputTensor = mModule.forward(IValue.from(inputTensor)).toTensor();
-            final long inferenceTime = SystemClock.elapsedRealtime() - startTime;
-
-            final float[] scores = outputTensor.getDataAsFloatArray();
-            Integer scoresIdx[] = new Integer[scores.length];
-            for (int i = 0; i < scores.length; i++)
-                scoresIdx[i] = i;
-
-            Arrays.sort(scoresIdx, new Comparator<Integer>() {
-                @Override public int compare(final Integer o1, final Integer o2) {
-                    return Float.compare(scores[o2], scores[o1]);
-                }
-            });
-
-//            String tops[] = new String[Constants.TOP_COUNT];
-//            for (int j = 0; j < Constants.TOP_COUNT; j++)
-//                tops[j] = MainActivity.getClasses()[scoresIdx[j]];
-            final String result = "";//String.join(", ", tops);
+            String result = String.valueOf((char)(1 + maxScoreIdx + 64));
+            if (maxScoreIdx == DELETE) result = "DELETE";
+            else if (maxScoreIdx == NOTHING) result = "NOTHING";
+            else if (maxScoreIdx == SPACE) result = "SPACE";
             return new AnalysisResult(String.format("%s - %dms", result, inferenceTime));
         }
     }
