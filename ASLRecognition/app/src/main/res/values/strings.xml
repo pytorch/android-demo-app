@@ -1,5 +1,5 @@
 <resources>
-<string name="app_name">ASLRecognition</string>
+<string name="app_name">ASLRcgntn</string>
 <string name="an_image">an image</string>
 <string name="image_view">Image View</string>
 <string name="recognize">Recognize</string>
