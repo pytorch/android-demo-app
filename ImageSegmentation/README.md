@@ -47,8 +47,6 @@ mModule = LiteModuleLoader.load(MainActivity.assetFilePath(getApplicationContext
 ### 3. Run the app
 Select an Android emulator or device and build and run the app. The example image and its segmented result are as follows:
 
-results are:
-
 ![](screenshot1.png)
 ![](screenshot2.png)
 
