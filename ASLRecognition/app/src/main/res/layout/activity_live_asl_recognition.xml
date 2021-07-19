@@ -21,6 +21,8 @@
         android:layout_height="match_parent"
         android:textAlignment="center"
         android:textColor="#E91E63"
+        android:textSize="24sp"
+        android:textStyle="bold"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"

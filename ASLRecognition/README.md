@@ -61,11 +61,14 @@ and in the MainActivity.java, the code below is used to load the model:
 mModule = LiteModuleLoader.load(MainActivity.assetFilePath(getApplicationContext(), "asl.ptl"));
 ```
 
-### 3. Run the app
+### 3. Run the App
 Select an Android emulator or device and build and run the app. Some of the 26 test images of the ASL alphabet and their recognition results are as follows:
 
 ![](screenshot1.png)
 ![](screenshot2.png)
 ![](screenshot2.png)
 
-To test the live ASL alphabet gesture recognition, after you get familiar with the 26 ASL signs by tapping Next and Recognize, select the LIVE button and make some ASL gesture in front of the camera.
+To test the live ASL alphabet gesture recognition, after you get familiar with the 26 ASL signs by tapping Next and Recognize, select the LIVE button and make some ASL gesture in front of the camera. A screencast of the app running is available [here](https://drive.google.com/file/d/1NxehGHlU-RiYP_JU9qkpCEcQR2hG-vyv/view?usp=sharing). 
+
+### 4. What's Next
+With a different sign language dataset such as the RWTH-PHOENIX-Weather 2014 MS [Public Hand Shape Dataset](https://www-i6.informatik.rwth-aachen.de/~koller/1miohands-data/) or the [Continuous Sign Language Recognition Dataset](https://www-i6.informatik.rwth-aachen.de/~koller/RWTH-PHOENIX/) and a state-of-the-art [sign language transformer](https://arxiv.org/pdf/2003.13830v1.pdf) based model, more powerful sign language recognition Android app can be developed based on the app here.
