@@ -7,7 +7,7 @@ import joblib
 import numpy as np
 import torch
 import random
-import albumentations
+from PIL import Image
 import matplotlib.pyplot as plt
 import argparse
 import torch.nn as nn
@@ -15,7 +15,6 @@ import torch.nn.functional as F
 import torch.optim as optim
 import torchvision.transforms as transforms
 import time
-import cv2
 import cnn_models
 from tqdm import tqdm
 from sklearn.model_selection import train_test_split
@@ -57,15 +56,15 @@ class ASLImageDataset(Dataset):
         self.X = path
         self.y = labels
         # apply augmentations
-        self.aug = albumentations.Compose([
-            albumentations.Resize(224, 224, always_apply=True),
+        self.aug = transforms.Compose([
+            transforms.Resize((224, 224))
         ])
     def __len__(self):
         return (len(self.X))
 
     def __getitem__(self, i):
-        image = cv2.imread(self.X[i])
-        image = self.aug(image=np.array(image))['image']
+        image = Image.open(self.X[i])
+        image = self.aug(image)
         image = np.transpose(image, (2, 0, 1)).astype(np.float32)
         label = self.y[i]
         return torch.tensor(image, dtype=torch.float), torch.tensor(label, dtype=torch.long)
@@ -153,25 +152,5 @@ for epoch in range(args['epochs']):
     print("loss: {val_epoch_loss}, accuracy: {val_epoch_accuracy}")
 end = time.time()
 
-#  # accuracy plots
-# plt.figure(figsize=(10, 7))
-# plt.plot(train_accuracy, color='green', label='train accuracy')
-# plt.plot(val_accuracy, color='blue', label='validataion accuracy')
-# plt.xlabel('Epochs')
-# plt.ylabel('Accuracy')
-# plt.legend()
-# plt.savefig('../outputs/accuracy.png')
-# plt.show()
-#
-# # loss plots
-# plt.figure(figsize=(10, 7))
-# plt.plot(train_loss, color='orange', label='train loss')
-# plt.plot(val_loss, color='red', label='validataion loss')
-# plt.xlabel('Epochs')
-# plt.ylabel('Loss')
-# plt.legend()
-# plt.savefig('../outputs/loss.png')
-# plt.show()
-# save the model to disk
 print('Saving model...')
 torch.save(model.state_dict(), 'asl.pth')
