@@ -80,7 +80,9 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         btnNext.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 mStartLetterPos = (mStartLetterPos + 1) % 26;
-                if (mStartLetterPos == 0) mStartLetterPos = 26;
+                if (mStartLetterPos == 0) {
+                    mStartLetterPos = 26;
+                }
                 mLetter = String.valueOf((char)(mStartLetterPos + 64));
                 String imageName = String.format("%s1.jpg", mLetter);
                 mTvResult.setText(mLetter);
