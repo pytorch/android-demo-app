@@ -61,4 +61,5 @@ optimized_model = optimize_for_mobile(scripted_model)
 waveform , _ = torchaudio.load('scent_of_a_woman_future.wav')
 print('Result:', optimized_model(waveform))
 
-optimized_model.save("wav2vec2.pt")
+optimized_model._save_for_lite_interpreter("wav2vec2.ptl")
+
