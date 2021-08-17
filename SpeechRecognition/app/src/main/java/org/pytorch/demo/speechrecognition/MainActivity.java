@@ -25,7 +25,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.nio.FloatBuffer;
-import java.util.Map;
+
+import org.pytorch.LiteModuleLoader;
 
 
 public class MainActivity extends AppCompatActivity implements Runnable {
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private Button mButton;
 
     private final static int REQUEST_RECORD_AUDIO = 13;
-    private final static int AUDIO_LEN_IN_SECOND = 12;
+    private final static int AUDIO_LEN_IN_SECOND = 6;
     private final static int SAMPLE_RATE = 16000;
     private final static int RECORDING_LENGTH = SAMPLE_RATE * AUDIO_LEN_IN_SECOND;
 
@@ -193,9 +194,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
     private String recognize(float[] floatInputBuffer) {
         if (mModuleEncoder == null) {
-            final String moduleFileAbsoluteFilePath = new File(
-                    assetFilePath(this, "wav2vec2.pt")).getAbsolutePath();
-            mModuleEncoder = Module.load(moduleFileAbsoluteFilePath);
+            mModuleEncoder = LiteModuleLoader.load(assetFilePath(getApplicationContext(), "wav2vec2.ptl"));
         }
 
         double wav2vecinput[] = new double[RECORDING_LENGTH];
