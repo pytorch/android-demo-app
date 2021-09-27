@@ -10,7 +10,7 @@ In this demo app, we'll show how to quantize, trace, and optimize the wav2vec2 m
 
 * PyTorch 1.9.0 and torchaudio 0.9.0 (Optional)
 * Python 3.8 (Optional)
-* Android PyTorch library 1.9.0
+* Android Pytorch library org.pytorch:pytorch_android_lite:1.9.0
 * Android Studio 4.0.1 or later
 
 ## Quick Start
@@ -24,7 +24,7 @@ git clone https://github.com/pytorch/android-demo-app
 cd android-demo-app/SpeechRecognition
 ```
 
-If you don't have PyTorch 1.9.0 and torchaudio 0.9.0 installed or want to have a quick try of the demo app, you can download the quantized scripted wav2vec2 model file [here](https://drive.google.com/file/d/1RcCy3K3gDVN2Nun5IIdDbpIDbrKD-XVw/view?usp=sharing), then drag and drop it to the `app/src/main/assets` folder inside  `android-demo-app/SpeechRecognition`, and continue to Step 3.
+If you don't have PyTorch 1.9.0 and torchaudio 0.9.0 installed or want to have a quick try of the demo app, you can download the quantized scripted wav2vec2 model file [here](https://drive.google.com/file/d/1xMh-BZMSIeoohBfZvQFYcemmh5zUn_gh/view?usp=sharing), then drag and drop it to the `app/src/main/assets` folder inside  `android-demo-app/SpeechRecognition`, and continue to Step 3.
 
 ### 2. Prepare the Model
 
@@ -42,7 +42,7 @@ Now with PyTorch 1.9.0 and torchaudio 0.9.0 installed, run the following command
 ```
 python create_wav2vec2.py
 ```
-This will create the model file `wav2vec2.pt`. Copy it to the Android app:
+This will create the PyTorch mobile interpreter model file `wav2vec2.ptl`. Copy it to the Android app:
 ```
 
 mkdir -p app/src/main/assets
@@ -51,7 +51,7 @@ cp wav2vec2.pt app/src/main/assets
 
 ### 2. Build and run with Android Studio
 
-Start Android Studio, open the project located in `android-demo-app/SpeechRecognition`, build and run the app on an Android device. After the app runs, tap the Start button and start saying something; after 12 seconds (you can change `private final static int AUDIO_LEN_IN_SECOND = 12;` in `MainActivity.java` for a shorter or longer recording length), the model will infer to recognize your speech. Some example recognition results are:
+Start Android Studio, open the project located in `android-demo-app/SpeechRecognition`, build and run the app on an Android device. After the app runs, tap the Start button and start saying something; after 6 seconds (you can change `private final static int AUDIO_LEN_IN_SECOND = 6;` in `MainActivity.java` for a shorter or longer recording length), the model will infer to recognize your speech. Some example recognition results are:
 
 ![](screenshot1.png)
 ![](screenshot2.png)

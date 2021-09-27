@@ -6,7 +6,9 @@
 
 package org.pytorch.demo.seq2seqnmt;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -21,11 +23,16 @@ import org.pytorch.Module;
 import org.pytorch.PyTorchAndroid;
 import org.pytorch.Tensor;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.FloatBuffer;
 import java.nio.LongBuffer;
 import java.util.ArrayList;
+
+import org.pytorch.LiteModuleLoader;
 
 public class MainActivity extends AppCompatActivity implements Runnable{
     // to be consistent with the model inputs defined in seq2seq_nmt.py, based on
@@ -43,6 +50,26 @@ public class MainActivity extends AppCompatActivity implements Runnable{
     private EditText mEditText;
     private TextView mTextView;
     private Button mButton;
+
+    private static String assetFilePath(Context context, String assetName) throws IOException {
+        File file = new File(context.getFilesDir(), assetName);
+        if (file.exists() && file.length() > 0) {
+            return file.getAbsolutePath();
+        }
+
+        try (InputStream is = context.getAssets().open(assetName)) {
+            try (OutputStream os = new FileOutputStream(file)) {
+                byte[] buffer = new byte[4 * 1024];
+                int read;
+                while ((read = is.read(buffer)) != -1) {
+                    os.write(buffer, 0, read);
+                }
+                os.flush();
+            }
+            return file.getAbsolutePath();
+        }
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +103,12 @@ public class MainActivity extends AppCompatActivity implements Runnable{
 
     private String translate(final String text) {
         if (mModuleEncoder == null) {
-            mModuleEncoder = PyTorchAndroid.loadModuleFromAsset(getAssets(), "optimized_encoder_150k.pth");
+            try {
+                mModuleEncoder = LiteModuleLoader.load(MainActivity.assetFilePath(getApplicationContext(), "optimized_encoder_150k.ptl"));
+            } catch (IOException e) {
+                Log.e(TAG, "Error reading assets", e);
+                finish();
+            }
         }
 
         String json;
@@ -140,7 +172,12 @@ public class MainActivity extends AppCompatActivity implements Runnable{
         Tensor outputsTensor = Tensor.fromBlob(outputsTensorBuffer, outputsShape);
         final long[] decoderInputShape = new long[]{1, 1};
         if (mModuleDecoder == null) {
-            mModuleDecoder = PyTorchAndroid.loadModuleFromAsset(getAssets(), "optimized_decoder_150k.pth");
+            try {
+                mModuleDecoder = LiteModuleLoader.load(MainActivity.assetFilePath(getApplicationContext(), "optimized_decoder_150k.ptl"));
+            } catch (IOException e) {
+                Log.e(TAG, "Error reading assets", e);
+                finish();
+            }
         }
 
         mInputTensorBuffer = Tensor.allocateLongBuffer(1);
