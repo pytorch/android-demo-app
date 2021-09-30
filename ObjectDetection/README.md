@@ -126,6 +126,7 @@ Run the app in Android Studio and you should see the custom model working on the
 
 ![](aicook1.png)
 ![](aicook2.png)
+
 ![](aicook3.png)
 ![](aicook4.png)
 
