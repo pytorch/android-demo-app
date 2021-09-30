@@ -41,7 +41,7 @@ Edit `export.py` to make the following two changes:
 
 * After `(optimize_for_mobile(ts) if optimize else ts).save(f)`, add `(optimize_for_mobile(ts) if optimize else ts)._save_for_lite_interpreter(str(fl))`
 
-Now run the script below to generate the optimized TorchScript lite model and copy the generated model file `yolov5s.torchscript.ptl` to the `android-demo-app/ObjectDetection/app/src/main/assets` folder:
+Now run the script below to generate the optimized TorchScript lite model `yolov5s.torchscript.ptl` and copy it to the `android-demo-app/ObjectDetection/app/src/main/assets` folder (the original full JIT model `yolov5s.torchscript.pt` was also generated for comparison):
 
 ```
 python export.py --weights yolov5s.pt --include torchscript
@@ -67,7 +67,7 @@ Some example images and the detection results are as follows:
 
 ## Transfer Learning
 
-In this section, you'll see how to use an example dataset called [aicook](https://universe.roboflow.com/karel-cornelis-q2qqg/aicook-lcv4d/4), used to detect ingredients in your fridge, to fine-tune the YOLOv5 model. For more info on the YOLOv5 transfer learning, see [here](https://github.com/ultralytics/yolov5/issues/1314).
+In this section, you'll see how to use an example dataset called [aicook](https://universe.roboflow.com/karel-cornelis-q2qqg/aicook-lcv4d/4), used to detect ingredients in your fridge, to fine-tune the YOLOv5 model. For more info on the YOLOv5 transfer learning, see [here](https://github.com/ultralytics/yolov5/issues/1314). If you use the default YOLOv5 model to do object detection on what's inside your fridge, you'll likely not get good results. That's why you need to have a custom model trained with a dataset like aicook.
 
 ### 1. Download the custom dataset
 
@@ -81,7 +81,9 @@ Run the script below to generate a custom model `best.torchscript.pt` located in
 python train.py --img 640 --batch 16 --epochs 3 --data  data.yaml  --weights yolov5s.pt
 ```
 
-The precision of the model with the epochs set as 3 is very low - less than 0.01 actually; with a tool such as [Weights and Biases](https://wandb.ai), which can be set up in a few minutes and has been integrated with YOLOv5, you can find that with `--epochs` set as 80, the precision gets to be 0.95. But on a CPU machine, you can quickly train a custom model using the command above, then test it in the Android demo app.
+The precision of the model with the epochs set as 3 is very low - less than 0.01 actually; with a tool such as [Weights and Biases](https://wandb.ai), which can be set up in a few minutes and has been integrated with YOLOv5, you can find that with `--epochs` set as 80, the precision gets to be 0.95. But on a CPU machine, you can quickly train a custom model using the command above, then test it in the Android demo app. Below is a sample metrics from 100 epochs of training on wandb:
+
+![](metrics.png)
 
 ### 3. Convert the custom model to lite version
 
@@ -126,3 +128,5 @@ Run the app in Android Studio and you should see the custom model working on the
 ![](aicook2.png)
 ![](aicook3.png)
 ![](aicook4.png)
+
+In order to do live object detection with the new custom model, just open `ObjectDetectionActivity.java` and replace `yolov5s.torchscript.ptl` in `mModule = LiteModuleLoader.load(MainActivity.assetFilePath(getApplicationContext(), "yolov5s.torchscript.ptl"));` with `best.torchscript.ptl`.
