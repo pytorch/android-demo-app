@@ -81,7 +81,7 @@ Run the script below to generate a custom model `best.torchscript.pt` located in
 python train.py --img 640 --batch 16 --epochs 3 --data  data.yaml  --weights yolov5s.pt
 ```
 
-The precision of the model with the epochs set as 3 is very low - less than 0.01 actually; with a tool such as [Weights and Biases](https://wandb.ai), which can be set up in a few minutes and has been integrated with YOLOv5, you can find that with `--epochs` set as 80, the precision gets to be 0.95. But on a CPU machine, you can quickly train a custom model using the command above, then test it in the Android demo app. Below is a sample metrics from 100 epochs of training on wandb:
+The precision of the model with the epochs set as 3 is very low - less than 0.01 actually; with a tool such as [Weights and Biases](https://wandb.ai), which can be set up in a few minutes and has been integrated with YOLOv5, you can find that with `--epochs` set as 80, the precision gets to be 0.95. But on a CPU machine, you can quickly train a custom model using the command above, then test it in the Android demo app. Below is a sample wandb metrics from 3, 30, and 100 epochs of training:
 
 ![](metrics.png)
 
