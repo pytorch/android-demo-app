@@ -6,9 +6,9 @@
 
 ## Prerequisites
 
-* PyTorch 1.9.0 and torchvision 0.10.0 (Optional)
+* PyTorch 1.10.0 and torchvision 0.11.1 (Optional)
 * Python 3.8 or above (Optional)
-* Android Pytorch library pytorch_android_lite:1.9.0, pytorch_android_torchvision:1.9.0
+* Android Pytorch library pytorch_android_lite:1.10.0, pytorch_android_torchvision_lite:1.10.0
 * Android Studio 4.0.1 or later
 
 ## Quick Start
@@ -17,9 +17,9 @@ To Test Run the ASL recognition Android App, follow the steps below:
 
 ### 1. Train and Prepare the Model
 
-If you don't have the PyTorch 1.9.0 and torchvision 0.10.0 installed, or if don't want to install them, you can skip this step. The trained, scripted and optimized model is already included in the repo, located at `ASLRecognitionapp/src/main/assets`.
+If you don't have the PyTorch 1.10.0 and torchvision 0.11.1 installed, or if don't want to install them, you can skip this step. The trained, scripted and optimized model is already included in the repo, located at `ASLRecognitionapp/src/main/assets`.
 
-Otherwise, open a terminal window, make sure you have torch 1.9.0 and torchvision 0.10.0 installed using command like `pip list|grep torch`, or install them using command like `pip install torch torchvision`, then run the following commands:
+Otherwise, open a terminal window, make sure you have torch 1.10.0 and torchvision 0.11.1 installed using command like `pip list|grep torch`, or install them using command like `pip install torch torchvision`, then run the following commands:
 
 ```
 git clone https://github.com/pytorch/android-demo-app
@@ -29,6 +29,7 @@ cd android-demo-app/ASLRecognition/scripts
 Download the ASL alphabet dataset [here](https://www.kaggle.com/grassknoted/asl-alphabet) and unzip it into the `ASLRecognition/scripts` folder. Then run the scripts below, which are based on this [tutorial](https://debuggercafe.com/american-sign-language-detection-using-deep-learning/), to pre-process the training images, train the model and convert and optimize the trained model to the mobile interpreter model:
 
 ```
+pip install opencv-python pandas sklearn imutils matplotlib
 python preprocess_image.py
 python create_csv.py
 python train.py --epochs 5 # on a machine without GPU this can take hours
@@ -51,8 +52,8 @@ For more information on how to use a test script like the above to find out the 
 Open the ASLRecognition project using Android Studio. Note the app's `build.gradle` file has the following lines:
 
 ```
-implementation 'org.pytorch:pytorch_android_lite:1.9.0'
-implementation 'org.pytorch:pytorch_android_torchvision:1.9.0'
+implementation 'org.pytorch:pytorch_android_lite:1.10.0'
+implementation 'org.pytorch:pytorch_android_torchvision_lite:1.10.0'
 ```
 
 and in the MainActivity.java, the code below is used to load the model:
@@ -68,7 +69,7 @@ Select an Android emulator or device and build and run the app. Some of the 26 t
 ![](screenshot2.png)
 ![](screenshot2.png)
 
-To test the live ASL alphabet gesture recognition, after you get familiar with the 26 ASL signs by tapping Next and Recognize, select the LIVE button and make some ASL gesture in front of the camera. A screencast of the app running is available [here](https://drive.google.com/file/d/1NxehGHlU-RiYP_JU9qkpCEcQR2hG-vyv/view?usp=sharing). 
+To test the live ASL alphabet gesture recognition, after you get familiar with the 26 ASL signs by tapping Next and Recognize, select the LIVE button and make some ASL gesture in front of the camera. A screencast of the app running is available [here](https://drive.google.com/file/d/1NxehGHlU-RiYP_JU9qkpCEcQR2hG-vyv/view?usp=sharing).
 
 ### 4. What's Next
 With a different sign language dataset such as the RWTH-PHOENIX-Weather 2014 MS [Public Hand Shape Dataset](https://www-i6.informatik.rwth-aachen.de/~koller/1miohands-data/) or the [Continuous Sign Language Recognition Dataset](https://www-i6.informatik.rwth-aachen.de/~koller/RWTH-PHOENIX/) and a state-of-the-art [sign language transformer](https://arxiv.org/pdf/2003.13830v1.pdf) based model, more powerful sign language recognition Android app can be developed based on the app here.

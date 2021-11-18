@@ -6,9 +6,9 @@ This repo offers a Python script that converts the [PyTorch DeepLabV3 model](htt
 
 ## Prerequisites
 
-* PyTorch 1.9.0 and torchvision 0.10.0 (Optional)
+* PyTorch 1.10.0 and torchvision 0.11.1 (Optional)
 * Python 3.8 or above (Optional)
-* Android Pytorch library pytorch_android_lite:1.9.0, pytorch_android_torchvision:1.9.0
+* Android Pytorch library pytorch_android_lite:1.10.0, pytorch_android_torchvision_lite:1.10.0
 * Android Studio 4.0.1 or later
 
 ## Quick Start
@@ -17,9 +17,9 @@ To Test Run the Image Segmentation Android App, follow the steps below:
 
 ### 1. Prepare the Model
 
-If you don't have the PyTorch 1.9.0 environment set up, you can download the optimized-for-mobile Mobile Interpreter version of model file to the `android-demo-app/ImageSegmentation/app/src/main/assets` folder using the link [here](https://drive.google.com/file/d/1FCm-pHsLiPiiXBsJwookAa0VFS2zTgv-/view?usp=sharing).
+If you don't have the PyTorch 1.10.0 environment set up, you can download the optimized-for-mobile Mobile Interpreter version of model file to the `android-demo-app/ImageSegmentation/app/src/main/assets` folder using the link [here](https://pytorch-mobile-demo-apps.s3.us-east-2.amazonaws.com/deeplabv3_scripted.pt).
 
-Otherwise, open a terminal window, first install PyTorch 1.9.0 and torchvision 0.10.0 using command like `pip install torch torchvision`, then run the following commands:
+Otherwise, open a terminal window, first install PyTorch 1.10.0 and torchvision 0.11.1 using command like `pip install torch torchvision`, then run the following commands:
 
 ```
 git clone https://github.com/pytorch/android-demo-app
@@ -34,8 +34,8 @@ The Python script `deeplabv3.py` is used to generate the TorchScript-formatted m
 Open the ImageSegmentation project using Android Studio. Note the app's `build.gradle` file has the following lines:
 
 ```
-implementation 'org.pytorch:pytorch_android_lite:1.9.0'
-implementation 'org.pytorch:pytorch_android_torchvision:1.9.0'
+implementation 'org.pytorch:pytorch_android_lite:1.10.0'
+implementation 'org.pytorch:pytorch_android_torchvision_lite:1.10.0'
 ```
 
 and in the MainActivity.java, the code below is used to load the model:

@@ -32,11 +32,10 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.4'
 
-    implementation 'org.pytorch:pytorch_android_lite:1.9.0'
-    implementation "androidx.core:core-ktx:+"
+    implementation "androidx.core:core-ktx:1.6.0"
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
-
+    implementation 'org.pytorch:pytorch_android_lite:1.10.0'
 }
 repositories {
     mavenCentral()

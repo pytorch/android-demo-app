@@ -8,27 +8,24 @@ In this demo app, written in Kotlin, we'll show how to quantize and convert the 
 
 ## Prerequisites
 
-* PyTorch 1.9.0 or later (Optional)
+* PyTorch 1.10.0 or later (Optional)
 * Python 3.8 (Optional)
-* Android Pytorch library org.pytorch:pytorch_android_lite:1.9.0
+* Android Pytorch library org.pytorch:pytorch_android_lite:1.10.0
 * Android Studio 4.0.1 or later
 
 ## Quick Start
 
-To Test Run the Android QA App, run the following commands on a Terminal:
+To Test Run the Android QA App, follow the steps below:
 
 ### 1. Prepare the Model
 
-If you don't have PyTorch installed or want to have a quick try of the demo app, you can download the scripted QA model `qa360_quantized.ptl` [here](https://drive.google.com/file/d/1PgD3pAEf0riUiT3BfwHOm6UEGk8FfJzI/view?usp=sharing) and save it to the `QuestionAnswering/app/src/main/assets` folder, then continue to Step 2.
+If you don't have PyTorch installed or want to have a quick try of the demo app, you can download the scripted QA model `qa360_quantized.ptl` [here](https://pytorch-mobile-demo-apps.s3.us-east-2.amazonaws.com/qa360_quantized.ptl) and save it to the `QuestionAnswering/app/src/main/assets` folder, then continue to Step 2.
 
-Be aware that the downloadable model file was created with PyTorch 1.9.0, matching the PyTorch Android library 1.9.0 specified in the project's `build.gradle` file as `implementation 'org.pytorch:pytorch_android:1.9.0'`. If you use a different version of PyTorch to create your model by following the instructions below, make sure you specify the same PyTorch Android library version in the `build.gradle` file to avoid possible errors caused by the version mismatch. Furthermore, if you want to use the latest PyTorch master code to create the model, follow the steps at [Building PyTorch Android from Source](https://pytorch.org/mobile/android/#building-pytorch-android-from-source) and [Using the PyTorch Android Libraries Built](https://pytorch.org/mobile/android/#using-the-pytorch-android-libraries-built-from-source-or-nightly) on how to use the model in Android.
-
-With PyTorch 1.9.0 installed, first install the Huggingface `transformers` by running `pip install transformers`, then run `python convert_distilbert_qa.py`.
+With PyTorch 1.10.0 installed, first install the Huggingface `transformers` by running `pip install transformers`, then run `python convert_distilbert_qa.py`.
 
 Note that a pre-defined question and text, resulting in the size of the input tokens (of question and text) being 360, is used in the `convert_distilbert_qa.py`, and 360 is the maximum token size for the user text and question in the app. If the token size of the inputs of the text and question is less than 360, padding will be needed to make the model work correctly.
 
 After the script completes, copy the model file `qa360_quantized.ptl` to the Android app's assets folder.
-
 
 ### 2. Build and run with Android Studio
 
