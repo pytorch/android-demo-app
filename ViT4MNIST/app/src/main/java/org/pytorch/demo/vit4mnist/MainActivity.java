@@ -12,7 +12,9 @@
 
 package org.pytorch.demo.vit4mnist;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Pair;
 import android.view.View;
 import android.widget.Button;
@@ -21,10 +23,15 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import org.pytorch.IValue;
+import org.pytorch.LiteModuleLoader;
 import org.pytorch.Module;
-import org.pytorch.PyTorchAndroid;
 import org.pytorch.Tensor;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.nio.FloatBuffer;
 import java.util.List;
 
@@ -42,6 +49,26 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private static final float BLANK = - MNISI_STD / MNISI_MEAN;
     private static final float NON_BLANK = (1.0f - MNISI_STD) / MNISI_MEAN;
     private static final int MNIST_IMAGE_SIZE = 28;
+
+
+    public static String assetFilePath(Context context, String assetName) throws IOException {
+        File file = new File(context.getFilesDir(), assetName);
+        if (file.exists() && file.length() > 0) {
+            return file.getAbsolutePath();
+        }
+
+        try (InputStream is = context.getAssets().open(assetName)) {
+            try (OutputStream os = new FileOutputStream(file)) {
+                byte[] buffer = new byte[4 * 1024];
+                int read;
+                while ((read = is.read(buffer)) != -1) {
+                    os.write(buffer, 0, read);
+                }
+                os.flush();
+            }
+            return file.getAbsolutePath();
+        }
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,7 +94,12 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             }
         });
 
-        mModule = PyTorchAndroid.loadModuleFromAsset(getAssets(), "vit4mnist.pth");
+        try {
+            mModule = LiteModuleLoader.load(MainActivity.assetFilePath(getApplicationContext(), "vit4mnist.ptl"));
+        } catch (IOException e) {
+            Log.e("VIT4MNIST", "Error reading assets", e);
+            finish();
+        }
     }
 
     public void run() {

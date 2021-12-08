@@ -12,9 +12,9 @@ This Android demo app shows:
 
 ## Prerequisites
 
-* PyTorch 1.9.0 (Optional)
+* PyTorch 1.10.0 (Optional)
 * Python 3.8 (Optional)
-* Android Pytorch library org.pytorch:pytorch_android_lite:1.9.0
+* Android Pytorch library org.pytorch:pytorch_android_lite:1.10.0
 * Android Studio 4.0.1 or later
 
 ## Quick Start
@@ -25,7 +25,7 @@ To Test Run the Object Detection Android App, follow the steps below:
 
 If you don't have the PyTorch environment set up to run the script, you can download the PyTorch trained and optimized NMT encoder and decoder models compressed in a zip [here](https://drive.google.com/file/d/1S75cWNEp43U6nCp2MOBR-jE-ZnlHz1PI/view?usp=sharing), unzip it, copy them to the Android app's assets folder, and skip the rest of this step and go to step 2 directly.
 
-If you have a good GPU and want to train your model from scratch, run `python seq2seq2_nmt.py` to go through the whole process of training, saving, loading, optimizing and saving the final mobile-ready models `optimized_encoder_150k.ptl` and `optimized_decoder_150k.ptl`. Copy the two model files to the Android app's assets folder.
+If you have a good GPU and want to train your model from scratch, run `python seq2seq_nmt.py` to go through the whole process of training, saving, loading, optimizing and saving the final mobile-ready models `optimized_encoder_150k.ptl` and `optimized_decoder_150k.ptl`. Copy the two model files to the Android app's assets folder.
 
 ### 2. Build and run with Android Studio
 

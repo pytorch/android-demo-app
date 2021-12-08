@@ -98,4 +98,4 @@ dummy_input = torch.zeros(1, 1, 28, 28)
 ts_model = torch.jit.trace(quantized_model, dummy_input)
 optimized_torchscript_model = optimize_for_mobile(ts_model)
 # the quantized, scripted, and optimized model
-optimized_torchscript_model.save("vit4mnist.pth")
+optimized_torchscript_model._save_for_lite_interpreter("app/src/main/assets/vit4mnist.ptl")

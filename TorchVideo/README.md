@@ -6,9 +6,9 @@ The newly released open-sourced [PyTorchVideo](https://github.com/facebookresear
 
 ## Prerequisites
 
-* PyTorch 1.9.0, torchvision 0.10.0, PyTorchVideo 0.1.1 (Optional)
+* PyTorch 1.10.0, torchvision 0.11.0, PyTorchVideo 0.1.3 (Optional)
 * Python 3.8 or above (Optional)
-* Android library org.pytorch:pytorch_android_lite:1.9.0, org.pytorch:pytorch_android_torchvision:1.9.0
+* Android library org.pytorch:pytorch_android_lite:1.10.0, org.pytorch:pytorch_android_torchvision_lite:1.10.0
 * Android Studio 4.0.1 or later
 
 ## Quick Start
@@ -17,19 +17,17 @@ The newly released open-sourced [PyTorchVideo](https://github.com/facebookresear
 
 If you don't have the PyTorch environment set up to run the script, you can download the model file `video_classification.ptl` [here](https://drive.google.com/file/d/1ti8Eb59L5BZV3YJa-c0AUx6XCgEvsqlV/view?usp=sharing) to the `android-demo-app/TorchVideo/app/src/main/assets` folder, then skip the rest of this step and go to step 2 directly.
 
-Be aware that the downloadable model file was created with PyTorch 1.9.0, matching the PyTorch Android library 1.9.0 specified in the project's `build.gradle` file as `implementation 'org.pytorch:pytorch_android_lite:1.9.0'`. If you use a different version of PyTorch to create your model by following the instructions below, make sure you specify the same PyTorch Android library version in the `build.gradle` file to avoid possible errors caused by the version mismatch. Furthermore, if you want to use the latest PyTorch master code to create the model, follow the steps at [Building PyTorch Android from Source](https://pytorch.org/mobile/android/#building-pytorch-android-from-source) and [Using the PyTorch Android Libraries Built](https://pytorch.org/mobile/android/#using-the-pytorch-android-libraries-built-from-source-or-nightly) on how to use the model in Android.
-
 To create the model yourself, simply run the following commands:
 ```
-conda create -n pt19 python=3.8.5
-conda activate pt19
+conda create -n pt1.10 python=3.8.5
+conda activate pt1.10
 pip install torch torchvision
 pip install pytorchvideo
 
 # pip list|grep torch
-# torch             1.9.0
-# torchvision       0.10.0
-# pytorchvideo      0.1.1
+# torch             1.10.0
+# torchvision       0.11.1
+# pytorchvideo      0.1.3
 
 cd android-demo-app/TorchVideo
 python build_model.py
@@ -39,7 +37,12 @@ The model file `video_classification.ptl` will be created and saved in the `app/
 
 ### 2. Build with Android Studio
 
-Start Android Studio, then open the project located in `android-demo-app/TorchVideo`
+Start Android Studio, then open the project located in `android-demo-app/TorchVideo`. Note the app's `build.gradle` file has the following lines:
+
+```
+implementation 'org.pytorch:pytorch_android_lite:1.10.0'
+implementation 'org.pytorch:pytorch_android_torchvision_lite:1.10.0'
+```
 
 ### 3. Run the app
 

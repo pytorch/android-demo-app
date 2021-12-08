@@ -8,9 +8,9 @@
 
 ## Prerequisites
 
-* PyTorch 1.9.0 or later (Optional)
+* PyTorch 1.10.0 and torchvision 0.11.1 (Optional)
 * Python 3.8 (Optional)
-* Android Pytorch library pytorch_android_lite:1.9.0 and pytorch_android_torchvision:1.9.0
+* Android Pytorch library pytorch_android_lite:1.10.0, pytorch_android_torchvision_lite:1.10.0
 * Android Studio 4.0.1 or later
 
 ## Quick Start
@@ -19,9 +19,7 @@ To Test Run the Object Detection Android App, follow the steps below:
 
 ### 1. Prepare the model
 
-If you don't have the PyTorch environment set up to run the script, you can download the model file `yolov5s.torchscript.ptl` [here](https://drive.google.com/u/1/uc?id=1_MF7NVi9Csm1lizoSCp1wCtUUUpuhwet&export=download) to the `android-demo-app/ObjectDetection/app/src/main/assets` folder, then skip the rest of this step and go to step 2 directly.
-
-Be aware that the downloadable model file was created with PyTorch 1.9.0, matching the PyTorch Android library 1.9.0 specified in the project's `build.gradle` file as `implementation 'org.pytorch:pytorch_android_lite:1.9.0'`. If you use a different version of PyTorch to create your model by following the instructions below, make sure you specify the same PyTorch Android library version in the `build.gradle` file to avoid possible errors caused by the version mismatch. Furthermore, if you want to use the latest PyTorch master code to create the model, follow the steps at [Building PyTorch Android from Source](https://pytorch.org/mobile/android/#building-pytorch-android-from-source) and [Using the PyTorch Android Libraries Built](https://pytorch.org/mobile/android/#using-the-pytorch-android-libraries-built-from-source-or-nightly) on how to use the model in Android.
+If you don't have the PyTorch environment set up to run the script, you can download the model file `yolov5s.torchscript.ptl` [here](https://pytorch-mobile-demo-apps.s3.us-east-2.amazonaws.com/yolov5s.torchscript.ptl) to the `android-demo-app/ObjectDetection/app/src/main/assets` folder, then skip the rest of this step and go to step 2 directly.
 
 The Python script `export.py` in the `models` folder of the [YOLOv5 repo](https://github.com/ultralytics/yolov5) is used to generate a TorchScript-formatted YOLOv5 model named `yolov5s.torchscript.pt` for mobile apps.
 
@@ -51,7 +49,12 @@ Note that small sized version of the YOLOv5 model, which runs faster but with le
 
 ### 2. Build with Android Studio
 
-Start Android Studio, then open the project located in `android-demo-app/ObjectDetection`
+Start Android Studio, then open the project located in `android-demo-app/ObjectDetection`. Note the app's `build.gradle` file has the following lines:
+
+```
+implementation 'org.pytorch:pytorch_android_lite:1.10.0'
+implementation 'org.pytorch:pytorch_android_torchvision_lite:1.10.0'
+```
 
 ### 3. Run the app
 
