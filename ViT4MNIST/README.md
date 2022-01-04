@@ -12,16 +12,16 @@ In this demo app, we'll integrate the two oldest and most popular image datasets
 
 ## Prerequisites
 
-* PyTorch 1.7 or later (Optional)
+* PyTorch 1.10 or later (Optional)
 * Python 3.8 (Optional)
-* Android Pytorch library 1.7 or later
+* Android Pytorch library 1.10 or later
 * Android Studio 4.0.1 or later
 
 ## Quick Start on Using Facebook DeiT
 
 ### 1. Prepare the Model (Optional)
 
-To use a pre-trained Facebook DeiT model and convert it to TorchScript, first install [PyTorch](https://pytorch.org/get-started/locally/) 1.7 or later, then install [timm](https://github.com/rwightman/pytorch-image-models) using `pip install timm==0.3.2`, and finally run the following script:
+To use a pre-trained Facebook DeiT model and convert it to TorchScript, first install [PyTorch](https://pytorch.org/get-started/locally/) 1.10 or later, then install [timm](https://github.com/rwightman/pytorch-image-models) using `pip install timm==0.3.2`, and finally run the following script:
 
 ```
 python convert_deit.py
@@ -60,14 +60,12 @@ To Test Run the Android ViT4MNIST demo app, follow the steps below:
 
 ### 1. Prepare the Model (Optional)
 
-On a Terminal, with PyTorch 1.7.0 and [einops](https://pypi.org/project/einops/) installed, run :
+On a Terminal, with PyTorch 1.10.0 and [einops](https://pypi.org/project/einops/) installed (using `pip install einops`), run :
 ```
 python mnist_vit.py
 ```
 
-The model definition in `vit_pytorch.py` and training code in `mnist_vit.py` are mostly taken from the blog [here](https://towardsdatascience.com/a-demonstration-of-using-vision-transformers-in-pytorch-mnist-handwritten-digit-recognition-407eafbc15b0). After the training, which takes about 20 minutes on a MacBook Pro, the model is saved as   `vit4mnist.pt` and then dynamic-quantized, converted to TorchScript, optimized, and saved as `vit4mnist.pth`, which should be the same as the one already added in the app project, located at `app/src/main/assets`.
-
-Be aware that the model file was created with PyTorch 1.7.0, matching the PyTorch Android library 1.7.0 specified in the project's `build.gradle` file as `implementation 'org.pytorch:pytorch_android:1.7.0'`. If you use a different version of PyTorch to create your model by following the instructions below, make sure you specify the same PyTorch Android library version in the `build.gradle` file to avoid possible errors caused by the version mismatch. Furthermore, if you want to use the latest PyTorch master code to create the model, follow the steps at [Building PyTorch Android from Source](https://pytorch.org/mobile/android/#building-pytorch-android-from-source) and [Using the PyTorch Android Libraries Built](https://pytorch.org/mobile/android/#using-the-pytorch-android-libraries-built-from-source-or-nightly) on how to use the model in Android.
+The model definition in `vit_pytorch.py` and training code in `mnist_vit.py` are mostly taken from the blog [here](https://towardsdatascience.com/a-demonstration-of-using-vision-transformers-in-pytorch-mnist-handwritten-digit-recognition-407eafbc15b0). After the training, which takes about 20 minutes on a MacBook Pro, the model is saved as `vit4mnist.pt` and then dynamic-quantized, converted to TorchScript, optimized, and saved as `vit4mnist.pth`, which should be the same as the one already added in the app project, located at `app/src/main/assets`.
 
 ### 2. Build and run with Android Studio
 

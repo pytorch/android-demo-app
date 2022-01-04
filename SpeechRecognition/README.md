@@ -8,9 +8,9 @@ In this demo app, we'll show how to quantize, trace, and optimize the wav2vec2 m
 
 ## Prerequisites
 
-* PyTorch 1.9.0 and torchaudio 0.9.0 (Optional)
+* PyTorch 1.10.0 and torchaudio 0.10.0 (Optional)
 * Python 3.8 (Optional)
-* Android Pytorch library org.pytorch:pytorch_android_lite:1.9.0
+* Android Pytorch library org.pytorch:pytorch_android_lite:1.10.0
 * Android Studio 4.0.1 or later
 
 ## Quick Start
@@ -24,20 +24,19 @@ git clone https://github.com/pytorch/android-demo-app
 cd android-demo-app/SpeechRecognition
 ```
 
-If you don't have PyTorch 1.9.0 and torchaudio 0.9.0 installed or want to have a quick try of the demo app, you can download the quantized scripted wav2vec2 model file [here](https://drive.google.com/file/d/1xMh-BZMSIeoohBfZvQFYcemmh5zUn_gh/view?usp=sharing), then drag and drop it to the `app/src/main/assets` folder inside  `android-demo-app/SpeechRecognition`, and continue to Step 3.
+If you don't have PyTorch 1.10.0 and torchaudio 0.10.0 installed or want to have a quick try of the demo app, you can download the quantized scripted wav2vec2 model file [here](https://drive.google.com/file/d/1xMh-BZMSIeoohBfZvQFYcemmh5zUn_gh/view?usp=sharing), then drag and drop it to the `app/src/main/assets` folder inside  `android-demo-app/SpeechRecognition`, and continue to Step 3.
 
 ### 2. Prepare the Model
 
-To install PyTorch 1.9.0, torchaudio 0.9.0 and the Hugging Face transformers, you can do something like this:
+To install PyTorch 1.10.0, torchaudio 0.10.0 and the Hugging Face transformers, you can do something like this:
 
 ```
 conda create -n wav2vec2 python=3.8.5
 conda activate wav2vec2
-pip install torch torchaudio
-pip install transformers
+pip install torch torchaudio transformers
 ```
 
-Now with PyTorch 1.9.0 and torchaudio 0.9.0 installed, run the following commands on a Terminal:
+Now with PyTorch 1.10.0 and torchaudio 0.10.0 installed, run the following commands on a Terminal:
 
 ```
 python create_wav2vec2.py
@@ -46,7 +45,7 @@ This will create the PyTorch mobile interpreter model file `wav2vec2.ptl`. Copy 
 ```
 
 mkdir -p app/src/main/assets
-cp wav2vec2.pt app/src/main/assets
+cp wav2vec2.ptl app/src/main/assets
 ```
 
 ### 2. Build and run with Android Studio

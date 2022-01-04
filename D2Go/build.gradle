@@ -24,7 +24,7 @@ allprojects {
         }
 
         dependencies {
-            classpath 'com.android.tools.build:gradle:3.3.2'
+            classpath 'com.android.tools.build:gradle:4.0.1'
         }
     }
 

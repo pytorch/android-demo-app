@@ -32,7 +32,7 @@ import org.pytorch.LiteModuleLoader;
 public class MainActivity extends AppCompatActivity implements Runnable {
     private static final String TAG = MainActivity.class.getName();
 
-    private Module mModuleEncoder;
+    private Module module;
     private TextView mTextView;
     private Button mButton;
 
@@ -193,8 +193,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     }
 
     private String recognize(float[] floatInputBuffer) {
-        if (mModuleEncoder == null) {
-            mModuleEncoder = LiteModuleLoader.load(assetFilePath(getApplicationContext(), "wav2vec2.ptl"));
+        if (module == null) {
+            module = LiteModuleLoader.load(assetFilePath(getApplicationContext(), "wav2vec2.ptl"));
         }
 
         double wav2vecinput[] = new double[RECORDING_LENGTH];
@@ -206,7 +206,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             inTensorBuffer.put((float)val);
 
         Tensor inTensor = Tensor.fromBlob(inTensorBuffer, new long[]{1, RECORDING_LENGTH});
-        final String result = mModuleEncoder.forward(IValue.from(inTensor)).toStr();
+        final String result = module.forward(IValue.from(inTensor)).toStr();
 
         return result;
     }
