@@ -1,10 +1,8 @@
-# Speech Recognition on Android with Wav2Vec2
+# Streaming Speech Recognition on Android with Emformer-RNNT-based Model
 
 ## Introduction
 
-Facebook AI's [wav2vec 2.0](https://github.com/pytorch/fairseq/tree/master/examples/wav2vec) is one of the leading models in speech recognition. It is also available in the [Huggingface Transformers](https://github.com/huggingface/transformers) library, which is also used in another PyTorch Android demo app for [Question Answering](https://github.com/pytorch/android-demo-app/tree/master/QuestionAnswering).
-
-In this demo app, we'll show how to quantize, trace, and optimize the wav2vec2 model, powered by the newly released torchaudio 0.9.0, and how to use the converted model on an Android demo app to perform speech recognition.
+In the Speech Recognition Android demo app, we showed how to use the [wav2vec 2.0](https://github.com/pytorch/fairseq/tree/master/examples/wav2vec) model on an Android demo app to perform non-continuous speech recognition. Here we're going one step further, using a torchaudio [Emformer-RNNT-based ASR](https://pytorch.org/audio/main/prototype.pipelines.html#torchaudio.prototype.pipelines.EMFORMER_RNNT_BASE_LIBRISPEECH) model in Android to perform streaming speech recognition.
 
 ## Prerequisites
 
@@ -21,7 +19,7 @@ Simply run the commands below:
 
 ```
 git clone https://github.com/pytorch/android-demo-app
-cd android-demo-app/SpeechRecognition
+cd android-demo-app/StreamingASR
 ```
 
 If you don't have PyTorch 1.10.0 and torchaudio 0.10.0 installed or want to have a quick try of the demo app, you can download the quantized scripted wav2vec2 model file [here](https://drive.google.com/file/d/1xMh-BZMSIeoohBfZvQFYcemmh5zUn_gh/view?usp=sharing), then drag and drop it to the `app/src/main/assets` folder inside  `android-demo-app/SpeechRecognition`, and continue to Step 3.
