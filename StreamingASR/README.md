@@ -57,8 +57,18 @@ mv streaming_asr.ptl StreamingASR/app/src/main/assets
 
 ### 2. Build and run with Android Studio
 
-Start Android Studio, open the project located in `android-demo-app/SpeechRecognition`, build and run the app on an Android device. After the app runs, tap the Start button and start saying something; after 6 seconds (you can change `private final static int AUDIO_LEN_IN_SECOND = 6;` in `MainActivity.java` for a shorter or longer recording length), the model will infer to recognize your speech. Some example recognition results are:
+Start Android Studio, open the project located in `android-demo-app/StreamingASR/StreamingASR`, build and run the app on an Android device. After the app runs, tap the Start button and start saying something. Some example recognition results are:
 
 ![](screenshot1.png)
 ![](screenshot2.png)
 ![](screenshot3.png)
+
+## Librosa C++, Eigen, and JNI
+
+Note that this demo uses a [C++ port](https://github.com/ewan-xu/LibrosaCpp/) of [Librosa](https://librosa.org), a popular audio processing library in Python, to perform the MelSpectrogram transform. In the Python script `run_sasr.py` above, the torchaudio's [MelSpectrogram](https://pytorch.org/audio/stable/transforms.html#melspectrogram) is used, but you can achieve the same transform result by replacing `spectrogram = transform(tensor).transpose(1, 0)`, line 46 of run_sasr.py with:
+```
+mel = librosa.feature.melspectrogram(np_array, sr=16000, n_fft=400, n_mels=80, hop_length=160)
+spectrogram = torch.tensor(mel).transpose(1, 0)
+```
+
+Because torchaudio currently doesn't support fft on Android (see [here](https://github.com/pytorch/audio/issues/408)), using the Librosa C++ port and JNI (Java Native Interface) on Android makes the MelSpectrogram possible on Android. Furthermore, the Librosa C++ port requires [Eigen](https://eigen.tuxfamily.org/), a C++ template library for linear algebra, so both the port and the Eigen library are included in the demo app and built as JNI, using the `CMakeLists.txt` and `MainActivityJNI.cpp` in `StreamingASR/app/src/main/cpp`.
