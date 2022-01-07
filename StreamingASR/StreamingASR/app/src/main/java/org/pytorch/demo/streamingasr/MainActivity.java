@@ -6,8 +6,6 @@ import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
@@ -30,7 +28,6 @@ import java.util.Vector;
 
 import org.pytorch.LiteModuleLoader;
 
-
 public class MainActivity extends AppCompatActivity implements Runnable {
     private static final String TAG = MainActivity.class.getName();
 
@@ -38,11 +35,14 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private TextView mTextView;
     private Button mButton;
     private boolean mListening;
+    private String all_result = "";
 
     private final static int REQUEST_RECORD_AUDIO = 13;
-    private final static int AUDIO_LEN_IN_SECOND = 5;
     private final static int SAMPLE_RATE = 16000;
-    private final static int RECORDING_LENGTH = SAMPLE_RATE * AUDIO_LEN_IN_SECOND;
+    private final static int CHUNK_TO_READ = 5;
+    private final static int CHUNK_SIZE = 640;
+    private final static int SPECTROGRAM_X = 21;
+    private final static int SPECTROGRAM_Y = 80;
 
     private IValue hypo = null;
     private IValue state = null;
@@ -216,49 +216,11 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private double _decibel = 2 * 20 * Math.log10(32767);
     private double _gain = Math.pow(10, 0.05 * _decibel);
 
-    private final static String LOG_TAG = MainActivity.class.getSimpleName();
-
-    private int mStart = 1;
-    private HandlerThread mTimerThread;
-    private Handler mTimerHandler;
-    private Runnable mRunnable = new Runnable() {
-        @Override
-        public void run() {
-            mTimerHandler.postDelayed(mRunnable, 1000);
-
-            MainActivity.this.runOnUiThread(
-                    () -> {
-                        mButton.setText(String.format("Listening... Stop")); //, AUDIO_LEN_IN_SECOND - mStart));
-                        mStart += 1;
-                    });
-        }
-    };
-
     public native Vector<Vector<Float>> melSpectrogram(double[] data);
 
     static {
         System.loadLibrary("MainActivityJNI");
     }
-
-
-    @Override
-    protected void onDestroy() {
-        stopTimerThread();
-        super.onDestroy();
-    }
-
-    protected void stopTimerThread() {
-        mTimerThread.quitSafely();
-        try {
-            mTimerThread.join();
-            mTimerThread = null;
-            mTimerHandler = null;
-            mStart = 1;
-        } catch (InterruptedException e) {
-            Log.e(TAG, "Error on stopping background thread", e);
-        }
-    }
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -268,26 +230,23 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         mButton = findViewById(R.id.btnRecognize);
         mTextView = findViewById(R.id.tvResult);
 
+        if (mModuleEncoder == null) {
+            mModuleEncoder = LiteModuleLoader.load(assetFilePath(getApplicationContext(), "streaming_asr.ptl"));
+        }
+
         mButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 if (mButton.getText().equals("Start")) {
-                    mButton.setText("Listening... Stop"); // - %ds left", AUDIO_LEN_IN_SECOND));
+                    mButton.setText("Listening... Stop");
                     mListening = true;
                 }
                 else {
-                    mButton.setText("Start"); // - %ds left", AUDIO_LEN_IN_SECOND));
+                    mButton.setText("Start");
                     mListening = false;
                 }
 
-                //mButton.setEnabled(false);
-
                 Thread thread = new Thread(MainActivity.this);
                 thread.start();
-
-                mTimerThread = new HandlerThread("Timer");
-                mTimerThread.start();
-                mTimerHandler = new Handler(mTimerThread.getLooper());
-                mTimerHandler.postDelayed(mRunnable, 1000);
             }
         });
         requestMicrophonePermission();
@@ -334,68 +293,55 @@ public class MainActivity extends AppCompatActivity implements Runnable {
                 bufferSize);
 
         if (record.getState() != AudioRecord.STATE_INITIALIZED) {
-            Log.e(LOG_TAG, "Audio Record can't initialize!");
+            Log.e(TAG, "Audio Record can't initialize!");
             return;
         }
         record.startRecording();
 
-
-        //while (shortsRead < RECORDING_LENGTH) {
-        int chunkToRead = 5;
+        int chunkToRead = CHUNK_TO_READ;
         int recordingOffset = 0;
-        short[] recordingBuffer = new short[5*640]; //RECORDING_LENGTH];
+        short[] recordingBuffer = new short[CHUNK_TO_READ*CHUNK_SIZE];
         while (mListening) {
             long shortsRead = 0;
             short[] audioBuffer = new short[bufferSize / 2];
 
-            // TODO Jan2&3: verify the pre-processing data is correct - compared with the Python audio processing
-            while (shortsRead < chunkToRead*640) {
+            while (shortsRead < chunkToRead * CHUNK_SIZE) {
                 // for every segment of 5 chunks of data, we perform transcription
                 // each successive segment’s first chunk is exactly the preceding segment’s last chunk
                 int numberOfShort = record.read(audioBuffer, 0, audioBuffer.length);
                 shortsRead += numberOfShort;
-                System.out.println(String.format("numberOfShort=%d, shortsRead=%d", numberOfShort, shortsRead));
-                int x = (int) (numberOfShort - (shortsRead - chunkToRead*640));
-                if (shortsRead > chunkToRead*640)
+                int x = (int) (numberOfShort - (shortsRead - chunkToRead * CHUNK_SIZE));
+                if (shortsRead > chunkToRead * CHUNK_SIZE)
                     System.arraycopy(audioBuffer, 0, recordingBuffer, recordingOffset, (int) (numberOfShort - (shortsRead - chunkToRead*640)));
                 else
                     System.arraycopy(audioBuffer, 0, recordingBuffer, recordingOffset, numberOfShort);
 
                 recordingOffset += numberOfShort;
             }
-            double[] floatInputBuffer = new double[5 * 640];
+            double[] floatInputBuffer = new double[CHUNK_TO_READ * CHUNK_SIZE];
 
-            for (int i = 0; i < 5 * 640; ++i) {
+            for (int i = 0; i < CHUNK_TO_READ * CHUNK_SIZE; ++i) {
                 floatInputBuffer[i] = recordingBuffer[i] / (float)Short.MAX_VALUE;
             }
 
             final String result = recognize(floatInputBuffer);
+            if (result.length() > 0)
+                all_result = String.format("%s %s", all_result, result);
 
-            chunkToRead = 4;
-            recordingOffset = 640;
-            System.arraycopy(recordingBuffer, 4*640, recordingBuffer, 0, 640);
+            chunkToRead = CHUNK_TO_READ - 1;
+            recordingOffset = CHUNK_SIZE;
+            System.arraycopy(recordingBuffer, chunkToRead * CHUNK_SIZE, recordingBuffer, 0, CHUNK_SIZE);
 
-            runOnUiThread(() -> showTranslationResult(result));
-
-
+            runOnUiThread(() -> showTranslationResult(all_result));
         }
 
         record.stop();
         record.release();
-        stopTimerThread();
-
-//        runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                mButton.setText("Recognizing...");
-//            }
-//        });
-
     }
 
     private String recognize(double[] inputBuffer) {
 
-        double[][] spectrogram = new double[21][80];
+        double[][] spectrogram = new double[SPECTROGRAM_X][SPECTROGRAM_Y];
         Vector<Vector< Float >> result = melSpectrogram(inputBuffer);
         for (int i = 0; i < result.size(); i++) {
             for (int j = 0; j < result.get(i).size(); j++) {
@@ -413,8 +359,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             }
         }
 
-        FloatBuffer inTensorBuffer = Tensor.allocateFloatBuffer(1600); //1*20*80);
-
+        FloatBuffer inTensorBuffer = Tensor.allocateFloatBuffer((SPECTROGRAM_X-1) * SPECTROGRAM_Y);
         // get rid of the last row and transform the others
         for (int i = 0; i < spectrogram.length - 1; i++) {
             for (int j = 0; j < spectrogram[i].length; j++) {
@@ -424,12 +369,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             }
         }
 
-
-        if (mModuleEncoder == null) {
-            mModuleEncoder = LiteModuleLoader.load(assetFilePath(getApplicationContext(), "streaming_asr.ptl"));
-        }
-
-        Tensor inTensor = Tensor.fromBlob(inTensorBuffer, new long[]{1, 20, 80});
+        Tensor inTensor = Tensor.fromBlob(inTensorBuffer, new long[]{1, SPECTROGRAM_X - 1, SPECTROGRAM_Y});
         final long startTime = SystemClock.elapsedRealtime();
         IValue[] outputTuple;
         if (hypo == null && state == null)
@@ -437,12 +377,12 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         else
             outputTuple = mModuleEncoder.forward(IValue.from(inTensor), hypo, state).toTuple();
         final long inferenceTime = SystemClock.elapsedRealtime() - startTime;
-        System.out.println("inference time (ms): " + inferenceTime);
-        final String transcript = outputTuple[0].toStr();
+        Log.d(TAG, "inference time (ms): " + inferenceTime);
+        final String transcript = outputTuple[0].toStr().replace("▁", "");;
         hypo = outputTuple[1];
         state = outputTuple[2];
         if (transcript.length() > 0)
-            System.out.println("transcript=" + transcript);
+            Log.d(TAG, "transcript=" + transcript);
         return transcript;
     }
 }

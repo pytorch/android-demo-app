@@ -20,10 +20,11 @@
     <TextView
         android:id="@+id/tvResult"
         android:layout_width="350dp"
-        android:layout_height="100dp"
+        android:layout_height="200dp"
         android:layout_marginTop="50dp"
         android:gravity="center"
         android:hint=""
+        android:singleLine="false"
         android:textAlignment="center"
         android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"

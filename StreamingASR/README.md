@@ -6,7 +6,7 @@ In the Speech Recognition Android demo app, we showed how to use the [wav2vec 2.
 
 ## Prerequisites
 
-* PyTorch 1.10.0 and torchaudio 0.10.0 (Optional)
+* PyTorch 1.11 nightly and torchaudio 0.11 nightly (Optional)
 * Python 3.8 (Optional)
 * Android Pytorch library org.pytorch:pytorch_android_lite:1.10.0
 * Android Studio 4.0.1 or later
@@ -22,28 +22,37 @@ git clone https://github.com/pytorch/android-demo-app
 cd android-demo-app/StreamingASR
 ```
 
-If you don't have PyTorch 1.10.0 and torchaudio 0.10.0 installed or want to have a quick try of the demo app, you can download the quantized scripted wav2vec2 model file [here](https://drive.google.com/file/d/1xMh-BZMSIeoohBfZvQFYcemmh5zUn_gh/view?usp=sharing), then drag and drop it to the `app/src/main/assets` folder inside  `android-demo-app/SpeechRecognition`, and continue to Step 3.
+If you don't have PyTorch 1.11 nightly and torchaudio 0.11 nightly installed or want to have a quick try of the demo app, you can download the optimized scripted model file [streaming_asr.ptl](), then drag and drop it to the `app/src/main/assets` folder inside  `android-demo-app/StreamingASR`, and continue to Step 3.
 
 ### 2. Prepare the Model
 
-To install PyTorch 1.10.0, torchaudio 0.10.0 and the Hugging Face transformers, you can do something like this:
+To install PyTorch 1.11 and torchaudio 0.11 nightly, you can do something like this:
 
 ```
-conda create -n wav2vec2 python=3.8.5
-conda activate wav2vec2
-pip install torch torchaudio transformers
+conda create -n torch_nightly python=3.8.5
+conda activate torch_nightly
+pip install -U --pre torch torchaudio -f https://download.pytorch.org/whl/nightly/cpu/torch_nightly.html
 ```
 
-Now with PyTorch 1.10.0 and torchaudio 0.10.0 installed, run the following commands on a Terminal:
+After that, run the following commands to test the streaming ASR works in your computer:
 
 ```
-python create_wav2vec2.py
-```
-This will create the PyTorch mobile interpreter model file `wav2vec2.ptl`. Copy it to the Android app:
+conda install pyaudio
+python run_sasr.py
 ```
 
-mkdir -p app/src/main/assets
-cp wav2vec2.ptl app/src/main/assets
+After you see:
+```
+Initializing model...
+Initialization complete.
+```
+you can say something like "good afternoon happy new year", and you'll likely see the streaming recognition results `▁good ▁afternoon ▁happy ▁new ▁year` while you speak. Hit Ctrl-C to end.
+
+To optimize and convert the model to the format that can run on Android, run the following commands:
+```
+mkdir -p StreamingASR/app/src/main/assets
+python save_model_for_mobile.py
+mv streaming_asr.ptl StreamingASR/app/src/main/assets
 ```
 
 ### 2. Build and run with Android Studio

@@ -5,7 +5,6 @@ import queue
 import numpy as np
 import torch
 import torchaudio
-import librosa
 
 
 def get_demo_wrapper():
@@ -44,12 +43,7 @@ hypo = None
 def transcribe(np_array, should_print=True):
     global state, hypo
     tensor = torch.tensor(np_array)
-
     spectrogram = transform(tensor).transpose(1, 0)
-
-    # mel = librosa.feature.melspectrogram(np_array, sr=16000, n_fft=400, n_mels=80, hop_length=160)
-    # spectrogram = torch.tensor(mel)
-    # spectrogram = spectrogram.transpose(1, 0)
 
     features = _piecewise_linear_log(spectrogram * _gain)
     features = features.unsqueeze(0)[:, :-1]
