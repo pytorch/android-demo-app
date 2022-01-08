@@ -2,11 +2,11 @@
 
 ## Introduction
 
-In the Speech Recognition Android demo app, we showed how to use the [wav2vec 2.0](https://github.com/pytorch/fairseq/tree/master/examples/wav2vec) model on an Android demo app to perform non-continuous speech recognition. Here we're going one step further, using a torchaudio [Emformer-RNNT-based ASR](https://pytorch.org/audio/main/prototype.pipelines.html#torchaudio.prototype.pipelines.EMFORMER_RNNT_BASE_LIBRISPEECH) model in Android to perform streaming speech recognition.
+In the Speech Recognition Android [demo app](https://github.com/pytorch/android-demo-app/tree/master/SpeechRecognition), we showed how to use the [wav2vec 2.0](https://github.com/pytorch/fairseq/tree/master/examples/wav2vec) model on an Android demo app to perform non-continuous speech recognition. Here we're going one step further, using a torchaudio [Emformer-RNNT-based ASR](https://pytorch.org/audio/main/prototype.pipelines.html#torchaudio.prototype.pipelines.EMFORMER_RNNT_BASE_LIBRISPEECH) model in Android to perform streaming speech recognition.
 
 ## Prerequisites
 
-* PyTorch 1.11 nightly and torchaudio 0.11 nightly (Optional)
+* PyTorch 1.10.0 and torchaudio 0.10.0 or above (Optional)
 * Python 3.8 (Optional)
 * Android Pytorch library org.pytorch:pytorch_android_lite:1.10.0
 * Android Studio 4.0.1 or later
@@ -22,31 +22,26 @@ git clone https://github.com/pytorch/android-demo-app
 cd android-demo-app/StreamingASR
 ```
 
-If you don't have PyTorch 1.11 nightly and torchaudio 0.11 nightly installed or want to have a quick try of the demo app, you can download the optimized scripted model file [streaming_asr.ptl](), then drag and drop it to the `app/src/main/assets` folder inside  `android-demo-app/StreamingASR`, and continue to Step 3.
+If you don't have PyTorch 1.10.1 nightly and torchaudio 0.11 nightly installed or want to have a quick try of the demo app, you can download the optimized scripted model file [streaming_asr.ptl](https://drive.google.com/file/d/1awT_1S6H5IXSOOqpFLmpeg0B-kQVWG2y/view?usp=sharing), then drag and drop it to the `app/src/main/assets` folder inside  `android-demo-app/StreamingASR`, and continue to Step 3.
 
 ### 2. Prepare the Model
 
-To install PyTorch 1.11 and torchaudio 0.11 nightly, you can do something like this:
+To install PyTorch 1.10.1, torchaudio 0.10.1, and other required Python packages, do something like this:
 
 ```
-conda create -n torch_nightly python=3.8.5
-conda activate torch_nightly
-pip install -U --pre torch torchaudio -f https://download.pytorch.org/whl/nightly/cpu/torch_nightly.html
+conda create -n pt1.10.1 python=3.8.5
+conda activate pt1.10
+pip install torch torchaudio numpy pyaudio
 ```
 
-After that, run the following commands to test the streaming ASR works in your computer:
+Now download the [scripted streaming ASR model](https://drive.google.com/file/d/1_49DwHS_a3p3THGdHZj3TXmjNJj60AhP/view?usp=sharing) (the script to create the model will be published soon) to the `android-demo-app/StreamingASR` directory and run `python run_sasr.py` to test the streaming ASR:
 
-```
-conda install pyaudio
-python run_sasr.py
-```
-
-After you see:
+After you see
 ```
 Initializing model...
 Initialization complete.
 ```
-you can say something like "good afternoon happy new year", and you'll likely see the streaming recognition results `▁good ▁afternoon ▁happy ▁new ▁year` while you speak. Hit Ctrl-C to end.
+say something like "good afternoon happy new year", and you'll likely see the streaming recognition results `▁good ▁afternoon ▁happy ▁new ▁year` while you speak. Hit Ctrl-C to end.
 
 To optimize and convert the model to the format that can run on Android, run the following commands:
 ```
@@ -71,4 +66,4 @@ mel = librosa.feature.melspectrogram(np_array, sr=16000, n_fft=400, n_mels=80, h
 spectrogram = torch.tensor(mel).transpose(1, 0)
 ```
 
-Because torchaudio currently doesn't support fft on Android (see [here](https://github.com/pytorch/audio/issues/408)), using the Librosa C++ port and JNI (Java Native Interface) on Android makes the MelSpectrogram possible on Android. Furthermore, the Librosa C++ port requires [Eigen](https://eigen.tuxfamily.org/), a C++ template library for linear algebra, so both the port and the Eigen library are included in the demo app and built as JNI, using the `CMakeLists.txt` and `MainActivityJNI.cpp` in `StreamingASR/app/src/main/cpp`.
+Because torchaudio currently doesn't support fft on Android (see [here](https://github.com/pytorch/audio/issues/408)), using the Librosa C++ port and [JNI](https://developer.android.com/training/articles/perf-jni) (Java Native Interface) on Android makes the MelSpectrogram possible on Android. Furthermore, the Librosa C++ port requires [Eigen](https://eigen.tuxfamily.org/), a C++ template library for linear algebra, so both the port and the Eigen library are included in the demo app and built as JNI, using the `CMakeLists.txt` and `MainActivityJNI.cpp` in `StreamingASR/app/src/main/cpp`.
