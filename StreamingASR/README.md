@@ -6,7 +6,7 @@ In the Speech Recognition Android [demo app](https://github.com/pytorch/android-
 
 ## Prerequisites
 
-* PyTorch 1.10.0 and torchaudio 0.10.0 or above (Optional)
+* PyTorch 1.10.1 and torchaudio 0.10.1 or above (Optional)
 * Python 3.8 (Optional)
 * Android Pytorch library org.pytorch:pytorch_android_lite:1.10.0
 * Android Studio 4.0.1 or later
@@ -22,21 +22,28 @@ git clone https://github.com/pytorch/android-demo-app
 cd android-demo-app/StreamingASR
 ```
 
-If you don't have PyTorch 1.10.1 nightly and torchaudio 0.11 nightly installed or want to have a quick try of the demo app, you can download the optimized scripted model file [streaming_asr.ptl](https://drive.google.com/file/d/1awT_1S6H5IXSOOqpFLmpeg0B-kQVWG2y/view?usp=sharing), then drag and drop it to the `app/src/main/assets` folder inside  `android-demo-app/StreamingASR`, and continue to Step 3.
+If you don't have PyTorch 1.10.1 and torchaudio 0.10.1 installed or want to have a quick try of the demo app, you can download the optimized scripted model file [streaming_asr.ptl](https://drive.google.com/file/d/1awT_1S6H5IXSOOqpFLmpeg0B-kQVWG2y/view?usp=sharing), then drag and drop it to the `StreamingASR/app/src/main/assets` folder inside `android-demo-app/StreamingASR`, and continue to Step 3.
 
-### 2. Prepare the Model
+Also you need to download [Eigen](https://eigen.tuxfamily.org/), a C++ template library for linear algebra, for Android NDK build required to run the app (see last section of this README for more info):
+```
+mkdir external; cd external
+git clone https://github.com/jeffxtang/eigen
+```
 
-To install PyTorch 1.10.1, torchaudio 0.10.1, and other required Python packages, do something like this:
+### 2. Test and Prepare the Model
+
+To install PyTorch 1.10.1, torchaudio 0.10.1, and other required Python packages (numpy and pyaudio), do something like this:
 
 ```
 conda create -n pt1.10.1 python=3.8.5
-conda activate pt1.10
+conda activate pt1.10.1
 pip install torch torchaudio numpy pyaudio
 ```
 
-Now download the [scripted streaming ASR model](https://drive.google.com/file/d/1_49DwHS_a3p3THGdHZj3TXmjNJj60AhP/view?usp=sharing) (the script to create the model will be published soon) to the `android-demo-app/StreamingASR` directory and run `python run_sasr.py` to test the streaming ASR:
+Now download the streaming ASR model file
+[scripted_wrapper_tuple_no_transform.pt](https://drive.google.com/file/d/1_49DwHS_a3p3THGdHZj3TXmjNJj60AhP/view?usp=sharing) (the script used to create the model will be published soon) to the `android-demo-app/StreamingASR` directory.
 
-After you see
+To test the model, run `python run_sasr.py`. After you see:
 ```
 Initializing model...
 Initialization complete.
@@ -50,7 +57,7 @@ python save_model_for_mobile.py
 mv streaming_asr.ptl StreamingASR/app/src/main/assets
 ```
 
-### 2. Build and run with Android Studio
+### 3. Build and run with Android Studio
 
 Start Android Studio, open the project located in `android-demo-app/StreamingASR/StreamingASR`, build and run the app on an Android device. After the app runs, tap the Start button and start saying something. Some example recognition results are:
 

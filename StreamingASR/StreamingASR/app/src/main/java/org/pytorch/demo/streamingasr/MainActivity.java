@@ -231,7 +231,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         mTextView = findViewById(R.id.tvResult);
 
         if (mModuleEncoder == null) {
-            mModuleEncoder = LiteModuleLoader.load(assetFilePath(getApplicationContext(), "sasr.ptl"));
+            mModuleEncoder = LiteModuleLoader.load(assetFilePath(getApplicationContext(), "streaming_asr.ptl"));
         }
 
         mButton.setOnClickListener(new View.OnClickListener() {
