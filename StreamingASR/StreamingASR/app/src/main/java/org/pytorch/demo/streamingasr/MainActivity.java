@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private IValue hypo = null;
     private IValue state = null;
 
-    private double[] _mean =  {
+    private static final double[] MEAN =  {
             16.462461471557617,
             17.020158767700195,
             17.27733039855957,
@@ -130,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             7.252806663513184
     };
 
-    private double[] _invstddev = {
+    private static final double[] INVSTDDEV = {
             0.2532021571066031,
             0.2597563367511928,
             0.2579079373215276,
@@ -213,8 +213,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             0.24719513536827162
     };
 
-    private double _decibel = 2 * 20 * Math.log10(32767);
-    private double _gain = Math.pow(10, 0.05 * _decibel);
+    private static final double DECIBEL = 2 * 20 * Math.log10(32767);
+    private static final double GAIN = Math.pow(10, 0.05 * DECIBEL);
 
     public native Vector<Vector<Float>> melSpectrogram(double[] data);
 
@@ -288,8 +288,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     public void run() {
         android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_AUDIO);
 
-        int bufferSize = AudioRecord.getMinBufferSize(SAMPLE_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
-        AudioRecord record = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, SAMPLE_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT,
+        final int bufferSize = AudioRecord.getMinBufferSize(SAMPLE_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT);
+        final AudioRecord record = new AudioRecord(MediaRecorder.AudioSource.DEFAULT, SAMPLE_RATE, AudioFormat.CHANNEL_IN_MONO, AudioFormat.ENCODING_PCM_16BIT,
                 bufferSize);
 
         if (record.getState() != AudioRecord.STATE_INITIALIZED) {
@@ -301,6 +301,8 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         int chunkToRead = CHUNK_TO_READ;
         int recordingOffset = 0;
         short[] recordingBuffer = new short[CHUNK_TO_READ*CHUNK_SIZE];
+        double[] floatInputBuffer = new double[CHUNK_TO_READ * CHUNK_SIZE];
+
         while (mListening) {
             long shortsRead = 0;
             short[] audioBuffer = new short[bufferSize / 2];
@@ -318,7 +320,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
                 recordingOffset += numberOfShort;
             }
-            double[] floatInputBuffer = new double[CHUNK_TO_READ * CHUNK_SIZE];
 
             for (int i = 0; i < CHUNK_TO_READ * CHUNK_SIZE; ++i) {
                 floatInputBuffer[i] = recordingBuffer[i] / (float)Short.MAX_VALUE;
@@ -351,7 +352,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
 
         for (int i = 0; i < spectrogram.length; i++) {
             for (int j = 0; j < spectrogram[i].length; j++) {
-                spectrogram[i][j] *= _gain;
+                spectrogram[i][j] *= GAIN;
                 if (spectrogram[i][j] > Math.E)
                     spectrogram[i][j] = Math.log(spectrogram[i][j]);
                 else
@@ -363,13 +364,13 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         // get rid of the last row and transform the others
         for (int i = 0; i < spectrogram.length - 1; i++) {
             for (int j = 0; j < spectrogram[i].length; j++) {
-                spectrogram[i][j] -= _mean[j];
-                spectrogram[i][j] *= _invstddev[j];
+                spectrogram[i][j] -= MEAN[j];
+                spectrogram[i][j] *= INVSTDDEV[j];
                 inTensorBuffer.put((float) spectrogram[i][j]);
             }
         }
 
-        Tensor inTensor = Tensor.fromBlob(inTensorBuffer, new long[]{1, SPECTROGRAM_X - 1, SPECTROGRAM_Y});
+        final Tensor inTensor = Tensor.fromBlob(inTensorBuffer, new long[]{1, SPECTROGRAM_X - 1, SPECTROGRAM_Y});
         final long startTime = SystemClock.elapsedRealtime();
         IValue[] outputTuple;
         if (hypo == null && state == null)
