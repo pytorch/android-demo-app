@@ -9,5 +9,5 @@ def get_demo_wrapper():
 wrapper = get_demo_wrapper()
 scripted_model = torch.jit.script(wrapper)
 optimized_model = optimize_for_mobile(scripted_model)
-optimized_model._save_for_lite_interpreter("sasr.ptl")
+optimized_model._save_for_lite_interpreter("streaming_asr.ptl")
 print("Done _save_for_lite_interpreter")
