@@ -119,10 +119,10 @@ public class LiveVideoClassificationActivity extends AbstractCameraXActivity<Liv
 
             TensorImageUtils.bitmapToFloatBuffer(centerCroppedBitmap, 0, 0,
                     Constants.TARGET_VIDEO_SIZE, Constants.TARGET_VIDEO_SIZE, Constants.MEAN_RGB, Constants.STD_RGB, inTensorBuffer,
-                    (Constants.COUNT_OF_FRAMES_PER_INFERENCE - 1) * mFrameCount * Constants.TARGET_VIDEO_SIZE * Constants.TARGET_VIDEO_SIZE);
+                    mFrameCount * 3 * Constants.TARGET_VIDEO_SIZE * Constants.TARGET_VIDEO_SIZE);
 
             mFrameCount++;
-            if (mFrameCount < 4) {
+            if (mFrameCount < Constants.COUNT_OF_FRAMES_PER_INFERENCE) {
                 return null;
             }
 
