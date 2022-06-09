@@ -42,6 +42,10 @@ The [PyTorch demo app](https://github.com/pytorch/android-demo-app/tree/master/P
 
 [Speech Recognition](https://github.com/pytorch/android-demo-app/tree/master/SpeechRecognition) demonstrates how to convert Facebook AI's wav2vec 2.0, one of the leading models in speech recognition, to TorchScript and how to use the scripted model in an Android app to perform speech recognition.
 
+### Streaming Speech recognition
+
+[Streaming Speech Recognition](https://github.com/pytorch/android-demo-app/tree/master/StreamingASR) demonstrates how to how to use a new torchaudio pipeline to perform streaming speech recognition, powered by Java Native Call to a C++ audio processing library for the mel spectrogram transform.
+
 ### Video Classification
 
 [TorchVideo](https://github.com/pytorch/android-demo-app/tree/master/TorchVideo) demonstrates how to use a pre-trained video classification model, available at the newly released [PyTorchVideo](https://github.com/facebookresearch/pytorchvideo), on Android to see video classification results, updated per second while the video plays, on tested videos, videos from the Photos library, or even real-time videos.
