@@ -41,8 +41,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     private final static int SAMPLE_RATE = 16000;
     private final static int CHUNK_TO_READ = 5;
     private final static int CHUNK_SIZE = 640;
-    private final static int SPECTROGRAM_X = 21;
-    private final static int SPECTROGRAM_Y = 80;
+    private final static int INPUT_SIZE = 3200;
 
     private IValue hypo = null;
     private IValue state = null;
@@ -213,15 +212,6 @@ public class MainActivity extends AppCompatActivity implements Runnable {
             0.24719513536827162
     };
 
-    private static final double DECIBEL = 2 * 20 * Math.log10(32767);
-    private static final double GAIN = Math.pow(10, 0.05 * DECIBEL);
-
-    public native Vector<Vector<Float>> melSpectrogram(double[] data);
-
-    static {
-        System.loadLibrary("MainActivityJNI");
-    }
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -231,7 +221,7 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         mTextView = findViewById(R.id.tvResult);
 
         if (mModuleEncoder == null) {
-            mModuleEncoder = LiteModuleLoader.load(assetFilePath(getApplicationContext(), "streaming_asr.ptl"));
+            mModuleEncoder = LiteModuleLoader.load(assetFilePath(getApplicationContext(), "streaming_asrv2.ptl"));
         }
 
         mButton.setOnClickListener(new View.OnClickListener() {
@@ -341,36 +331,13 @@ public class MainActivity extends AppCompatActivity implements Runnable {
     }
 
     private String recognize(double[] inputBuffer) {
-
-        double[][] spectrogram = new double[SPECTROGRAM_X][SPECTROGRAM_Y];
-        Vector<Vector< Float >> result = melSpectrogram(inputBuffer);
-        for (int i = 0; i < result.size(); i++) {
-            for (int j = 0; j < result.get(i).size(); j++) {
-                spectrogram[i][j] = result.get(i).get(j);
-            }
-        }
-
-        for (int i = 0; i < spectrogram.length; i++) {
-            for (int j = 0; j < spectrogram[i].length; j++) {
-                spectrogram[i][j] *= GAIN;
-                if (spectrogram[i][j] > Math.E)
-                    spectrogram[i][j] = Math.log(spectrogram[i][j]);
-                else
-                    spectrogram[i][j] /= Math.E;
-            }
-        }
-
-        FloatBuffer inTensorBuffer = Tensor.allocateFloatBuffer((SPECTROGRAM_X-1) * SPECTROGRAM_Y);
+        FloatBuffer inTensorBuffer = Tensor.allocateFloatBuffer(INPUT_SIZE);
         // get rid of the last row and transform the others
-        for (int i = 0; i < spectrogram.length - 1; i++) {
-            for (int j = 0; j < spectrogram[i].length; j++) {
-                spectrogram[i][j] -= MEAN[j];
-                spectrogram[i][j] *= INVSTDDEV[j];
-                inTensorBuffer.put((float) spectrogram[i][j]);
-            }
+        for (int i = 0; i < inputBuffer.length - 1; i++) {
+            inTensorBuffer.put((float) inputBuffer[i]);
         }
 
-        final Tensor inTensor = Tensor.fromBlob(inTensorBuffer, new long[]{1, SPECTROGRAM_X - 1, SPECTROGRAM_Y});
+        final Tensor inTensor = Tensor.fromBlob(inTensorBuffer, new long[]{INPUT_SIZE});
         final long startTime = SystemClock.elapsedRealtime();
         IValue[] outputTuple;
         if (hypo == null && state == null)
