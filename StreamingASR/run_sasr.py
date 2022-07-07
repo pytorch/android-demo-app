@@ -1,5 +1,3 @@
-import math
-import json
 import pyaudio
 import queue
 import numpy as np
@@ -8,52 +6,39 @@ import torchaudio
 
 
 def get_demo_wrapper():
-    wrapper = torch.jit.load("scripted_wrapper_tuple_no_transform.pt")
+    wrapper = torch.jit.load("scripted_wrapper_tuple.pt")
     return wrapper
 
+
 wrapper = get_demo_wrapper()
+
+
+################################################################
+
+
 data_queue = queue.Queue()
+
 
 def callback(in_data, frame_count, time_info, status):
     global data_queue
     data_queue.put(in_data)
     return in_data, pyaudio.paContinue
 
-def _piecewise_linear_log(x):
-    x[x > math.e] = torch.log(x[x > math.e])
-    x[x <= math.e] = x[x <= math.e] / math.e
-    return x
-
-transform = torchaudio.transforms.MelSpectrogram(
-    sample_rate=16000, n_fft=400, n_mels=80, hop_length=160,
-)
-
-with open("global_stats.json") as f:
-    blob = json.loads(f.read())
-
-_mean = torch.tensor(blob["mean"])
-_invstddev = torch.tensor(blob["invstddev"])
-
-_decibel = 2 * 20 * math.log10(32767)
-_gain = pow(10, 0.05 * _decibel)
 
 state = None
 hypo = None
 
+
 def transcribe(np_array, should_print=True):
     global state, hypo
     tensor = torch.tensor(np_array)
-    spectrogram = transform(tensor).transpose(1, 0)
-
-    features = _piecewise_linear_log(spectrogram * _gain)
-    features = features.unsqueeze(0)[:, :-1]
-    features = (features - _mean) * _invstddev
-
-    transcript, hypo, state = wrapper(features, hypo, state)
+    transcript, hypo, state = wrapper(tensor, hypo, state)
     if should_print and transcript:
-        print(transcript, end=" ", flush=True)
+        print(transcript, end="", flush=True)
+
 
 previous_right_context = None
+
 
 def process(should_print=True):
     global previous_right_context

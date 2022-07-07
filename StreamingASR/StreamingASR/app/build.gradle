@@ -13,13 +13,6 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-
-        externalNativeBuild {
-            cmake {
-                cppFlags ""
-                arguments "-DLOGGER_BUILD_HEADER_LIB=ON", "-DBUILD_TESTING=OFF"
-            }
-        }
     }
 
     buildTypes {
@@ -32,13 +25,6 @@ android {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
-
-    externalNativeBuild {
-        cmake {
-            path "../../CMakeLists.txt"
-            version "3.10.2"
-        }
-    }
 }
 
 dependencies {
@@ -50,5 +36,5 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
 
-    implementation 'org.pytorch:pytorch_android_lite:1.11'
+    implementation 'org.pytorch:pytorch_android_lite:1.12.2'
 }
