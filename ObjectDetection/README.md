@@ -28,7 +28,7 @@ Open a Mac/Linux/Windows Terminal, run the following commands (note that we use 
 ```
 git clone https://github.com/ultralytics/yolov5
 cd yolov5
-pip install -r requirements.txt wanb
+pip install -r requirements.txt wandb
 ```
 
 Note the steps below have been tested with the commit `cd35a009ba964331abccd30f6fa0614224105d39` and if there's any issue with running the script or using the model, try `git reset --hard cd35a009ba964331abccd30f6fa0614224105d39`.
