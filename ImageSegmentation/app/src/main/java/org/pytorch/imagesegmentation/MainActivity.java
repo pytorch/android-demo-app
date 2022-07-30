@@ -78,8 +78,10 @@ public class MainActivity extends AppCompatActivity implements Runnable {
         final Button buttonRestart = findViewById(R.id.restartButton);
         buttonRestart.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
-                if (mImagename == "deeplab.jpg")
+                if (mImagename.equals("deeplab.jpg"))
                     mImagename = "dog.jpg";
+                else if (mImagename.equals("dog.jpg"))
+                    mImagename = "dog_landscape.jpg";
                 else
                     mImagename = "deeplab.jpg";
                 try {
