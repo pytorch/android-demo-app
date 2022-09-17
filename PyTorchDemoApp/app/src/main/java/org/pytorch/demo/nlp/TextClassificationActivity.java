@@ -124,6 +124,7 @@ public class TextClassificationActivity extends BaseModuleActivity {
 
       mModuleClasses = moduleClasses;
     }
+    
     byte[] bytes = text.getBytes(Charset.forName("UTF-8"));
     final long[] shape = new long[]{1, bytes.length};
     final Tensor inputTensor = Tensor.fromBlobUnsigned(bytes, shape);
