@@ -48,7 +48,7 @@ mkdir -p app/src/main/assets
 cp wav2vec2.ptl app/src/main/assets
 ```
 
-### 2. Build and run with Android Studio
+### 3. Build and run with Android Studio
 
 Start Android Studio, open the project located in `android-demo-app/SpeechRecognition`, build and run the app on an Android device. After the app runs, tap the Start button and start saying something; after 6 seconds (you can change `private final static int AUDIO_LEN_IN_SECOND = 6;` in `MainActivity.java` for a shorter or longer recording length), the model will infer to recognize your speech. Some example recognition results are:
 
