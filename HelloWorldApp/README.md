@@ -7,8 +7,12 @@ This application runs TorchScript serialized TorchVision pretrained [MobileNet v
 
 Let’s start with model preparation. If you are familiar with PyTorch, you probably should already know how to train and save your model. In case you don’t, we are going to use a pre-trained image classification model(MobileNet v3), which is packaged in [TorchVision](https://pytorch.org/docs/stable/torchvision/index.html).
 To install it, run the command below:
-```
-pip install torch torchvision
+```sh
+pip install torch==1.8.2 torchvision==0.9.2
+# or
+pip install -r requirements.txt
+# maybe faster
+pip install torch==1.8.2 torchvision==0.9.2 -extra-index-url https://download.pytorch.org/whl/lts/1.8/cpu
 ```
 
 To serialize and optimize the model for Android, you can use the Python [script](https://github.com/pytorch/android-demo-app/blob/master/HelloWorldApp/trace_model.py) in the root folder of HelloWorld app:
@@ -54,14 +58,14 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.pytorch:pytorch_android_lite:1.9.0'
-    implementation 'org.pytorch:pytorch_android_torchvision:1.9.0'
+    implementation 'org.pytorch:pytorch_android_lite:1.12.2'
+    implementation 'org.pytorch:pytorch_android_torchvision_lite:1.12.2'
 }
 ```
-Where `org.pytorch:pytorch_android` is the main dependency with PyTorch Android API, including libtorch native library for all 4 android abis (armeabi-v7a, arm64-v8a, x86, x86_64).
+Where `org.pytorch:pytorch_android_lite` is the main dependency with PyTorch Android API, including libtorch native library for all 4 android abis (armeabi-v7a, arm64-v8a, x86, x86_64).
 Further in this doc you can find how to rebuild it only for specific list of android abis.
 
-`org.pytorch:pytorch_android_torchvision` - additional library with utility functions for converting `android.media.Image` and `android.graphics.Bitmap` to tensors.
+`org.pytorch:pytorch_android_torchvision_lite` - additional library with utility functions for converting `android.media.Image` and `android.graphics.Bitmap` to tensors.
 
 #### 4. Reading image from Android Asset
 
