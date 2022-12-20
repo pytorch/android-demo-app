@@ -15,7 +15,7 @@ android {
     defaultConfig {
         applicationId "org.pytorch.demo.objectdetection"
         minSdkVersion 28
-        targetSdkVersion 30
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
 
@@ -46,7 +46,7 @@ android {
 
     packagingOptions {
         pickFirst "**"
-    }
+   }
 }
 
 
@@ -64,7 +64,14 @@ dependencies {
     implementation "androidx.camera:camera-core:$camerax_version"
     implementation "androidx.camera:camera-camera2:$camerax_version"
 
+    implementation 'com.facebook.fbjni:fbjni-java-only:0.0.3'
+
     implementation 'org.pytorch:pytorch_android_lite:1.10.0'
     implementation 'org.pytorch:pytorch_android_torchvision_lite:1.10.0'
     implementation 'org.pytorch:torchvision_ops:0.10.0'
+
+//    Uncomment below lines if using the libraries built from source
+//    implementation(name:'pytorch_android-release', ext:'aar')
+//    implementation(name:'pytorch_android_torchvision-release', ext:'aar')
+
 }
