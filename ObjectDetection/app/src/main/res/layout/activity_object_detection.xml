@@ -6,14 +6,22 @@
     android:background="@android:color/black"
     android:fitsSystemWindows="true">
 
-    <ViewStub
-        android:id="@+id/object_detection_texture_view_stub"
+    <!--    <ViewStub-->
+    <!--        android:id="@+id/object_detection_texture_view_stub"-->
+    <!--        android:layout_width="match_parent"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:layout="@layout/texture_view"-->
+    <!--        app:layout_constraintBottom_toTopOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toTopOf="parent" />-->
+    <androidx.camera.view.PreviewView
+        android:id="@+id/previewView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout="@layout/texture_view"
         app:layout_constraintBottom_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
 
     <org.pytorch.demo.objectdetection.ResultView
         android:id="@+id/resultView"
