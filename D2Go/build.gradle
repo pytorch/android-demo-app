@@ -2,9 +2,9 @@ allprojects {
     buildscript {
         ext {
             minSdkVersion = 21
-            targetSdkVersion = 28
-            compileSdkVersion = 28
-            buildToolsVersion = '28.0.3'
+            targetSdkVersion = 33
+            compileSdkVersion = 33
+            buildToolsVersion = '30.0.3'
 
             coreVersion = "1.2.0"
             extJUnitVersion = "1.1.1"
@@ -21,16 +21,22 @@ allprojects {
             google()
             mavenCentral()
             jcenter()
+            flatDir {
+                dirs 'libs'
+            }
         }
 
         dependencies {
-            classpath 'com.android.tools.build:gradle:4.0.1'
+            classpath 'com.android.tools.build:gradle:7.3.1'
         }
     }
 
     repositories {
         google()
         jcenter()
+        flatDir {
+            dirs 'libs'
+        }
     }
 }
 

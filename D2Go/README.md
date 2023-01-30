@@ -8,16 +8,16 @@ This D2Go Android demo app shows how to prepare and use the D2Go model on Androi
 
 ## Prerequisites
 
-* PyTorch 1.10.0 and torchvision 0.11.1 (Optional)
+* PyTorch 1.13.0 and torchvision 0.14.1 (Optional)
 * Python 3.8 or above (Optional)
-* Android Pytorch library pytorch_android_lite 1.10.0, pytorch_android_torchvision_lite 1.10.0, torchvision_ops library 0.10.0
+* Android Pytorch library pytorch_android_lite 1.13.0, pytorch_android_torchvision_lite 1.13.0, torchvision_ops library 0.13.0
 * Android Studio 4.0.1 or later
 
 ## Quick Start
 
 This section shows how to create and use the D2Go model and the pre-built torchvision-ops library in a completed Android app. To just build and run the app without creating the D2Go model yourself, go directly to Step 4.
 
-1. Install PyTorch 1.10.0 and torchvision 0.11.1, for example:
+1. Install PyTorch 1.13.0 and torchvision 0.14.0, for example:
 
 ```
 conda create -n d2go python=3.8.5
@@ -54,9 +54,9 @@ In Android Studio, open `android-demo-app/D2Go` (not `android-demo-app/D2Go/Obje
 
 The main changes needed to use the D2Go model and the required and pre-built torchvision-ops library are adding
 ```
-implementation 'org.pytorch:pytorch_android_lite:1.10.0'
-implementation 'org.pytorch:pytorch_android_torchvision_lite:1.10.0'
-implementation 'org.pytorch:torchvision_ops:0.10.0'
+implementation 'org.pytorch:pytorch_android_lite:1.13.0'
+implementation 'org.pytorch:pytorch_android_torchvision_lite:1.13.0'
+implementation 'org.pytorch:torchvision_ops:0.14.0'
 ```
 in the build.gradle file and
 ```
