@@ -40,7 +40,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    implementation 'org.pytorch:pytorch_android_lite:1.10.0'
+    implementation 'org.pytorch:pytorch_android_lite:1.13.0'
 
     implementation 'com.facebook.fbjni:fbjni-java-only:0.0.3'
 
