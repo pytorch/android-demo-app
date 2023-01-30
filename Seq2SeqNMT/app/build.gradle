@@ -34,7 +34,7 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 
     implementation 'com.facebook.fbjni:fbjni-java-only:0.0.3'
-    implementation 'org.pytorch:pytorch_android_lite:1.10.0'
+    implementation 'org.pytorch:pytorch_android_lite:1.13.0'
 
     // if using the libraries built from source
     // implementation(name:'pytorch_android-release', ext:'aar')
