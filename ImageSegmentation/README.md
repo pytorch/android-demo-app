@@ -34,8 +34,8 @@ The Python script `deeplabv3.py` is used to generate the TorchScript-formatted m
 Open the ImageSegmentation project using Android Studio. Note the app's `build.gradle` file has the following lines:
 
 ```
-implementation 'org.pytorch:pytorch_android_lite:1.10.0'
-implementation 'org.pytorch:pytorch_android_torchvision_lite:1.10.0'
+implementation 'org.pytorch:pytorch_android_lite:1.13.0'
+implementation 'org.pytorch:pytorch_android_torchvision_lite:1.13.0'
 ```
 
 and in the MainActivity.java, the code below is used to load the model:
