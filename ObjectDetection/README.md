@@ -8,9 +8,9 @@
 
 ## Prerequisites
 
-* PyTorch 1.10.0 and torchvision 0.11.1 (Optional)
+* PyTorch 1.13.0 and torchvision 0.14.1 (Optional)
 * Python 3.8 (Optional)
-* Android Pytorch library pytorch_android_lite:1.10.0, pytorch_android_torchvision_lite:1.10.0
+* Android Pytorch library pytorch_android_lite:1.13.0, pytorch_android_torchvision_lite:1.13.0
 * Android Studio 4.0.1 or later
 
 ## Quick Start
@@ -52,8 +52,8 @@ Note that small sized version of the YOLOv5 model, which runs faster but with le
 Start Android Studio, then open the project located in `android-demo-app/ObjectDetection`. Note the app's `build.gradle` file has the following lines:
 
 ```
-implementation 'org.pytorch:pytorch_android_lite:1.10.0'
-implementation 'org.pytorch:pytorch_android_torchvision_lite:1.10.0'
+implementation 'org.pytorch:pytorch_android_lite:1.13.0'
+implementation 'org.pytorch:pytorch_android_torchvision_lite:1.13.0'
 ```
 
 ### 3. Run the app
