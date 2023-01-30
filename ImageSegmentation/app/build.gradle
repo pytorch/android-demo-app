@@ -38,8 +38,8 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    implementation 'org.pytorch:pytorch_android_lite:1.10.0'
-    implementation 'org.pytorch:pytorch_android_torchvision_lite:1.10.0'
+    implementation 'org.pytorch:pytorch_android_lite:1.13.0'
+    implementation 'org.pytorch:pytorch_android_torchvision_lite:1.13.0'
 
     // Uncomment below lines for using libs from src build
     // implementation(name:'pytorch_android-release', ext:'aar')
