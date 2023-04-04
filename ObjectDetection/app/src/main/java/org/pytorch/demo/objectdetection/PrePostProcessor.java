@@ -61,7 +61,11 @@ public class PrePostProcessor {
                         return o1.score.compareTo(o2.score);
                     }
                 });
-
+        
+        // Collections.sort() sorts in ascending order
+        // reverse array to obtain boxes arranged in descending order
+        Collections.reverse(boxes);
+        
         ArrayList<Result> selected = new ArrayList<>();
         boolean[] active = new boolean[boxes.size()];
         Arrays.fill(active, true);
