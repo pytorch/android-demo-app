@@ -10,7 +10,8 @@ repositories {
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
-
+    //Declare ndk version here
+    ndkVersion "21.1.6352462"
     defaultConfig {
         applicationId "org.pytorch.demo.imagesegmentation"
         minSdkVersion 28
@@ -35,6 +36,7 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    implementation 'org.pytorch:pytorch_android_lite:1.10.0'
-    implementation 'org.pytorch:pytorch_android_torchvision_lite:1.10.0'
+    //Using Pytorch Library 1.13.1
+    implementation 'org.pytorch:pytorch_android_lite:1.13.1'
+    implementation 'org.pytorch:pytorch_android_torchvision_lite:1.13.1'
 }
