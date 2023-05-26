@@ -10,7 +10,8 @@ repositories {
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
-
+    //Added ndk version here
+    ndkVersion "21.1.6352462"
     defaultConfig {
         applicationId "org.pytorch.demo.imagesegmentation"
         minSdkVersion 28
