@@ -1,11 +1,10 @@
 # PyTorch Android Examples
 
+A list of Android demo apps built on the powerful [PyTorch Mobile](https://pytorch.org/mobile) platform.
+
 ### Note
 
 PyTorch Mobile is no longer actively supported. Please check out [ExecuTorch](https://pytorch.org/executorch-overview), PyTorch’s all-new on-device inference library. You can learn more about ExecuTorch’s Android demo apps [here](https://github.com/pytorch/executorch/tree/main/examples/demo-apps/android).
-
-
-A list of Android demo apps built on the powerful [PyTorch Mobile](https://pytorch.org/mobile) platform.
 
 ### HelloWorld
 
