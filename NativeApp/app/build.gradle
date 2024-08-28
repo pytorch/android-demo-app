@@ -19,11 +19,11 @@ android {
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
-       externalNativeBuild {
-           cmake {
-               arguments "-DANDROID_STL=c++_shared"
-           }
-       }
+        externalNativeBuild {
+            cmake {
+                arguments "-DANDROID_STL=c++_shared"
+            }
+        }
     }
     buildTypes {
         release {
@@ -49,22 +49,15 @@ dependencies {
     extractForNativeBuild 'org.pytorch:pytorch_android:1.6.0-SNAPSHOT'
 }
 
-task extractAARForNativeBuild {
-    doLast {
-        configurations.extractForNativeBuild.files.each {
-            def file = it.absoluteFile
+afterEvaluate {
+    configurations.extractForNativeBuild.files.each {
+        def zipPath = it.absoluteFile
+        if (!file("$buildDir/$zipPath.name").exists())
             copy {
-                from zipTree(file)
-                into "$buildDir/$file.name"
+                from zipTree(zipPath)
+                into "$buildDir/$zipPath.name"
                 include "headers/**"
                 include "jni/**"
             }
-        }
     }
-}
-
-tasks.whenTaskAdded { task ->
-  if (task.name.contains('externalNativeBuild')) {
-    task.dependsOn(extractAARForNativeBuild)
-  }
 }
