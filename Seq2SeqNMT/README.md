@@ -12,9 +12,9 @@ This Android demo app shows:
 
 ## Prerequisites
 
-* PyTorch 1.10.0 (Optional)
+* PyTorch 1.13.0 (Optional)
 * Python 3.8 (Optional)
-* Android Pytorch library org.pytorch:pytorch_android_lite:1.10.0
+* Android Pytorch library org.pytorch:pytorch_android_lite:1.13.0
 * Android Studio 4.0.1 or later
 
 ## Quick Start
