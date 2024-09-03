@@ -12,11 +12,11 @@ android {
         sourceCompatibility 1.8
         targetCompatibility 1.8
     }
-    compileSdkVersion 28
+    compileSdkVersion 33
     defaultConfig {
         applicationId "org.pytorch.demo"
         minSdkVersion 21
-        targetSdkVersion 28
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -38,6 +38,11 @@ dependencies {
     implementation "androidx.camera:camera-camera2:$camerax_version"
     implementation 'com.google.android.material:material:1.0.0-beta01'
 
-    implementation 'org.pytorch:pytorch_android:1.6.0-SNAPSHOT'
-    implementation 'org.pytorch:pytorch_android_torchvision:1.6.0-SNAPSHOT'
+    implementation 'org.pytorch:pytorch_android:1.13.0-SNAPSHOT'
+    implementation 'org.pytorch:pytorch_android_torchvision:1.13.0-SNAPSHOT'
+
+    // Uncomment below lines for using libs from src build
+    // implementation(name: 'pytorch_android-release', ext:'aar')
+    // implementation(name: 'pytorch_android_torchvision-release', ext:'aar')
+
 }
