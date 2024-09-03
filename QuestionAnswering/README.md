@@ -10,7 +10,7 @@ In this demo app, written in Kotlin, we'll show how to quantize and convert the 
 
 * PyTorch 1.10.0 or later (Optional)
 * Python 3.8 (Optional)
-* Android Pytorch library org.pytorch:pytorch_android_lite:1.10.0
+* Android Pytorch library org.pytorch:pytorch_android_lite:1.13.0
 * Android Studio 4.0.1 or later
 
 ## Quick Start
