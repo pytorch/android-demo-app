@@ -8,13 +8,13 @@ repositories {
 
 
 android {
-    compileSdkVersion 30
+    compileSdkVersion 33
     buildToolsVersion "30.0.2"
 
     defaultConfig {
         applicationId "org.pytorch.demo.imagesegmentation"
         minSdkVersion 28
-        targetSdkVersion 30
+        targetSdkVersion 33
         versionCode 1
         versionName "1.0"
 
@@ -32,9 +32,17 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
     testImplementation 'junit:junit:4.12'
+
+    implementation 'com.facebook.fbjni:fbjni-java-only:0.0.3'
+
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
-    implementation 'org.pytorch:pytorch_android_lite:1.10.0'
-    implementation 'org.pytorch:pytorch_android_torchvision_lite:1.10.0'
+    implementation 'org.pytorch:pytorch_android_lite:1.13.0'
+    implementation 'org.pytorch:pytorch_android_torchvision_lite:1.13.0'
+
+    // Uncomment below lines for using libs from src build
+    // implementation(name:'pytorch_android-release', ext:'aar')
+    // implementation(name:'pytorch_android_torchvision-release', ext:'aar')
+
 }
